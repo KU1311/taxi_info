@@ -30,7 +30,7 @@
       .then(csvData => {
         // Parse the CSV data
         const rows = csvData.trim().split('\n');
-        const headers = rows[0].split(',');
+        const headers = rows[0].split(',').replace('"', '');
         const data = rows.slice(1).map(row => {
           const values = row.split(',');
           return headers.reduce((obj, header, i) => {
@@ -48,7 +48,7 @@
         // Add markers for the POIs
         data.forEach(poi => {
           console.log("poi ",poi)
-          const Y = poi.Lng;
+          const Y = poi.lng;
           console.log("Y ",Y)
           const Yr = String(Y).replace('\r', '');
           console.log("Yr ",Yr)
