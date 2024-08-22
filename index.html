@@ -51,7 +51,7 @@
           const Yr = String(Y).replace('\r', '');
           L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
             .bindPopup(`<b>${poi.name}</b>
-	    <br>${poi.remarks}`);
+	    <br>${poi.remarks}
 	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">Navigate</button>
      	 `);
       })
