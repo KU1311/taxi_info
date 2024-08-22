@@ -82,7 +82,6 @@
 		const userLocation = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map).bindPopup("<b>Your Location</b>");
 	        // Zoom the map to a 2km radius around the current location
 	        map.setView(currentLocation, 14);
-	        L.circle(currentLocation, { radius: 2000 }).addTo(map);
 	      },
 	      (error) => {
 	        console.error('Error getting location:', error);
