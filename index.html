@@ -30,7 +30,7 @@
       .then(csvData => {
         // Parse the CSV data
         const rows = csvData.trim().split('\n');
-        const headers = rows[0].split(',');
+        const headers = rows[0].split(',').map(header => header.replace('"', ''));
         const data = rows.slice(1).map(row => {
           const values = row.split(',');
           return headers.reduce((obj, header, i) => {
