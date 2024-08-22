@@ -47,16 +47,23 @@
       
         // Add markers for the POIs
         data.forEach(poi => {
-          console.log("poi ",poi)
           const Y = poi.lng;
-          console.log("Y ",Y)
           const Yr = String(Y).replace('\r', '');
-          console.log("Yr ",Yr)
           L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
-            .bindPopup(`<b>${poi.name}</b><br>${poi.remarks}`);
-        });
+            .bindPopup(`<b>${poi.name}</b>
+	    <br>${poi.remarks}`);
+	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">Navigate</button>
+     	 `);
       })
       .catch(error => console.error('Error fetching CSV data:', error));
+
+	// Function to open Google Maps navigation
+    function openGoogleMapsNavigation(lat, lng) {
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      window.open(url, '_blank');
+    }
+
+	  
   </script>
 </body>
 </html>
