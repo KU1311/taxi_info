@@ -47,7 +47,7 @@
 
         // Add markers for the POIs
         data.forEach(poi => {
-          L.marker([parseFloat(poi.lat), parseFloat(poi.lng)]).addTo(map)
+          L.marker([parseFloat(poi.lat), parseFloat(poi.lng.replace('\r', ''))]).addTo(map)
             .bindPopup(`<b>${poi.name}</b><br>${poi.remarks}`);
         });
       })
