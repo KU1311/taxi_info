@@ -88,7 +88,7 @@
 	        console.error('Error getting location:', error);
 	        // Fallback to a default location if geolocation fails
 	        map.setView([22.305451, 114.169656], 4);
-	      }
+	      })
 	      
       })
       .catch(error => console.error('Error fetching CSV data:', error));
