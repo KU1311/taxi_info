@@ -14,6 +14,16 @@
       width: 100%;
       height: 100%;
     }
+   button {
+      display: flex;
+      padding: 0.75rem;
+      background-color: rgb(237, 28, 36 );
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
@@ -62,6 +72,24 @@
 	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">Navigate</button>
      	 `);
 	})
+
+
+	      // Get the user's current location
+	    navigator.geolocation.getCurrentPosition(
+	      (position) => {
+	        const { latitude, longitude } = position.coords;
+	        const currentLocation = L.latLng(latitude, longitude);
+		const userLocation = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map).bindPopup("<b>Your Location</b>");
+	        // Zoom the map to a 2km radius around the current location
+	        map.setView(currentLocation, 14);
+	        L.circle(currentLocation, { radius: 2000 }).addTo(map);
+	      },
+	      (error) => {
+	        console.error('Error getting location:', error);
+	        // Fallback to a default location if geolocation fails
+	        map.setView([22.305451, 114.169656], 4);
+	      }
+	      
       })
       .catch(error => console.error('Error fetching CSV data:', error));
 
