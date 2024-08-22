@@ -49,7 +49,7 @@
         data.forEach(poi => {
           const Y = poi.lng
           const Yr = Y.replace('\r', '')
-          L.marker([parseFloat(poi.lat), parseFloat(Yr]).addTo(map)
+          L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
             .bindPopup(`<b>${poi.name}</b><br>${poi.remarks}`);
         });
       })
