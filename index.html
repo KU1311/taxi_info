@@ -44,10 +44,12 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
-
+      
         // Add markers for the POIs
         data.forEach(poi => {
-          L.marker([parseFloat(poi.lat), parseFloat(poi.lng.replace('\r', ''))]).addTo(map)
+          const Y = poi.lng
+          const Yr = Y.replace('\r', '')
+          L.marker([parseFloat(poi.lat), parseFloat(Yr]).addTo(map)
             .bindPopup(`<b>${poi.name}</b><br>${poi.remarks}`);
         });
       })
