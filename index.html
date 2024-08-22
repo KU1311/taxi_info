@@ -30,11 +30,11 @@
       .then(csvData => {
         // Parse the CSV data
         const rows = csvData.trim().split('\n');
-        const headers = rows[0].split(',').replace('"', '');
+        const headers = rows[0].split(',');
         const data = rows.slice(1).map(row => {
           const values = row.split(',');
           return headers.reduce((obj, header, i) => {
-            obj[header] = values[i];
+            obj[header] = values[i].replace('"', '');
             return obj;
           }, {});
         });
