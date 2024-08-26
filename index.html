@@ -24,6 +24,28 @@
       cursor: pointer;
       font-size: 1rem;
     }
+
+	.current-location-marker {
+	  background-color: rgba(73, 167, 223, 0.5);
+	  border-radius: 50%;
+	  width: 40px;
+	  height: 40px;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  font-size: 12px;
+	  font-weight: bold;
+	  color: white;
+	}
+	
+	.current-location-label {
+	  
+	  padding: 4px 8px;
+	  border-radius: 4px;
+	  font-size: 12px;
+	  font-weight: bold;
+	}
+	  
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
@@ -74,20 +96,25 @@
 	})
 
 
-	      // Get the user's current location
-	    navigator.geolocation.getCurrentPosition(
-	      (position) => {
-	        const { latitude, longitude } = position.coords;
-	        const currentLocation = L.latLng(latitude, longitude);
-		const userLocation = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map).bindPopup("<b>Your Location</b>");
-	        // Zoom the map to a 2km radius around the current location
-	        map.setView(currentLocation, 14);
-	      },
-	      (error) => {
-	        console.error('Error getting location:', error);
-	        // Fallback to a default location if geolocation fails
-	        map.setView([22.305451, 114.169656], 4);
-	      })
+	// Add the user's current location
+	    if (navigator.geolocation) {
+	      navigator.geolocation.getCurrentPosition(
+	        (position) => {
+	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
+			    className: 'current-location-marker',
+			    html: 'You',
+			    iconSize: [50, 50],
+			    iconAnchor: [25, 25]
+			  })
+			.bindPopup(`<div class="current-location-label">Your Current Location</div>`)
+			.addTo(map);
+	        },
+	        (error) => {
+	          console.error("Error getting user location:", error);
+	        });
+	    } else {
+	      console.error("Geolocation is not supported by this browser.");
+	    }
 	      
       })
       .catch(error => console.error('Error fetching CSV data:', error));
