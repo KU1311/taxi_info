@@ -39,8 +39,6 @@
 	}
 	
 	.current-location-label {
-	  background-color: rgba(73, 167, 223, 1);
-	  color: white;
 	  padding: 4px 8px;
 	  border-radius: 4px;
 	  font-size: 12px;
@@ -104,7 +102,7 @@
 	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
 			   icon: L.divIcon({
 			        className: 'current-location-marker',
-			        iconSize: [30, 30]
+			        iconSize: [50, 50]
 			      })
 			  })
 			.bindPopup(`<div class="current-location-label">Your Current Location</div>`)
