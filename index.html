@@ -102,14 +102,10 @@
 	      navigator.geolocation.getCurrentPosition(
 	        (position) => {
 	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
-			    className: 'current-location-marker',
-			   // html: 'You',
-			   // iconSize: [50, 50],
-			   // iconAnchor: [25, 25],
-				  color: 'rgba(73, 167, 223, 0.5)',
-				  fillColor: 'rgba(73, 167, 223, 0.5)',
-				  fillOpacity: 1,
-				  radius: 50
+			   icon: L.divIcon({
+			        className: 'current-location-marker',
+			        iconSize: [30, 30]
+			      })
 			  })
 			.bindPopup(`<div class="current-location-label">Your Current Location</div>`)
 			.addTo(map);
