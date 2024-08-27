@@ -1,233 +1,233 @@
-id,type,name,time,dangerous,legal,Remarks
-,urban,企業廣場門口,Night,Y,N,
-,cross-harbour,企業廣場對面 常悅道,PM,Y,N,
-,urban,Megabox,Daytime,N,Y,
-,urban,"小西灣邨, 燈位前","Daytime, Midnight",N,N,
-,urban,小西灣邨閘口,Daytime,Y,N,
-,urban,"嘉業街常安街口, 發達中心門口, 燈位前",Daytime,N,N,
-,urban,翠灣邨巴士站,"Daytime, Midnight",N,N,
-,urban,金鐘站的士站,Daytime,N,Y,
-,urban,遮打道 (歷山大廈) 的士站,Daytime,N,Y,
-,cross-harbour,遮打道 (歷山大廈) 過海的士站,Daytime,N,Y,
-,urban,纜車站的士站,Daytime,N,Y,
-,urban,林士街的士站,Daytime,N,Y,
-,urban,香港站的士站 (地底),Daytime,N,Y,
-,urban,IFC的士站,Daytime,N,N,
-,urban,山頂的士站,Daytime,N,Y,
-,urban,港澳碼頭的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,港澳碼頭過海的士站,"Daytime, Midnight",N,Y,
-,urban,爹核士街,Daytime,N,Y,
-,cross-harbour,加多近街過海的士站,Daytime,N,Y,
-,urban,中環二號碼頭的士站,Daytime,N,Y,
-,urban,中環四號碼頭,Daytime,N,N,
-,cross-harbour,中環碼頭過海的士站,Daytime,N,Y,
-,urban,中環六號碼頭的士站,Daytime,N,Y,
-,urban,中環八號碼頭的士站,Daytime,N,Y,
-,urban,IFC二期寫字樓的士站,PM,N,Y,
-,urban,港景街的士站,"Daytime, Midnight",Y,N,未到正式站前靠右排. 正式的士站沒人使用
-,cross-harbour,中環交易廣場過海的士站,Daytime,N,Y,
-,urban,畢打街的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,畢打街非法過海站,"Daytime, Midnight",Y,N,"正式的士站前, 車尾為隊頭第一輛. 常有警方執法"
-,urban,蘭桂坊的士站,"PM, Midnight",N,Y,
-,urban,帝景園,Daytime,N,Y,屋苑自設的士站
-,urban,太古廣場二座,Daytime,N,Y,
-,urban,太古廣場1座,"Daytime, Midnight",N,Y,
-,urban,會展站的士站,Daytime,N,Y,
-,cross-harbour,港灣道過海的士站,Daytime,N,Y,
-,cross-harbour,馬師道非法過海站 (半夜),Midnight,Y,N,
-,cross-harbour,駱克道過海的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,駱克道馬師道過海的士站,"Daytime, Midnight",N,Y,
-,urban,會展舊翼的士站,Daytime,N,Y,
-,urban,律敦治醫院的士站,Daytime,N,Y,
-,urban,香港足球會,Daytime,N,N,
-,cross-harbour,跑馬地非法過海站,"Daytime, Midnight",Y,N,
-,urban,養和醫院的士站,Daytime,N,Y,
-,urban,港安醫院,Daytime,N,Y,入閘有限時
-,urban,合和中心 皇后大道東,Daytime,Y,N,
-,urban,喜帖街 皇后大道東,Daytime,Y,N,
-,urban,太古廣場三座,PM,N,N,
-,urban,灣仔站 莊士敦道,Daytime,Y,N,
-,urban,時代廣場的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,時代廣場過海的士站,"Daytime, Midnight",N,Y,
-,urbasn,利園一期,Daytime,N,Y,
-,urban,利園二期的士站,Daytime,N,Y,
-,urban,邊寧頓街 渣甸街口,Daytime,Y,N,
-,urban,Sogo 軒尼詩道,Midnight,Y,N,
-,urban,百德新街的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,百德新街過海的士站,Daytime,N,Y,
-,urban,天后的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,天后過海的士站,"Daytime, Midnight",N,Y,
-,urban,城市花園,Daytime,N,N,
-,cross-harbour,北角道過海的士站,"Daytime, Midnight",N,Y,
-,urban,明園西街,Daytime,Y,N,
-,urban,北角站,Midnight,Y,N,
-,urban,英皇道K11,"PM, Midnight",Y,N,
-,urban,太古坊,Daytime,Y,N,
-,cross-harbour,太古坊非法過海站,"Daytime, Midnight",Y,N,"車尾為第一輛, 倒車排隊"
-,urban,太古坊一座,"PM, Midnight",N,Y,
-,urban,港島東中心,Daytime,N,Y,
-,urban,太古城中心的士站,"Daytime, Midnight",N,Y,
-,urban,康怡廣場 (東行),Daytime,Y,N,康山道東行巴士站尾
-,urban,康怡廣場 西行,Daytime,Y,N,"康安街落山方向, 燈位禁區前"
-,cross-harbour,太安樓非法過海站,"Daytime, Midnight",Y,N,
-,urban,嘉亨灣,Daytime,Y,N,排隊看嘉亨灣的士燈
-,urban,興東邨,Daytime,Y,N,巴士站最前
-,urban,愛蝶灣的士站,Daytime,N,Y,
-,urban,東旭苑,Daytime,Y,N,巴士站前
-,urban,望隆街,"Daytime, Midnight",Y,N,
-,urban,東區醫院,Daytime,N,Y,
-,urban,柴灣站的士站,"Daytime, Midnight",N,Y,
-,urban,藍灣半島的士站,Daytime,N,Y,
-,urban,藍灣半島的士站,Daytime,N,Y,
-,urban,杏花邨的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,杏花邨過海的士站,Daytime,N,Y,
-,urban,明報工業中心,PM,Y,N,
-,urban,石澳泳灘,Daytime,N,N,
-,urban,大浪灣,Daytime,N,N,
-,urban,赤柱的士站,"Daytime, Midnight",N,Y,
-,urban,赤柱廣場,"Daytime, Midnight",Y,N,迴旋處
-,urban,淺水灣泳灘,Daytime,N,Y,
-,urban,淺水灣,"Daytime, Midnight",N,Y,
-,urban,海洋公園的士站,Dayitme,N,Y,
-,cross-harbour,海洋公園過海的士站,Daytime,N,Y,
-,urban,港怡醫院,Daytime,N,Y,
-,urban,水上樂園的士站,PM,N,Y,
-,urban,深灣遊艇會,Daytime,N,Y,
-,urban,利東邨的士站,"Daytime, Midnight",N,Y,
-,urban,鴨脷洲邨的士站,"Daytime, Midnight",N,Y,
-,urban,海怡半島一期,"Daytime, Midnight",N,N,
-,urban,海怡半島三期,"Daytime, Midnight",N,N,
-,urban,海怡半島二期,"Daytime, Midnight",N,N,
-,urban,新海怡廣場的士站,Daytime,N,Y,
-,urban,香港仔的士站,"Daytime, Midnight",N,Y,
-,urban,石排灣邨口,"Daytime, Midnight",Y,N,
-,urban,華貴邨的士站,"Daytime, Midnight",N,Y,
-,urban,華富邨,"Daytime, Midnight",N,N,出閘後只能停2部車
-,urban,貝沙灣四至六期,Daytime,N,Y,
-,urban,貝沙灣一至二期,Daytime,Y,N,停巴士站等候的士燈
-,urban,數碼港戲院,Daytime,Y,N,
-,urban,數碼港 (南區方向),Daytime,Y,N,
-,urban,瑪麗醫院的士站,Daytime,N,Y,
-,urban,中環中心,Daytime,N,N,
-,cross-harbour,中環中心非法過海站,Daytime,Y,N,
-,cross-harbour,文咸東街非法過海站,Daytime,Y,N,
-,urban,荷李活動些利街,Daytime,Y,N,
-,urban,花園道三號,"Daytime, Midnight",N,Y,
-,urban,尖沙咀碼頭的士站,Daytime,N,Y,
-,urban,廣東道 MacroPolo酒店,Daytime,Y,N,
-,urban,廣東道的士站,Daytime,N,Y,
-,urban,太子酒店,Daytime,N,Y,
-,urban,大潭道,Daytime,N,Y,
-,urban,鴨脷洲南灣,Daytime,N,Y,
-,urban,One Island South,PM,Y,N,
-,urban,黃埔AEON,Daytime,N,Y,
-,urban,黃埔聚寶坊,Daytime,N,Y,
-,urban,紅磡站的士站,Daytime,N,Y,
-,cross-harbour,紅磡站過海的士站,Daytime,N,Y,
-,urban,海灣軒,Daytime,N,Y,
-,urban,The One,Daytime,Y,N,
-,urban,麼地道 棉登經,"Daytime, Midnight",Y,N,
-,cross-harbour,麼地廣場過海的士站,"Daytime, Midnight",N,Y,
-,urban,九龍香格里接大酒店的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,天文臺道過海的士站,"Daytime, Midnight",N,Y,
-,urban,諾士佛臺,Midnight,Y,N,
-,urban,美麗華商場,Daytime,Y,N,
-,urban,厚福街,"Daytime, Midnight",Y,N,路口
-,urban,金域假日酒店,Daytime,N,Y,"酒店內, 一架"
-,urban,中港城的士站,Daytime,N,Y,地底正式的士站
-,urban,中港城 廣東道,Daytime,Y,N,大馬路旁
-,urban,高鐵站的士站,Daytime,N,Y,
-,cross-harbour,高鐵站過海的士站,Daytime,N,Y,
-,urban,西九文化區的士站,Daytime,N,Y,
-,urban,九龍站的士站,Daytime,N,Y,地面交通交匯處入
-,cross-harbour,ICC過海站,Daytime,N,Y,"ICC8樓平台, 收雙程隧道費"
-,urban,ICC的士站,Daytime,N,Y,ICC8樓平台
-,urban,麗思卡爾頓酒店,Daytime,N,Y,一架的士
-,urban,海逸豪園,Daytime,N,Y,
-,urban,伊利沙伯醫院的士站,Daytime,N,Y,
-,urban,君頤峰的士站,Daytime,N,Y,
-,urban,愛民邨的士站,"Daytime, Midnight",N,Y,
-,cross-harbour,彌敦道南行 咸美頓街,Midnight,Y,N,燈位前
-,cross-harbour,佐敦道東行,Midnight,Y,N,
-,urban,赤柱大街,"Daytime, Midnight",Y,N,
-,urban,滙豐總行,PM,N,N,
-,urban,太子大廈,Midnight,Y,N,
-,urban,銅鑼灣駱克道的士站,Daytime,N,Y,
-,urban,勵德邨,Daytime,Y,N,巴士站尾
-,urban,北海街的士站,Daytime,N,Y,
-,urban,寧波街的士站,Daytime,N,Y,
-,urban,駿發花園,Daytime,N,N,
-,urban,奧海城二期的士站,Daytime,N,Y,
-,cross-harbour,奧海城二期過海的士站,Daytime,N,Y,
-,urban,大角咀滙豐中心,PM,N,N,
-,urban,一號銀海,Daytime,Y,N,等待的士燈
-,urban,浪澄灣,Daytime,Y,N,等待的士燈
-,urban,奧海城一期的士站,Daytime,N,Y,
-,urban,港灣豪庭,Daytime,Y,N,停迴旋處大門
-,urban,朗豪坊的士站,"Daytime, Midnight",N,Y,
-,urban,旺角東站的士站,Daytime,N,Y,
-,urban,旺角中心的士站,"Daytime, Midnight",N,Y,
-,urban,欽州街,"Daytime, Midnight",Y,N,
-,urban,宇晴軒,Daytime,N,Y,
-,urban,海麗邨的士站,"Daytime, Midnight",N,Y,
-,urban,長沙灣廣場的士站,Daytime,N,Y,
-,urban,長沙灣道 長荔街,"Daytime, Midnight",Y,N,
-,urban,明愛醫院的士站,Daytime,N,Y,
-,urban,南昌站,Daytime,Y,N,
-,urban,南山邨的士站,Daytime,N,Y,
-,urban,又一城的士站,Daytime,N,Y,"地底, 跟停車場入"
-,urban,九龍醫院的士站,Daytime,N,Y,
-,urban,帝京酒店,Daytime,N,Y,平台
-,urban,MOKO的士站,Daytime,N,Y,平台
-,urban,九龍塘站的士站,Daytime,N,Y,
-,urban,浸會醫院的士站,Daytime,N,Y,金城道入
-,urban,樂富富美街,Daytime,Y,N,橋底
-,urban,樂富的士站,Daytime,N,Y,
-,urban,樂富商場,Daytime,N,Y,
-,urban,正德街,Daytime,Y,N,
-,urban,衙前圍道,"Daytime, Midnight",Y,N,
-,urban,法國醫院,Daytime,Y,N,隊頭在迴旋處
-,urban,富豪東方酒店的士站,Daytime,N,Y,
-,urban,何文田邨,"Daytime, Midnight",Y,N,閘口
-,urban,何文田廣場的士站,Daytime,N,Y,"要入閘, 留意免費時間"
-,urban,庇利街的士站,Daytime,N,Y,
-,cross-harbour,新圍街過海的士站,"Daytime, Midnight",N,Y,
-,urban,翔龍灣的士站,Daytime,N,Y,
-,urban,Airside的士站,Daytime,N,Y,
-,urban,沐寧街的士站,Daytime,N,Y,
-,urban,德朗邨閘口,"Daytime, Midnight",Y,N,
-,urban,麗晶花園閘口,Daytime,Y,N,
-,cross-harbour,宏泰道過海的士站,Daytime,N,Y,
-,urban,美羅中心,PM,Y,N,
-,urban,兒童醫院,Daytime,N,Y,
-,urban,啓德郵輪碼頭的士站,Daytime,N,Y,
-,urban,德福的士站,Daytime,N,Y,
-,urban,德福花園,Midnight,Y,N,
-,urban,海濱道83,PM,Y,N,
-,cross-harbour,創紀一期過海的士站,Daytime,N,Y,
-,urban,創紀一期的士站,"Daytime, Midnight",N,Y,
-,urban,APM的士站,Daytime,N,Y,
-,urban,裕民坊的士站,"Daytime, Midnight",N,Y,
-,urban,物華街,Midnight,Y,N,
-,urban,牛頭角道,"PM, Midnight",Y,N,
-,urban,牛頭角下邨,"Daytime, Midnight",Y,N,過馬路燈位
-,urban,福淘街的士站,Daytime,N,Y,
-,urban,淘大,Daytime,Y,N,
-,urban,淘大的士站,"Daytime, Midnight",N,Y,
-,urban,彩盈邨,"Daytime, Midnight",Y,N,巴士站
-,urban,啓業邨,Daytime,Y,N,閘口
-,urban,巧明街 駿業街,"PM, Midnight",Y,N,
-,urban,駱駝漆大廈,Midnight,Y,N,
-,urban,海濱匯,PM,Y,N,
-,cross-harbour,麗港城過海的士站,Daytime,N,Y,
-,urban,平田的士站,Daytime,N,Y,
-,urban,興田邨,Daytime,Y,N,
-,urban,坪石的士站,Daytime,N,Y,
-,urban,坪石,Midnight,Y,N,
-,urban,彩雲的士站,Daytime,N,Y,
-,urban,彩輝邨的士站,Daytime,N,Y,
-,urban,豐盛街的士站,Daytime,N,Y,
-,urban,彩德商場,Daytime,Y,N,巴士站
-,urban,順利紀律部隊宿舍的士站,Daytime,N,Y,
-,urban,順利的士站,Daytime,N,Y,
-,urban,香港站 港景街,Daytime,Y,N,
+id,type,name,time,dangerous,legal,Remarks,lat,lng
+,urban,企業廣場門口,Night,Y,N,,22.3216633800,114.2082438000
+,cross-harbour,企業廣場對面 常悅道,PM,Y,N,,22.3215878700,114.2083520000
+,urban,Megabox,Daytime,N,Y,,22.3202128200,114.2084564000
+,urban,"小西灣邨, 燈位前","Daytime, Midnight",N,N,,22.2626157800,114.2495768000
+,urban,小西灣邨閘口,Daytime,Y,N,,22.2648513600,114.2477695000
+,urban,"嘉業街常安街口, 發達中心門口, 燈位前",Daytime,N,N,,22.2676156900,114.2435011000
+,urban,翠灣邨巴士站,"Daytime, Midnight",N,N,,22.2685661100,114.2408775000
+,urban,金鐘站的士站,Daytime,N,Y,,22.2791713700,114.1645805000
+,urban,遮打道 (歷山大廈) 的士站,Daytime,N,Y,,22.2817369200,114.1587269000
+,cross-harbour,遮打道 (歷山大廈) 過海的士站,Daytime,N,Y,,22.2817984000,114.1585153000
+,urban,纜車站的士站,Daytime,N,Y,,22.2778248900,114.1596030000
+,urban,林士街的士站,Daytime,N,Y,,22.2864638800,114.1533811000
+,urban,香港站的士站 (地底),Daytime,N,Y,,22.2853379300,114.1568267000
+,urban,IFC的士站,Daytime,N,N,,22.2854626400,114.1579011000
+,urban,山頂的士站,Daytime,N,Y,,22.2703272700,114.1498825000
+,urban,港澳碼頭的士站,"Daytime, Midnight",N,Y,,22.2878533100,114.1516157000
+,cross-harbour,港澳碼頭過海的士站,"Daytime, Midnight",N,Y,,22.2878146600,114.1514790000
+,urban,爹核士街,Daytime,N,Y,,22.2835831100,114.1266067000
+,cross-harbour,加多近街過海的士站,Daytime,N,Y,,22.2818265100,114.1262251000
+,urban,中環二號碼頭的士站,Daytime,N,Y,,22.2876671200,114.1568608000
+,urban,中環四號碼頭,Daytime,N,N,,22.2872543300,114.1583681000
+,cross-harbour,中環碼頭過海的士站,Daytime,N,Y,,22.2869170700,114.1597274000
+,urban,中環六號碼頭的士站,Daytime,N,Y,,22.2867150700,114.1603633000
+,urban,中環八號碼頭的士站,Daytime,N,Y,,22.2860914900,114.1614871000
+,urban,IFC二期寫字樓的士站,PM,N,Y,,22.2856119500,114.1592869000
+,urban,港景街的士站,"Daytime, Midnight",Y,N,未到正式站前靠右排. 正式的士站沒人使用,22.2841311600,114.1585751000
+,cross-harbour,中環交易廣場過海的士站,Daytime,N,Y,,22.2837763300,114.1586728000
+,urban,畢打街的士站,"Daytime, Midnight",N,Y,,22.2817123300,114.1574332000
+,cross-harbour,畢打街非法過海站,"Daytime, Midnight",Y,N,"正式的士站前, 車尾為隊頭第一輛. 常有警方執法",22.2818036700,114.1575775000
+,urban,蘭桂坊的士站,"PM, Midnight",N,Y,,22.2811756800,114.1559420000
+,urban,帝景園,Daytime,N,Y,屋苑自設的士站,22.2756141200,114.1526370000
+,urban,太古廣場二座,Daytime,N,Y,,22.2773636500,114.1647664000
+,urban,太古廣場1座,"Daytime, Midnight",N,Y,,22.2775119700,114.1653531000
+,urban,會展站的士站,Daytime,N,Y,,22.2812924800,114.1748455000
+,cross-harbour,港灣道過海的士站,Daytime,N,Y,,22.2807024900,114.1750960000
+,cross-harbour,馬師道非法過海站 (半夜),Midnight,Y,N,,22.2792473100,114.1796000000
+,cross-harbour,駱克道過海的士站,"Daytime, Midnight",N,Y,,22.2782362700,114.1729198000
+,cross-harbour,駱克道馬師道過海的士站,"Daytime, Midnight",N,Y,,22.2792366000,114.1788642000
+,urban,會展舊翼的士站,Daytime,N,Y,,22.2812142000,114.1729511000
+,urban,律敦治醫院的士站,Daytime,N,Y,,22.2758186600,114.1753869000
+,urban,香港足球會,Daytime,N,N,,22.2756077200,114.1822887000
+,cross-harbour,跑馬地非法過海站,"Daytime, Midnight",Y,N,,22.2697515600,114.1836409000
+,urban,養和醫院的士站,Daytime,N,Y,,22.2695439200,114.1830575000
+,urban,港安醫院,Daytime,N,Y,入閘有限時,22.2634216100,114.1840166000
+,urban,合和中心 皇后大道東,Daytime,Y,N,,22.2749048500,114.1719681000
+,urban,喜帖街 皇后大道東,Daytime,Y,N,,22.2749526400,114.1720176000
+,urban,太古廣場三座,PM,N,N,,22.2766682000,114.1677509000
+,urban,灣仔站 莊士敦道,Daytime,Y,N,,22.2766871500,114.1735543000
+,urban,時代廣場的士站,"Daytime, Midnight",N,Y,,22.2786301400,114.1821601000
+,cross-harbour,時代廣場過海的士站,"Daytime, Midnight",N,Y,,22.2787850500,114.1823464000
+,urbasn,利園一期,Daytime,N,Y,,22.2782544000,114.1847491000
+,urban,利園二期的士站,Daytime,N,Y,,22.2787652700,114.1851908000
+,urban,邊寧頓街 渣甸街口,Daytime,Y,N,,22.2789737500,114.1860700000
+,urban,Sogo 軒尼詩道,Midnight,Y,N,,22.2802311700,114.1845852000
+,urban,百德新街的士站,"Daytime, Midnight",N,Y,,22.2807783000,114.1855179000
+,cross-harbour,百德新街過海的士站,Daytime,N,Y,,22.2820077000,114.1850301000
+,urban,天后的士站,"Daytime, Midnight",N,Y,,22.2832865500,114.1917671000
+,cross-harbour,天后過海的士站,"Daytime, Midnight",N,Y,,22.2841863500,114.1915331000
+,urban,城市花園,Daytime,N,N,,22.2908426100,114.1942985000
+,cross-harbour,北角道過海的士站,"Daytime, Midnight",N,Y,,22.2917465300,114.1964713000
+,urban,明園西街,Daytime,Y,N,,22.2907305400,114.1987085000
+,urban,北角站,Midnight,Y,N,,22.2909777400,114.2003210000
+,urban,英皇道K11,"PM, Midnight",Y,N,,22.2916023300,114.2075162000
+,urban,太古坊,Daytime,Y,N,,22.2874938800,114.2106738000
+,cross-harbour,太古坊非法過海站,"Daytime, Midnight",Y,N,"車尾為第一輛, 倒車排隊",22.2875647500,114.2116131000
+,urban,太古坊一座,"PM, Midnight",N,Y,,22.2876603300,114.2124981000
+,urban,港島東中心,Daytime,N,Y,,22.2864193900,114.2133600000
+,urban,太古城中心的士站,"Daytime, Midnight",N,Y,,22.2861276900,114.2174668000
+,urban,康怡廣場 (東行),Daytime,Y,N,康山道東行巴士站尾,22.2847367900,114.2159638000
+,urban,康怡廣場 西行,Daytime,Y,N,"康安街落山方向, 燈位禁區前",22.2841056000,114.2154480000
+,cross-harbour,太安樓非法過海站,"Daytime, Midnight",Y,N,,22.2831992100,114.2216923000
+,urban,嘉亨灣,Daytime,Y,N,排隊看嘉亨灣的士燈,22.2848719200,114.2236385000
+,urban,興東邨,Daytime,Y,N,巴士站最前,22.2806283300,114.2197130000
+,urban,愛蝶灣的士站,Daytime,N,Y,,22.2817456700,114.2287704000
+,urban,東旭苑,Daytime,Y,N,巴士站前,22.2827740200,114.2270515000
+,urban,望隆街,"Daytime, Midnight",Y,N,,22.2790198900,114.2294708000
+,urban,東區醫院,Daytime,N,Y,,22.2692027800,114.2363512000
+,urban,柴灣站的士站,"Daytime, Midnight",N,Y,,22.2642225400,114.2366280000
+,urban,藍灣半島的士站,Daytime,N,Y,,22.2666764000,114.2505569000
+,urban,藍灣半島的士站,Daytime,N,Y,,22.2663698800,114.2513018000
+,urban,杏花邨的士站,"Daytime, Midnight",N,Y,,22.2763435500,114.2405832000
+,cross-harbour,杏花邨過海的士站,Daytime,N,Y,,22.2782222600,114.2389632000
+,urban,明報工業中心,PM,Y,N,,22.2687034400,114.2450361000
+,urban,石澳泳灘,Daytime,N,N,,22.2298717300,114.2511419000
+,urban,大浪灣,Daytime,N,N,,22.2446344700,114.2455701000
+,urban,赤柱的士站,"Daytime, Midnight",N,Y,,22.2196871100,114.2127387000
+,urban,赤柱廣場,"Daytime, Midnight",Y,N,迴旋處,22.2198041200,114.2097459000
+,urban,淺水灣泳灘,Daytime,N,Y,,22.2367273900,114.1975640000
+,urban,淺水灣,"Daytime, Midnight",N,Y,,22.2386225800,114.1947451000
+,urban,海洋公園的士站,Dayitme,N,Y,,22.2483803600,114.1749675000
+,cross-harbour,海洋公園過海的士站,Daytime,N,Y,,22.2484215600,114.1747318000
+,urban,港怡醫院,Daytime,N,Y,,22.2516648200,114.1763452000
+,urban,水上樂園的士站,PM,N,Y,,22.2361110400,114.1675729000
+,urban,深灣遊艇會,Daytime,N,Y,,22.2437082900,114.1642077000
+,urban,利東邨的士站,"Daytime, Midnight",N,Y,,22.2411456600,114.1562232000
+,urban,鴨脷洲邨的士站,"Daytime, Midnight",N,Y,,22.2442076400,114.1508680000
+,urban,海怡半島一期,"Daytime, Midnight",N,N,,22.2444301200,114.1469862000
+,urban,海怡半島三期,"Daytime, Midnight",N,N,,22.2429469200,114.1481612000
+,urban,海怡半島二期,"Daytime, Midnight",N,N,,22.2435715100,114.1461061000
+,urban,新海怡廣場的士站,Daytime,N,Y,,22.2392521100,114.1525860000
+,urban,香港仔的士站,"Daytime, Midnight",N,Y,,22.2480721900,114.1539489000
+,urban,石排灣邨口,"Daytime, Midnight",Y,N,,22.2482715900,114.1576685000
+,urban,華貴邨的士站,"Daytime, Midnight",N,Y,,22.2497877500,114.1397168000
+,urban,華富邨,"Daytime, Midnight",N,N,出閘後只能停2部車,22.2510303400,114.1367949000
+,urban,貝沙灣四至六期,Daytime,N,Y,,22.2540296900,114.1335039000
+,urban,貝沙灣一至二期,Daytime,Y,N,停巴士站等候的士燈,22.2581892300,114.1329732000
+,urban,數碼港戲院,Daytime,Y,N,,22.2613352500,114.1297564000
+,urban,數碼港 (南區方向),Daytime,Y,N,,22.2614489600,114.1301222000
+,urban,瑪麗醫院的士站,Daytime,N,Y,,22.2704008700,114.1309215000
+,urban,中環中心,Daytime,N,N,,22.2841550400,114.1544186000
+,cross-harbour,中環中心非法過海站,Daytime,Y,N,,22.2841023100,114.1543725000
+,cross-harbour,文咸東街非法過海站,Daytime,Y,N,,22.2856036300,114.1523734000
+,urban,荷李活動些利街,Daytime,Y,N,,22.2821725000,114.1534100000
+,urban,花園道三號,"Daytime, Midnight",N,Y,,22.2788633300,114.1611144000
+,urban,尖沙咀碼頭的士站,Daytime,N,Y,,22.2942391300,114.1692275000
+,urban,廣東道 MacroPolo酒店,Daytime,Y,N,,22.2952996100,114.1693898000
+,urban,廣東道的士站,Daytime,N,Y,,22.2963460900,114.1692333000
+,urban,太子酒店,Daytime,N,Y,,22.2992350200,114.1680154000
+,urban,大潭道,Daytime,N,Y,,22.2279757100,114.2174404000
+,urban,鴨脷洲南灣,Daytime,N,Y,,22.2411629700,114.1590569000
+,urban,One Island South,PM,Y,N,,22.2486152000,114.1694080000
+,urban,黃埔AEON,Daytime,N,Y,,22.3032561300,114.1900030000
+,urban,黃埔聚寶坊,Daytime,N,Y,,22.3048448000,114.1898794000
+,urban,紅磡站的士站,Daytime,N,Y,,22.3022541500,114.1825375000
+,cross-harbour,紅磡站過海的士站,Daytime,N,Y,,22.3030435400,114.1826447000
+,urban,海灣軒,Daytime,N,Y,,22.3001875700,114.1856160000
+,urban,The One,Daytime,Y,N,,22.2964128300,114.1716665000
+,urban,麼地道 棉登經,"Daytime, Midnight",Y,N,,22.2971775000,114.1745423000
+,cross-harbour,麼地廣場過海的士站,"Daytime, Midnight",N,Y,,22.2985717100,114.1772763000
+,urban,九龍香格里接大酒店的士站,"Daytime, Midnight",N,Y,,22.2975746700,114.1770266000
+,cross-harbour,天文臺道過海的士站,"Daytime, Midnight",N,Y,,22.3009893200,114.1758714000
+,urban,諾士佛臺,Midnight,Y,N,,22.3006415900,114.1731637000
+,urban,美麗華商場,Daytime,Y,N,,22.3005097500,114.1725144000
+,urban,厚福街,"Daytime, Midnight",Y,N,路口,22.2993874600,114.1735576000
+,urban,金域假日酒店,Daytime,N,Y,"酒店內, 一架",22.2969517300,114.1731456000
+,urban,中港城的士站,Daytime,N,Y,地底正式的士站,22.3004850300,114.1677962000
+,urban,中港城 廣東道,Daytime,Y,N,大馬路旁,22.3005773200,114.1680813000
+,urban,高鐵站的士站,Daytime,N,Y,,22.3032487200,114.1641739000
+,cross-harbour,高鐵站過海的士站,Daytime,N,Y,,22.3032240000,114.1642118000
+,urban,西九文化區的士站,Daytime,N,Y,,22.3016155500,114.1561811000
+,urban,九龍站的士站,Daytime,N,Y,地面交通交匯處入,22.3042737700,114.1608062000
+,cross-harbour,ICC過海站,Daytime,N,Y,"ICC8樓平台, 收雙程隧道費",22.3033171100,114.1606398000
+,urban,ICC的士站,Daytime,N,Y,ICC8樓平台,22.3032149300,114.1606019000
+,urban,麗思卡爾頓酒店,Daytime,N,Y,一架的士,22.3034934400,114.1599345000
+,urban,海逸豪園,Daytime,N,Y,,22.3078686700,114.1927269000
+,urban,伊利沙伯醫院的士站,Daytime,N,Y,,22.3089909500,114.1751576000
+,urban,君頤峰的士站,Daytime,N,Y,,22.3109240500,114.1766177000
+,urban,愛民邨的士站,"Daytime, Midnight",N,Y,,22.3137998000,114.1777697000
+,cross-harbour,彌敦道南行 咸美頓街,Midnight,Y,N,燈位前,22.3147424500,114.1704031000
+,cross-harbour,佐敦道東行,Midnight,Y,N,,22.3053357000,114.1711052000
+,urban,赤柱大街,"Daytime, Midnight",Y,N,,22.2185143600,114.2115725000
+,urban,滙豐總行,PM,N,N,,22.2799409100,114.1593360000
+,urban,太子大廈,Midnight,Y,N,,22.2813301700,114.1588878000
+,urban,銅鑼灣駱克道的士站,Daytime,N,Y,,22.2806891000,114.1830672000
+,urban,勵德邨,Daytime,Y,N,巴士站尾,22.2782138100,114.1941878000
+,urban,北海街的士站,Daytime,N,Y,,22.3077590700,114.1712082000
+,urban,寧波街的士站,Daytime,N,Y,,22.3065445000,114.1712922000
+,urban,駿發花園,Daytime,N,N,,22.3099789200,114.1690707000
+,urban,奧海城二期的士站,Daytime,N,Y,,22.3175860700,114.1621310000
+,cross-harbour,奧海城二期過海的士站,Daytime,N,Y,,22.3176618800,114.1620618000
+,urban,大角咀滙豐中心,PM,N,N,,22.3190939900,114.1611389000
+,urban,一號銀海,Daytime,Y,N,等待的士燈,22.3181711100,114.1564619000
+,urban,浪澄灣,Daytime,Y,N,等待的士燈,22.3191302400,114.1565888000
+,urban,奧海城一期的士站,Daytime,N,Y,,22.3185435600,114.1583522000
+,urban,港灣豪庭,Daytime,Y,N,停迴旋處大門,22.3242555100,114.1600562000
+,urban,朗豪坊的士站,"Daytime, Midnight",N,Y,,22.3188863400,114.1688103000
+,urban,旺角東站的士站,Daytime,N,Y,,22.3218642700,114.1723766000
+,urban,旺角中心的士站,"Daytime, Midnight",N,Y,,22.3199328200,114.1698123000
+,urban,欽州街,"Daytime, Midnight",Y,N,,22.3324023700,114.1616679000
+,urban,宇晴軒,Daytime,N,Y,,22.3338888600,114.1496788000
+,urban,海麗邨的士站,"Daytime, Midnight",N,Y,,22.3323002000,114.1474177000
+,urban,長沙灣廣場的士站,Daytime,N,Y,,22.3368733800,114.1488647000
+,urban,長沙灣道 長荔街,"Daytime, Midnight",Y,N,,22.3370810300,114.1478034000
+,urban,明愛醫院的士站,Daytime,N,Y,,22.3411383900,114.1533587000
+,urban,南昌站,Daytime,Y,N,,22.3278835700,114.1539248000
+,urban,南山邨的士站,Daytime,N,Y,,22.3328489800,114.1700950000
+,urban,又一城的士站,Daytime,N,Y,"地底, 跟停車場入",22.3375902600,114.1743913000
+,urban,九龍醫院的士站,Daytime,N,Y,,22.3239967700,114.1794053000
+,urban,帝京酒店,Daytime,N,Y,平台,22.3242621000,114.1732121000
+,urban,MOKO的士站,Daytime,N,Y,平台,22.3232304500,114.1726090000
+,urban,九龍塘站的士站,Daytime,N,Y,,22.3367394800,114.1763565000
+,urban,浸會醫院的士站,Daytime,N,Y,金城道入,22.3396762100,114.1797135000
+,urban,樂富富美街,Daytime,Y,N,橋底,22.3406880800,114.1870067000
+,urban,樂富的士站,Daytime,N,Y,,22.3385951300,114.1869572000
+,urban,樂富商場,Daytime,N,Y,,22.3378996700,114.1881867000
+,urban,正德街,Daytime,Y,N,,22.3411742400,114.1931290000
+,urban,衙前圍道,"Daytime, Midnight",Y,N,,22.3288208700,114.1911118000
+,urban,法國醫院,Daytime,Y,N,隊頭在迴旋處,22.3259995000,114.1843954000
+,urban,富豪東方酒店的士站,Daytime,N,Y,,22.3301211300,114.1927986000
+,urban,何文田邨,"Daytime, Midnight",Y,N,閘口,22.3169492200,114.1820199000
+,urban,何文田廣場的士站,Daytime,N,Y,"要入閘, 留意免費時間",22.3160560100,114.1820314000
+,urban,庇利街的士站,Daytime,N,Y,,22.3123348400,114.1888739000
+,cross-harbour,新圍街過海的士站,"Daytime, Midnight",N,Y,,22.3120035900,114.1863360000
+,urban,翔龍灣的士站,Daytime,N,Y,,22.3191031500,114.1930169000
+,urban,Airside的士站,Daytime,N,Y,,22.3309983800,114.1977632000
+,urban,沐寧街的士站,Daytime,N,Y,,22.3287323900,114.2010114000
+,urban,德朗邨閘口,"Daytime, Midnight",Y,N,,22.3311977900,114.2041030000
+,urban,麗晶花園閘口,Daytime,Y,N,,22.3291954800,114.2063195000
+,cross-harbour,宏泰道過海的士站,Daytime,N,Y,,22.3202468600,114.2097639000
+,urban,美羅中心,PM,Y,N,,22.3245959200,114.2103687000
+,urban,兒童醫院,Daytime,N,Y,,22.3159752600,114.2090684000
+,urban,啓德郵輪碼頭的士站,Daytime,N,Y,,22.3065668500,114.2130203000
+,urban,德福的士站,Daytime,N,Y,,22.3212282400,114.2131612000
+,urban,德福花園,Midnight,Y,N,,22.3219319400,114.2129906000
+,urban,海濱道83,PM,Y,N,,22.3155179400,114.2143288000
+,cross-harbour,創紀一期過海的士站,Daytime,N,Y,,22.3131019800,114.2216245000
+,urban,創紀一期的士站,"Daytime, Midnight",N,Y,,22.3131530700,114.2214959000
+,urban,APM的士站,Daytime,N,Y,,22.3121856900,114.2248859000
+,urban,裕民坊的士站,"Daytime, Midnight",N,Y,,22.3136408700,114.2248315000
+,urban,物華街,Midnight,Y,N,,22.3149988200,114.2243008000
+,urban,牛頭角道,"PM, Midnight",Y,N,,22.3148884000,114.2217267000
+,urban,牛頭角下邨,"Daytime, Midnight",Y,N,過馬路燈位,22.3213930400,114.2159892000
+,urban,福淘街的士站,Daytime,N,Y,,22.3236804600,114.2157370000
+,urban,淘大,Daytime,Y,N,,22.3258607600,114.2146279000
+,urban,淘大的士站,"Daytime, Midnight",N,Y,,22.3235041200,114.2171395000
+,urban,彩盈邨,"Daytime, Midnight",Y,N,巴士站,22.3283195700,114.2155112000
+,urban,啓業邨,Daytime,Y,N,閘口,22.3294171300,114.2082568000
+,urban,巧明街 駿業街,"PM, Midnight",Y,N,,22.3121626200,114.2237743000
+,urban,駱駝漆大廈,Midnight,Y,N,,22.3104651900,114.2247367000
+,urban,海濱匯,PM,Y,N,,22.3166056200,114.2141879000
+,cross-harbour,麗港城過海的士站,Daytime,N,Y,,22.3052278600,114.2292687000
+,urban,平田的士站,Daytime,N,Y,,22.3063056400,114.2370580000
+,urban,興田邨,Daytime,Y,N,,22.3129025700,114.2393487000
+,urban,坪石的士站,Daytime,N,Y,,22.3337563000,114.2101116000
+,urban,坪石,Midnight,Y,N,,22.3340216300,114.2091722000
+,urban,彩雲的士站,Daytime,N,Y,,22.3335140500,114.2150589000
+,urban,彩輝邨的士站,Daytime,N,Y,,22.3348950700,114.2180615000
+,urban,豐盛街的士站,Daytime,N,Y,,22.3375878900,114.2145991000
+,urban,彩德商場,Daytime,Y,N,巴士站,22.3295127100,114.2127270000
+,urban,順利紀律部隊宿舍的士站,Daytime,N,Y,,22.3318314400,114.2215470000
+,urban,順利的士站,Daytime,N,Y,,22.3320390900,114.2255978000
+,urban,香港站 港景街,Daytime,Y,N,,22.2847828300,114.1574334000
