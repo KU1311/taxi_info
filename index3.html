@@ -88,21 +88,29 @@
 	    });
 		console.log(data)
 	    const features = data.map(row => ({
-	      type: 'Feature',
-	      geometry: {
-	        type: 'Point',
-	        coordinates: [parseFloat(row['lat']), parseFloat(row['lng'])]
-	      },
-	      properties: {
-	        id: row['id'],
-	        type: row['type'],
-	        name: row['name'],
-	        time: row['time'],
-	        dangerous: row['dangerous'] === 'true',
-	        legal: row['legal'] === 'true',
-	        remarks: row['Remarks']
-	      }
-	    }));
+		    const latitude = parseFloat(row['lat']);
+		  const longitude = parseFloat(row['lng']);
+		
+		  // Log the coordinates
+		  console.log(`Coordinates: (${latitude}, ${longitude})`);
+		
+		  return {
+		      type: 'Feature',
+		      geometry: {
+		        type: 'Point',
+		        coordinates: [parseFloat(row['lat']), parseFloat(row['lng'])]
+		      },
+		      properties: {
+		        id: row['id'],
+		        type: row['type'],
+		        name: row['name'],
+		        time: row['time'],
+		        dangerous: row['dangerous'] === 'true',
+		        legal: row['legal'] === 'true',
+		        remarks: row['Remarks']
+		      }
+		  }
+	    });
 	
 	    const featureLayer = L.geoJSON(features, {
 	      onEachFeature: (feature, layer) => {
