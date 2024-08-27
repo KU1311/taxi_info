@@ -1,126 +1,201 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>POI Map</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Data on OpenStreetMap</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-   button {
-      display: flex;
-      padding: 0.75rem;
-      background-color: rgb(237, 28, 36 );
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-	.current-location-marker {
-	  background-color: rgba(73, 167, 223, 0.5);
-	  border-radius: 50%;
-	  width: 40px;
-	  height: 40px;
+    .controls-container {
 	  display: flex;
-	  justify-content: center;
+	  justify-content: space-around;
 	  align-items: center;
-	  font-size: 12px;
-	  font-weight: bold;
-	  color: white;
+	  background-color: #f1f1f1;
+	  padding: 10px;
+	  position: sticky;
+	  top: 0;
+	  z-index: 1000;
 	}
 	
-	.current-location-label {
-	  padding: 4px 8px;
-	  border-radius: 4px;
-	  font-size: 12px;
-	  font-weight: bold;
+	.dropdown-container {
+	  display: flex;
+	  align-items: center;
 	}
-	  
+	
+	.dropdown-container label {
+	  margin-right: 5px;
+	}
+	
+	.dropdown-container select {
+	  padding: 5px;
+	  border-radius: 4px;
+	  border: 1px solid #ccc;
+	}
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 </head>
 <body>
-  <div id="map"></div>
+  <div class="controls-container">
+    <div class="dropdown-container">
+      <label for="type-dropdown">Type:</label>
+      <select id="type-dropdown">
+        <option value="all">All</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="time-dropdown">Time:</label>
+      <select id="time-dropdown">
+        <option value="all">All</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="dangerous-dropdown">Dangerous:</label>
+      <select id="dangerous-dropdown">
+        <option value="all">All</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="legal-dropdown">Legal:</label>
+      <select id="legal-dropdown">
+        <option value="all">All</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select>
+    </div>
+  </div>
+  <div id="map" style="height: 80vh;"></div>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
-	  
-	// Function to open Google Maps navigation
-    function openGoogleMapsNavigation(lat, lng) {
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-      window.open(url, '_blank');
-    }
-	  
-    // Replace this with the URL of your CSV file on GitHub
-    const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv_test1.csv';
-
-    // Fetch the CSV data
-    fetch(csvUrl)
-      .then(response => response.text())
-      .then(csvData => {
-        // Parse the CSV data
-        const rows = csvData.trim().split('\n');
-			  const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-        const data = rows.slice(1).map(row => {
-          const values = row.split(',');
-          return headers.reduce((obj, header, i) => {
-            obj[header] = values[i];
-            return obj;
-          }, {});
-        });
-
-       // Initialize the map
         const map = L.map('map').setView([22.305451, 114.169656], 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-      
-        // Add markers for the POIs
-        data.forEach(poi => {
-          const Y = poi.lng;
-          const Yr = String(Y).replace('\r', '');
-          L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
-            .bindPopup(`<b>${poi.name}</b>
-	    <br>${poi.remarks}
-	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">Navigate</button>
-     	 `);
-	})
-
-
-	// Add the user's current location
-	    if (navigator.geolocation) {
-	      navigator.geolocation.getCurrentPosition(
-	        (position) => {
-	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
-			   icon: L.divIcon({
-			        className: 'current-location-marker',
-			        iconSize: [50, 50]
-			      })
-			  })
-			.bindPopup(`<div class="current-location-label">你的位置</div>`)
-			.addTo(map);
-	        },
-	        (error) => {
-	          console.error("Error getting user location:", error);
-	        });
-	    } else {
-	      console.error("Geolocation is not supported by this browser.");
-	    }
-	      
-      })
-      .catch(error => console.error('Error fetching CSV data:', error));
-
-    
-
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
 	  
+	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
+	// Load the CSV data
+	fetch(csvUrl)
+	  .then(response => response.text())
+	  .then(data => {
+	    const rows = data.trim().split('\n');
+	    const headers = rows[0].split('\t');
+	    const features = [];
+	
+	    for (let i = 1; i < rows.length; i++) {
+	      const values = rows[i].split('\t');
+	      const feature = {
+	        type: 'Feature',
+	        geometry: {
+	          type: 'Point',
+	          coordinates: [parseFloat(values[3]), parseFloat(values[2])]
+	        },
+	        properties: {
+	          id: values[0],
+	          type: values[1],
+	          name: values[2],
+	          time: values[3],
+	          dangerous: values[4] === 'true',
+	          legal: values[5] === 'true',
+	          remarks: values[6]
+	        }
+	      };
+	      features.push(feature);
+	    }
+	
+	    const featureLayer = L.geoJSON(features, {
+	      onEachFeature: (feature, layer) => {
+	        layer.bindPopup(`
+	          <b>ID:</b> ${feature.properties.id}<br>
+	          <b>Type:</b> ${feature.properties.type}<br>
+	          <b>Name:</b> ${feature.properties.name}<br>
+	          <b>Time:</b> ${feature.properties.time}<br>
+	          <b>Dangerous:</b> ${feature.properties.dangerous ? 'Y' : 'N'}<br>
+	          <b>Legal:</b> ${feature.properties.legal ? 'Y' : 'N'}<br>
+	          <b>Remarks:</b> ${feature.properties.remarks}
+	        `);
+	      }
+	    }).addTo(map);
+	
+	    // Populate the dropdowns
+	    const typeOptions = new Set(['all']);
+	    const timeOptions = new Set(['all']);
+	    const dangerousOptions = new Set(['all', 'Y', 'N']);
+	    const legalOptions = new Set(['all', 'Y', 'N']);
+	
+	    features.forEach(feature => {
+	      typeOptions.add(feature.properties.type);
+	      timeOptions.add(feature.properties.time);
+	    });
+	
+	    const typeDropdown = document.getElementById('type-dropdown');
+	    const timeDropdown = document.getElementById('time-dropdown');
+	    const dangerousDropdown = document.getElementById('dangerous-dropdown');
+	    const legalDropdown = document.getElementById('legal-dropdown');
+	
+	    typeOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      typeDropdown.appendChild(optionElement);
+	    });
+	
+	    timeOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      timeDropdown.appendChild(optionElement);
+	    });
+	
+	    dangerousOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      dangerousDropdown.appendChild(optionElement);
+	    });
+	
+	    legalOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      legalDropdown.appendChild(optionElement);
+	    });
+	
+	    // Add event listeners for the dropdowns
+	    typeDropdown.addEventListener('change', filterFeatures);
+	    timeDropdown.addEventListener('change', filterFeatures);
+	    dangerousDropdown.addEventListener('change', filterFeatures);
+	    legalDropdown.addEventListener('change', filterFeatures);
+	
+	    function filterFeatures() {
+	      const typeFilter = typeDropdown.value;
+	      const timeFilter = timeDropdown.value;
+	      const dangerousFilter = dangerousDropdown.value;
+	      const legalFilter = legalDropdown.value;
+	
+	      featureLayer.eachLayer(layer => {
+	        const feature = layer.feature;
+	        let shouldShow = true;
+	
+	        if (typeFilter !== 'all' && feature.properties.type !== typeFilter) {
+	          shouldShow = false;
+	        }
+	
+	        if (timeFilter !== 'all' && feature.properties.time !== timeFilter) {
+	          shouldShow = false;
+	        }
+	
+	        if (dangerousFilter !== 'all' && feature.properties.dangerous !== (dangerousFilter === 'true')) {
+	          shouldShow = false;
+	        }
+	
+	        if (legalFilter !== 'all' && feature.properties.legal !== (legalFilter === 'true')) {
+	          shouldShow = false;
+	        }
+	
+	        layer.setOpacity(shouldShow ? 1 : 0.3);
+	      });
+	    }
+	  });
   </script>
 </body>
 </html>
