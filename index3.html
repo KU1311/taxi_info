@@ -80,19 +80,21 @@
 		const rows = csvData.trim().split('\n');
 		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
 		const data = rows.slice(1).map(row => {
-			const values = row.split(',').replace('\r', '');
+			const values = row.split(',');
 			return headers.reduce((obj, header, i) => {
 				obj[header] = values[i];
 				return obj;
 			}, {});
 	    });
 
-		  console.log(data)
+	    const lat = data.lat
+	    const lng = data.lng.replace('\r', '')
+		console.log(lat,lng)
 	    const features = data.map(row => ({
 	      type: 'Feature',
 	      geometry: {
 	        type: 'Point',
-	        coordinates: [parseFloat(row['lat']), parseFloat(Yr)]
+	        coordinates: [parseFloat(lat), parseFloat(lng)]
 	      },
 	      properties: {
 	        id: row['id'],
