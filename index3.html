@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Data on OpenStreetMap</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    .controls-container {
+	  display: flex;
+	  justify-content: space-around;
+	  align-items: center;
+	  background-color: #f1f1f1;
+	  padding: 10px;
+	  position: sticky;
+	  top: 0;
+	  z-index: 1000;
+	}
+	
+	.dropdown-container {
+	  display: flex;
+	  align-items: center;
+	}
+	
+	.dropdown-container label {
+	  margin-right: 5px;
+	}
+	
+	.dropdown-container select {
+	  padding: 5px;
+	  border-radius: 4px;
+	  border: 1px solid #ccc;
+	}
+  </style>
+</head>
+<body>
+  <div class="controls-container">
+    <div class="dropdown-container">
+      <label for="type-dropdown">Type:</label>
+      <select id="type-dropdown">
+        <option value="all">All</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="time-dropdown">Time:</label>
+      <select id="time-dropdown">
+        <option value="all">All</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="dangerous-dropdown">Dangerous:</label>
+      <select id="dangerous-dropdown">
+        <option value="all">All</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="legal-dropdown">Legal:</label>
+      <select id="legal-dropdown">
+        <option value="all">All</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select>
+    </div>
+  </div>
+  <div id="map" style="height: 80vh;"></div>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>
+        const map = L.map('map').setView([22.305451, 114.169656], 12);
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+	
+	// Load the CSV data
+    	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
+	fetch(csvUrl)
+	  .then(response => response.text())
+	  .then(csvdata => {
+		const rows = csvData.trim().split('\n');
+		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+		const data = rows.slice(1).map(row => {
+		const values = row.split(',');
+		return headers.reduce((obj, header, i) => {
+			obj[header] = values[i];
+			return obj;
+		}, {});
+	    });
+		const Y = poi.lng;
+          	const Yr = String(Y).replace('\r', '');
+		  console.log(row['lat'],Yr)
+	    const features = data.map(row => ({
+	      type: 'Feature',
+	      geometry: {
+	        type: 'Point',
+	        coordinates: [parseFloat(row['lat']), parseFloat(Yr)]
+	      },
+	      properties: {
+	        id: row['id'],
+	        type: row['type'],
+	        name: row['name'],
+	        time: row['time'],
+	        dangerous: row['dangerous'] === 'true',
+	        legal: row['legal'] === 'true',
+	        remarks: row['Remarks']
+	      }
+	    }));
+	
+	    const featureLayer = L.geoJSON(features, {
+	      onEachFeature: (feature, layer) => {
+	        layer.bindPopup(`
+	          <b>ID:</b> ${feature.properties.id}<br>
+	          <b>Type:</b> ${feature.properties.type}<br>
+	          <b>Name:</b> ${feature.properties.name}<br>
+	          <b>Time:</b> ${feature.properties.time}<br>
+	          <b>Dangerous:</b> ${feature.properties.dangerous ? 'True' : 'False'}<br>
+	          <b>Legal:</b> ${feature.properties.legal ? 'True' : 'False'}<br>
+	          <b>Remarks:</b> ${feature.properties.remarks}
+	        `);
+	      }
+	    }).addTo(map);
+	
+	    // Populate the dropdowns
+	    const typeOptions = new Set(['all']);
+	    const timeOptions = new Set(['all']);
+	    const dangerousOptions = new Set(['all', 'true', 'false']);
+	    const legalOptions = new Set(['all', 'true', 'false']);
+	
+	    data.forEach(row => {
+	      typeOptions.add(row.type);
+	      timeOptions.add(row.time);
+	    });
+	
+	    const typeDropdown = document.getElementById('type-dropdown');
+	    const timeDropdown = document.getElementById('time-dropdown');
+	    const dangerousDropdown = document.getElementById('dangerous-dropdown');
+	    const legalDropdown = document.getElementById('legal-dropdown');
+	
+	    typeOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      typeDropdown.appendChild(optionElement);
+	    });
+	
+	    timeOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      timeDropdown.appendChild(optionElement);
+	    });
+	
+	    dangerousOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      dangerousDropdown.appendChild(optionElement);
+	    });
+	
+	    legalOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      legalDropdown.appendChild(optionElement);
+	    });
+	
+	    // Add event listeners for the dropdowns
+	    typeDropdown.addEventListener('change', filterFeatures);
+	    timeDropdown.addEventListener('change', filterFeatures);
+	    dangerousDropdown.addEventListener('change', filterFeatures);
+	    legalDropdown.addEventListener('change', filterFeatures);
+	
+	    function filterFeatures() {
+	      const typeFilter = typeDropdown.value;
+	      const timeFilter = timeDropdown.value;
+	      const dangerousFilter = dangerousDropdown.value;
+	      const legalFilter = legalDropdown.value;
+	
+	      featureLayer.eachLayer(layer => {
+	        const feature = layer.feature;
+	        let shouldShow = true;
+	
+	        if (typeFilter !== 'all' && feature.properties.type !== typeFilter) {
+	          shouldShow = false;
+	        }
+	
+	        if (timeFilter !== 'all' && feature.properties.time !== timeFilter) {
+	          shouldShow = false;
+	        }
+	
+	        if (dangerousFilter !== 'all' && feature.properties.dangerous !== (dangerousFilter === 'true')) {
+	          shouldShow = false;
+	        }
+	
+	        if (legalFilter !== 'all' && feature.properties.legal !== (legalFilter === 'true')) {
+	          shouldShow = false;
+	        }
+	
+	        layer.setOpacity(shouldShow ? 1 : 0.3);
+	      });
+	    }
+	  });
+  </script>
+</body>
+</html>
