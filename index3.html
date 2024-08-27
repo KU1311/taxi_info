@@ -98,7 +98,7 @@
 		      type: 'Feature',
 		      geometry: {
 		        type: 'Point',
-		        coordinates: [parseFloat(row['lat']), parseFloat(row['lng'])]
+		        coordinates: [latitude, longitude]
 		      },
 		      properties: {
 		        id: row['id'],
@@ -110,7 +110,7 @@
 		        remarks: row['Remarks']
 		      }
 		  }
-	    });
+	    }).filter(feature => feature !== null); // Remove any null values
 	
 	    const featureLayer = L.geoJSON(features, {
 	      onEachFeature: (feature, layer) => {
