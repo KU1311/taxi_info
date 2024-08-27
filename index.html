@@ -83,12 +83,13 @@
 	
 	    for (let i = 1; i < rows.length; i++) {
 	      const values = rows[i].split('\t');
+		    
+	      const lat = parseFloat(values[7]),
+	      const lng = parseFloat(String(values[8]).replace('\r', ''))
 	      const feature = {
 	        type: 'Feature',
 	        geometry: {
 	          type: 'Point',
-		  const lat = parseFloat(values[7]),
-		  const lng = parseFloat(String(values[8]).replace('\r', ''))
 	          console.log(lat,lng)
 	          coordinates: [lat, lng]
 	        },
