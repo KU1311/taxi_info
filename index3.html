@@ -82,14 +82,11 @@
 		const data = rows.slice(1).map(row => {
 			const values = row.split(',');
 			return headers.reduce((obj, header, i) => {
-				obj[header] = values[i];
+				obj[header] = Strint(values[i]).replace('\r', '');
 				return obj;
 			}, {});
 	    });
-
-	    const lat = data.lat
-	    const lng = data.lng.replace('\r', '')
-		console.log(lat,lng)
+		console.log(data)
 	    const features = data.map(row => ({
 	      type: 'Feature',
 	      geometry: {
