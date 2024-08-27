@@ -28,7 +28,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,cross-harbour,中環交易廣場過海的士站,Daytime,N,Y,,22.2837763300,114.1586728000
 ,urban,畢打街的士站,"Daytime; Midnight",N,Y,,22.2817123300,114.1574332000
 ,cross-harbour,畢打街非法過海站,"Daytime; Midnight",Y,N,正式的士站前 車尾為隊頭第一輛 常有警方執法,22.2818036700,114.1575775000
-,urban,蘭桂坊的士站,"PM, Midnight",N,Y,,22.2811756800,114.1559420000
+,urban,蘭桂坊的士站,"PM; Midnight",N,Y,,22.2811756800,114.1559420000
 ,urban,帝景園,Daytime,N,Y,屋苑自設的士站,22.2756141200,114.1526370000
 ,urban,太古廣場二座,Daytime,N,Y,,22.2773636500,114.1647664000
 ,urban,太古廣場1座,"Daytime; Midnight",N,Y,,22.2775119700,114.1653531000
@@ -79,7 +79,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,柴灣站的士站,"Daytime; Midnight",N,Y,,22.2642225400,114.2366280000
 ,urban,藍灣半島的士站,Daytime,N,Y,,22.2666764000,114.2505569000
 ,urban,藍灣半島的士站,Daytime,N,Y,,22.2663698800,114.2513018000
-,urban,杏花邨的士站,"Daytime, Midnight",N,Y,,22.2763435500,114.2405832000
+,urban,杏花邨的士站,"Daytime; Midnight",N,Y,,22.2763435500,114.2405832000
 ,cross-harbour,杏花邨過海的士站,Daytime,N,Y,,22.2782222600,114.2389632000
 ,urban,明報工業中心,PM,Y,N,,22.2687034400,114.2450361000
 ,urban,石澳泳灘,Daytime,N,N,,22.2298717300,114.2511419000
@@ -149,7 +149,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,愛民邨的士站,"Daytime; Midnight",N,Y,,22.3137998000,114.1777697000
 ,cross-harbour,彌敦道南行 咸美頓街,Midnight,Y,N,燈位前,22.3147424500,114.1704031000
 ,cross-harbour,佐敦道東行,Midnight,Y,N,,22.3053357000,114.1711052000
-,urban,赤柱大街,"Daytime, Midnight",Y,N,,22.2185143600,114.2115725000
+,urban,赤柱大街,"Daytime; Midnight",Y,N,,22.2185143600,114.2115725000
 ,urban,滙豐總行,PM,N,N,,22.2799409100,114.1593360000
 ,urban,太子大廈,Midnight,Y,N,,22.2813301700,114.1588878000
 ,urban,銅鑼灣駱克道的士站,Daytime,N,Y,,22.2806891000,114.1830672000
@@ -188,10 +188,10 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,衙前圍道,"Daytime; Midnight",Y,N,,22.3288208700,114.1911118000
 ,urban,法國醫院,Daytime,Y,N,隊頭在迴旋處,22.3259995000,114.1843954000
 ,urban,富豪東方酒店的士站,Daytime,N,Y,,22.3301211300,114.1927986000
-,urban,何文田邨,"Daytime, Midnight",Y,N,閘口,22.3169492200,114.1820199000
+,urban,何文田邨,"Daytime; Midnight",Y,N,閘口,22.3169492200,114.1820199000
 ,urban,何文田廣場的士站,Daytime,N,Y,要入閘 留意免費時間,22.3160560100,114.1820314000
 ,urban,庇利街的士站,Daytime,N,Y,,22.3123348400,114.1888739000
-,cross-harbour,新圍街過海的士站,"Daytime, Midnight",N,Y,,22.3120035900,114.1863360000
+,cross-harbour,新圍街過海的士站,"Daytime; Midnight",N,Y,,22.3120035900,114.1863360000
 ,urban,翔龍灣的士站,Daytime,N,Y,,22.3191031500,114.1930169000
 ,urban,Airside的士站,Daytime,N,Y,,22.3309983800,114.1977632000
 ,urban,沐寧街的士站,Daytime,N,Y,,22.3287323900,114.2010114000
@@ -209,7 +209,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,APM的士站,Daytime,N,Y,,22.3121856900,114.2248859000
 ,urban,裕民坊的士站,"Daytime; Midnight",N,Y,,22.3136408700,114.2248315000
 ,urban,物華街,Midnight,Y,N,,22.3149988200,114.2243008000
-,urban,牛頭角道,"PM, Midnight",Y,N,,22.3148884000,114.2217267000
+,urban,牛頭角道,"PM; Midnight",Y,N,,22.3148884000,114.2217267000
 ,urban,牛頭角下邨,"Daytime; Midnight",Y,N,過馬路燈位,22.3213930400,114.2159892000
 ,urban,福淘街的士站,Daytime,N,Y,,22.3236804600,114.2157370000
 ,urban,淘大,Daytime,Y,N,,22.3258607600,114.2146279000
