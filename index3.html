@@ -86,7 +86,7 @@
 			return obj;
 		}, {});
 	    });
-		const Y = poi.lng;
+		const Y = obj[lng];
           	const Yr = String(Y).replace('\r', '');
 		  console.log(row['lat'],Yr)
 	    const features = data.map(row => ({
