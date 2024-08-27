@@ -82,7 +82,7 @@
 		const data = rows.slice(1).map(row => {
 			const values = row.split(',');
 			return headers.reduce((obj, header, i) => {
-				obj[header] = Strint(values[i]).replace('\r', '');
+				obj[header] = String(values[i]).replace('\r', '');
 				return obj;
 			}, {});
 	    });
