@@ -69,7 +69,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,太古城中心的士站,"Daytime; Midnight",N,Y,,22.2861276900,114.2174668000
 ,urban,康怡廣場 (東行),Daytime,Y,N,康山道東行巴士站尾,22.2847367900,114.2159638000
 ,urban,康怡廣場 西行,Daytime,Y,N,康安街落山方向 燈位禁區前,22.2841056000,114.2154480000
-,cross-harbour,太安樓非法過海站,"Daytime, Midnight",Y,N,,22.2831992100,114.2216923000
+,cross-harbour,太安樓非法過海站,"Daytime; Midnight",Y,N,,22.2831992100,114.2216923000
 ,urban,嘉亨灣,Daytime,Y,N,排隊看嘉亨灣的士燈,22.2848719200,114.2236385000
 ,urban,興東邨,Daytime,Y,N,巴士站最前,22.2806283300,114.2197130000
 ,urban,愛蝶灣的士站,Daytime,N,Y,,22.2817456700,114.2287704000
@@ -214,7 +214,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,福淘街的士站,Daytime,N,Y,,22.3236804600,114.2157370000
 ,urban,淘大,Daytime,Y,N,,22.3258607600,114.2146279000
 ,urban,淘大的士站,"Daytime; Midnight",N,Y,,22.3235041200,114.2171395000
-,urban,彩盈邨,"Daytime, Midnight",Y,N,巴士站,22.3283195700,114.2155112000
+,urban,彩盈邨,"Daytime; Midnight",Y,N,巴士站,22.3283195700,114.2155112000
 ,urban,啓業邨,Daytime,Y,N,閘口,22.3294171300,114.2082568000
 ,urban,巧明街 駿業街,"PM; Midnight",Y,N,,22.3121626200,114.2237743000
 ,urban,駱駝漆大廈,Midnight,Y,N,,22.3104651900,114.2247367000
