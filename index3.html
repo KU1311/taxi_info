@@ -80,14 +80,14 @@
 		const rows = csvData.trim().split('\n');
 		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
 		const data = rows.slice(1).map(row => {
-		const values = row.split(',');
-		return headers.reduce((obj, header, i) => {
-			obj[header] = values[i];
-			return obj;
-		}, {});
+			const values = row.split(',');
+			return headers.reduce((obj, header, i) => {
+				obj[header] = values[i];
+				return obj;
+			}, {});
 	    });
 
-		  console.log(obj)
+		  console.log(data)
 	    const features = data.map(row => ({
 	      type: 'Feature',
 	      geometry: {
