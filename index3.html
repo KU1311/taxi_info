@@ -86,9 +86,9 @@
 			return obj;
 		}, {});
 	    });
-		const Y = obj[lng];
+		const Y = data.lng;
           	const Yr = String(Y).replace('\r', '');
-		  console.log(obj['lat'],Yr)
+		  console.log(data.lat,Yr)
 	    const features = data.map(row => ({
 	      type: 'Feature',
 	      geometry: {
