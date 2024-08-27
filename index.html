@@ -87,7 +87,10 @@
 	        type: 'Feature',
 	        geometry: {
 	          type: 'Point',
-	          coordinates: [parseFloat(values[7]), parseFloat(values[8])]
+		  const lat = parseFloat(values[7]),
+		  const lng = parseFloat(String(values[8]).replace('\r', ''))
+	          console.log(lat,lng)
+	          coordinates: [lat, lng]
 	        },
 	        properties: {
 	          id: values[0],
