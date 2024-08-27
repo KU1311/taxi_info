@@ -71,40 +71,40 @@
 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	}).addTo(map);
-	  
-	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
+	
 	// Load the CSV data
+    	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
 	fetch(csvUrl)
 	  .then(response => response.text())
 	  .then(data => {
-	    const rows = data.trim().split('\n');
-	    const headers = rows[0].split('\t');
-	    const features = [];
-	
-	    for (let i = 1; i < rows.length; i++) {
-	      const values = rows[i].split('\t');
-		console.log(values[7],values[8])
-	      const lat = parseFloat(values[7]);
-	      const lng = parseFloat(String(values[8]).replace('\r', ''));
-		console.log(lat,lng)
-	      const feature = {
-	        type: 'Feature',
-	        geometry: {
-	          type: 'Point',
-	          coordinates: [lat, lng]
-	        },
-	        properties: {
-	          id: values[0],
-	          type: values[1],
-	          name: values[2],
-	          time: values[3],
-	          dangerous: values[4] === 'true',
-	          legal: values[5] === 'true',
-	          remarks: values[6]
-	        }
-	      };
-	      features.push(feature);
-	    }
+		const rows = csvData.trim().split('\n');
+		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+		const data = rows.slice(1).map(row => {
+		const values = row.split(',');
+		return headers.reduce((obj, header, i) => {
+			obj[header] = values[i];
+			return obj;
+		}, {});
+	    });
+		const Y = poi.lng;
+          	const Yr = String(Y).replace('\r', '');
+		  console.log(row['lat'],Yr)
+	    const features = data.map(row => ({
+	      type: 'Feature',
+	      geometry: {
+	        type: 'Point',
+	        coordinates: [parseFloat(row['lat']), parseFloat(Yr)]
+	      },
+	      properties: {
+	        id: row['id'],
+	        type: row['type'],
+	        name: row['name'],
+	        time: row['time'],
+	        dangerous: row['dangerous'] === 'true',
+	        legal: row['legal'] === 'true',
+	        remarks: row['Remarks']
+	      }
+	    }));
 	
 	    const featureLayer = L.geoJSON(features, {
 	      onEachFeature: (feature, layer) => {
@@ -113,8 +113,8 @@
 	          <b>Type:</b> ${feature.properties.type}<br>
 	          <b>Name:</b> ${feature.properties.name}<br>
 	          <b>Time:</b> ${feature.properties.time}<br>
-	          <b>Dangerous:</b> ${feature.properties.dangerous ? 'Y' : 'N'}<br>
-	          <b>Legal:</b> ${feature.properties.legal ? 'Y' : 'N'}<br>
+	          <b>Dangerous:</b> ${feature.properties.dangerous ? 'True' : 'False'}<br>
+	          <b>Legal:</b> ${feature.properties.legal ? 'True' : 'False'}<br>
 	          <b>Remarks:</b> ${feature.properties.remarks}
 	        `);
 	      }
@@ -123,12 +123,12 @@
 	    // Populate the dropdowns
 	    const typeOptions = new Set(['all']);
 	    const timeOptions = new Set(['all']);
-	    const dangerousOptions = new Set(['all', 'Y', 'N']);
-	    const legalOptions = new Set(['all', 'Y', 'N']);
+	    const dangerousOptions = new Set(['all', 'true', 'false']);
+	    const legalOptions = new Set(['all', 'true', 'false']);
 	
-	    features.forEach(feature => {
-	      typeOptions.add(feature.properties.type);
-	      timeOptions.add(feature.properties.time);
+	    data.forEach(row => {
+	      typeOptions.add(row.type);
+	      timeOptions.add(row.time);
 	    });
 	
 	    const typeDropdown = document.getElementById('type-dropdown');
