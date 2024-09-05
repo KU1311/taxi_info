@@ -122,7 +122,7 @@
           const Yr = String(Y).replace('\r', '');
           L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
             .bindPopup(`<h2>${poi.name}</h2>
-	    ${poi.remarks}
+	    ${poi.remarks ? poi.remarks : ''}
 	    <br>開放時間: ${poi.openinghrs}
 	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">導航</button>
      	 `);
