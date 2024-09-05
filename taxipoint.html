@@ -179,13 +179,10 @@
 				return obj;
 			}, {});
 	    });
-		console.log(data)
 	    const features = data.map(row => {
 		  const latitude = parseFloat(row['lat']);
 		  const longitude = parseFloat(row['lng']);
-		console.log("row: ",i)
-		  // Log the coordinates
-		  console.log(`Coordinates: (${latitude}, ${longitude})`);
+		
 		i+=1;
 		  return {
 		      type: 'Feature',
