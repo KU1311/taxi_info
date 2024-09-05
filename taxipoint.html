@@ -259,8 +259,8 @@
 	    // Populate the dropdowns
 	    const typeOptions = new Set(['all']);
 	    const timeOptions = new Set(['all']);
-	    const dangerousOptions = new Set(['all', 'true', 'false']);
-	    const legalOptions = new Set(['all', 'true', 'false']);
+	    const dangerousOptions = new Set(['all']);
+	    const legalOptions = new Set(['all']);
 	
 	    data.forEach(row => {
 	      typeOptions.add(row.type);
@@ -332,7 +332,7 @@
 	          shouldShow = false;
 	        }
 	
-	        layer.setOpacity(shouldShow ? 1 : 0.3);
+	        layer.setOpacity(shouldShow ? 1 : 0);
 	      });
 	    }
 	  });
