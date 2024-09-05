@@ -236,7 +236,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,順天閘口對面,Daytime,Y,N,,22.3261460700,114.2281382000
 ,urban,順天邨閘口,Daytime,Y,N,,22.3270495800,114.2257391000
 ,urban,聯合醫院的士站,Daytime,N,Y,,22.3228991000,114.2278576000
-,urban,樂華邨,Daytime,Y,N,巴士總站旁，車頭向振華道,22.3206767800,114.2206592000
+,urban,樂華邨,Daytime,Y,N,巴士總站旁 車頭向振華道,22.3206767800,114.2206592000
 ,urban,秀茂坪的士站,"Daytime; Midnight",N,Y,,22.3187140200,114.2318820000
 ,urban,寶逹邨的士站,Daytime,N,Y,,22.3174607200,114.2364280000
 ,urban,安逹邨的士站,Daytime,N,Y,,22.3210352200,114.2346951000
