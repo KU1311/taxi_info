@@ -88,7 +88,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,赤柱廣場,"Daytime; Midnight",Y,N,迴旋處,22.2198041200,114.2097459000
 ,urban,淺水灣泳灘,Daytime,N,Y,,22.2367273900,114.1975640000
 ,urban,淺水灣,"Daytime; Midnight",N,Y,,22.2386225800,114.1947451000
-,urban,海洋公園的士站,Dayitme,N,Y,,22.2483803600,114.1749675000
+,urban,海洋公園的士站,Daytime,N,Y,,22.2483803600,114.1749675000
 ,cross-harbour,海洋公園過海的士站,Daytime,N,Y,,22.2484215600,114.1747318000
 ,urban,港怡醫院,Daytime,N,Y,,22.2516648200,114.1763452000
 ,urban,水上樂園的士站,PM,N,Y,,22.2361110400,114.1675729000
@@ -262,7 +262,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,唐明苑的士站,"Daytime; Midnight",N,Y,,22.3080541700,114.2571242000
 ,urban,九龍東皇冠假日酒店,Daytime,N,N,酒店門外路口,22.3086919400,114.2596901000
 ,urban,將軍澳廣場,"Daytime; Midnight",Y,N,,22.3095966900,114.2619717000
-,urban,尚德的士站,"Daytime, Midnight",N,Y,,22.3111268600,114.2596950000
+,urban,尚德的士站,"Daytime; Midnight",N,Y,,22.3111268600,114.2596950000
 ,urban,寶盈花園,Daytime,Y,N,閘口,22.3067217600,114.2616306000
 ,urban,將軍澳Donki,"Daytime; Midnight",Y,N,,22.3029000600,114.2615465000
 ,urban,首都的士站,Daytime,N,Y,,22.2964531000,114.2700205000
@@ -298,7 +298,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,大連排道工業街口,Midnight,N,N,路口7-11門口,22.3628172500,114.1336560000
 ,urban,大連排道KCC,Daytime,N,Y,,22.3618675400,114.1329631000
 ,urban,葵芳邨,"Daytime; Midnight",Y,N,閘口,22.3597260700,114.1283887000
-,urban,葵芳站的士站,Dayimte,N,Y,,22.3560556800,114.1277218000
+,urban,葵芳站的士站,Daytime,N,Y,,22.3560556800,114.1277218000
 ,urban,葵芳新都會的士站,Daytime,N,Y,,22.3570683700,114.1272723000
 ,urban,葵芳新都會,Daytime,Y,N,巴士站,22.3578143000,114.1262003000
 ,urban,葵涌廣場,Daytime,Y,N,,22.3583033600,114.1279392000
