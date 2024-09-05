@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>POI Map</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+   button {
+      display: flex;
+      padding: 0.75rem;
+      background-color: rgb(237, 28, 36 );
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+	.current-location-marker {
+	  background-color: rgba(73, 167, 223, 0.5);
+	  border-radius: 50%;
+	  width: 40px;
+	  height: 40px;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  font-size: 12px;
+	  font-weight: bold;
+	  color: white;
+	}
+	
+	.current-location-label {
+	  padding: 4px 8px;
+	  border-radius: 4px;
+	  font-size: 12px;
+	  font-weight: bold;
+	}
+	  
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+	  
+	// Function to open Google Maps navigation
+    function openGoogleMapsNavigation(lat, lng) {
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      window.open(url, '_blank');
+    }
+
+    var toiletLayer = L.layerGroup();
+    var tpLayer = L.layerGroup();
+    
+    // Initialize the map
+    const map = L.map('map').setView([22.305451, 114.169656], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+    // Replace this with the URL of your CSV file on GitHub
+    const csvUrl = 'https://etaxi.com.hk/poi_info/poi_toilets.csv';
+    const tp_csvUrl = 'https://etaxi.com.hk/poi_info/poi_taxipoints.csv';
+
+    // Fetch the CSV data
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(csvData => {
+        // Parse the CSV data
+        const rows = csvData.trim().split('\n');
+        const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',');
+          return headers.reduce((obj, header, i) => {
+            obj[header] = values[i];
+            return obj;
+          }, {});
+        });
+
+       // Initialize the map
+        // const mapA = L.map('map').setView([22.305451, 114.169656], 12);
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(mapA);
+      
+        // Add markers for the POIs
+        data.forEach(poi => {
+          const Y = poi.lng;
+          const Yr = String(Y).replace('\r', '');
+          toiletLayer.addLayer(L.marker([parseFloat(poi.lat), parseFloat(Yr)])
+            .bindPopup(`<b>${poi.name}</b>
+	    <br>${poi.remarks}
+	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">Navigate</button>
+     	 `));
+       //toiletLayer.addLayer(L.marker([parseFloat(poi.lat), parseFloat(Yr)]));
+	})
+
+
+	// Add the user's current location
+	    if (navigator.geolocation) {
+	      navigator.geolocation.getCurrentPosition(
+	        (position) => {
+	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
+			   icon: L.divIcon({
+			        className: 'current-location-marker',
+			        iconSize: [50, 50]
+			      })
+			  })
+			.bindPopup(`<div class="current-location-label">你的位置</div>`)
+			.addTo(toiletLayer);
+	        },
+	        (error) => {
+	          console.error("Error getting user location:", error);
+	        });
+	    } else {
+	      console.error("Geolocation is not supported by this browser.");
+	    }
+	      
+      })
+      .catch(error => console.error('Error fetching CSV data:', error));
+
+    // Fetch taxipoints  
+    fetch(tp_csvUrl)
+      .then(response => response.text())
+      .then(csvData => {
+        // Parse the CSV data
+        const rows = csvData.trim().split('\n');
+        const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+        const tp_data = rows.slice(1).map(row => {
+          const values = row.split(',');
+          return headers.reduce((obj, header, i) => {
+            obj[header] = values[i];
+            return obj;
+          }, {});
+        });
+
+       // Initialize the map
+        // const mapB = L.map('map').setView([22.305451, 114.169656], 12);
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(mapB);
+      
+        // Add markers for the POIs
+        tp_data.forEach(poi => {
+          const Y = poi.lng;
+          const Yr = String(Y).replace('\r', '');
+          tpLayer.addLayer(L.marker([parseFloat(poi.lat), parseFloat(Yr)])
+            .bindPopup(`<b>${poi.name}</b>
+	    <br>${poi.remarks}
+	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">Navigate</button>
+     	 `));
+       //tpLayer.addLayer(marker);
+	})
+
+
+	// Add the user's current location
+	    if (navigator.geolocation) {
+	      navigator.geolocation.getCurrentPosition(
+	        (position) => {
+	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
+			   icon: L.divIcon({
+			        className: 'current-location-marker',
+			        iconSize: [50, 50]
+			      })
+			  })
+			.bindPopup(`<div class="current-location-label">你的位置</div>`)
+			.addTo(tpLayer);
+	        },
+	        (error) => {
+	          console.error("Error getting user location:", error);
+	        });
+	    } else {
+	      console.error("Geolocation is not supported by this browser.");
+	    }
+	      
+      })
+      .catch(error => console.error('Error fetching CSV data:', error));
+    
+      //info.addOverlay(toiletLayer, tpLayer);
+      //const layerControl = L.control.addBaseLayers(toiletLayer, tpLayer);
+
+      //info.addOverlay(toiletLayer, tpLayer);
+      //layerControl.addBaseLayer(map);
+      const baseMaps = {
+        "公廁": toiletLayer,
+        "的士站": tpLayer
+      };
+      
+      const layerControl = L.control.layers(baseMaps).addTo(map);
+//      const overlayMaps = {toiletLayer, tpLayer};
+  
+
+  </script>
+</body>
+</html>
