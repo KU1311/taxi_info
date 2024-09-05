@@ -78,11 +78,12 @@
         });
 
 
+
        // Default coordinates
-        const defaultCoords = [22.305451, 114.169656];
-	const defaultZoom = 12;
-	      
-       // Initialize the map
+	    const defaultCoords = [22.305451, 114.169656];
+	    const defaultZoom = 12;
+	
+	    // Initialize the map with default coordinates
 	    const map = L.map('map').setView(defaultCoords, defaultZoom);
 	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -91,7 +92,8 @@
 	    // Function to set the user location
 	    function setUserLocation(position) {
 	        const userCoords = [position.coords.latitude, position.coords.longitude];
-	        map.setView(userCoords, defaultZoom); // Center the map on the user's location
+	        const userZoom = 14; // Set a higher zoom level for user location
+	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
 	        L.marker(userCoords).addTo(map); // Optionally add a marker for the user's location
 	    }
 	
@@ -99,11 +101,11 @@
 	    if (navigator.geolocation) {
 	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
 	            console.warn("Geolocation not allowed. Using default location.");
-	            // No need to do anything here since the map is already initialized to defaultCoords
+	            // The map is already initialized to defaultCoords
 	        });
 	    } else {
 	        console.warn("Geolocation is not supported by this browser. Using default location.");
-	        // No need to do anything here since the map is already initialized to defaultCoords
+	        // The map is already initialized to defaultCoords
 	    }
         // Add markers for the POIs
         data.forEach(poi => {
