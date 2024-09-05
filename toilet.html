@@ -83,28 +83,28 @@
 	const defaultZoom = 12;
 	      
        // Initialize the map
-      const map = L.map('map').setView(defaultCoords, defaultZoom);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
-
-      // Function to set the user location
-      function setUserLocation(position) {
-          const userCoords = [position.coords.latitude, position.coords.longitude];
-          map.setView(userCoords, defaultZoom);
-          L.circle(userCoords, { radius: 3000 }).addTo(map); // Add a 3km radius circle
-          L.marker(userCoords).addTo(map); // Optionally add a marker for the user's location
-      }
-  
-      // Check for user's location
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(setUserLocation, function() {
-              console.warn("Geolocation not allowed. Using default location.");
-              L.circle(defaultCoords, { radius: 3000 }).addTo(map); // Add a 3km radius circle at default location
-          });
-      } else {
-          console.warn("Geolocation is not supported by this browser. Using default location.");
-      }
+	    const map = L.map('map').setView(defaultCoords, defaultZoom);
+	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	    }).addTo(map);
+	
+	    // Function to set the user location
+	    function setUserLocation(position) {
+	        const userCoords = [position.coords.latitude, position.coords.longitude];
+	        map.setView(userCoords, defaultZoom); // Center the map on the user's location
+	        L.marker(userCoords).addTo(map); // Optionally add a marker for the user's location
+	    }
+	
+	    // Check for user's location
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+	            console.warn("Geolocation not allowed. Using default location.");
+	            // No need to do anything here since the map is already initialized to defaultCoords
+	        });
+	    } else {
+	        console.warn("Geolocation is not supported by this browser. Using default location.");
+	        // No need to do anything here since the map is already initialized to defaultCoords
+	    }
         // Add markers for the POIs
         data.forEach(poi => {
           const Y = poi.lng;
