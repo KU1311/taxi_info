@@ -1,1 +1,183 @@
-即將推出 Coming Soon
+<!DOCTYPE html>
+<html>
+<head>
+  <title>POI Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: hidden;
+  }
+    body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #333; /* Dark grey background */
+            color: white; /* Change text color to white for better contrast */
+        }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+   button {
+      display: flex;
+      padding: 0.75rem;
+      background-color: rgb(237, 28, 36 );
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+	.current-location-marker {
+	  background-color: rgba(73, 167, 223, 0.5);
+	  border-radius: 50%;
+	  width: 40px;
+	  height: 40px;
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  font-size: 12px;
+	  font-weight: bold;
+	  color: white;
+	}
+	
+	.current-location-label {
+	  padding: 4px 8px;
+	  border-radius: 4px;
+	  font-size: 12px;
+	  font-weight: bold;
+	}
+	  
+	.footer {
+	    padding: 10px;
+	    background-color: #444; /* Slightly lighter grey for footer */
+	    width: 100%;
+	    position: fixed; /* Use relative positioning */
+            bottom: 0; /* Align to the bottom of the viewport */
+            left: 0; /* Align to the left of the viewport */
+	    z-index: 1000; /* Ensure the footer is above other elements */
+	}
+        .footer h3 {
+            margin: 0; /* Remove default margin */
+            padding-left: 10px; /* Add some padding to the left */
+        }
+	.whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }  
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+</head>
+<body>
+  <div id="map"></div>
+	<div class="footer">
+	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+	</div>
+  <script>
+	  
+	// Function to open Google Maps navigation
+    function openGoogleMapsNavigation(lat, lng) {
+      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      window.open(url, '_blank');
+    }
+	  
+    // Replace this with the URL of your CSV file on GitHub
+    const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
+
+    // Fetch the CSV data
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(csvData => {
+        // Parse the CSV data
+        const rows = csvData.trim().split('\n');
+			  const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+        const data = rows.slice(1).map(row => {
+          const values = row.split(',');
+          return headers.reduce((obj, header, i) => {
+            obj[header] = values[i];
+            return obj;
+          }, {});
+        });
+
+
+
+       // Default coordinates
+	    const defaultCoords = [22.305451, 114.169656];
+	    const defaultZoom = 12;
+	
+	    // Initialize the map with default coordinates
+	    const map = L.map('map').setView(defaultCoords, defaultZoom);
+	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		opacity: 0.7
+	    }).addTo(map);
+	
+	    // Function to set the user location
+	    function setUserLocation(position) {
+	        const userCoords = [position.coords.latitude, position.coords.longitude];
+	        const userZoom = 16; // Set a higher zoom level for user location
+	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+	        // Create a custom marker for the user's location
+	        const userLocationMarker = L.divIcon({
+	            className: 'current-location-marker', // Custom class
+	            iconSize: [50, 50] // Size of the marker
+	        });
+	
+	        // Add the custom marker to the map
+	        L.marker(userCoords, { icon: userLocationMarker })
+	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
+	            .addTo(map);
+	    }
+	
+	    // Check for user's location
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+	            console.warn("Geolocation not allowed. Using default location.");
+	            // The map is already initialized to defaultCoords
+	        });
+	    } else {
+	        console.warn("Geolocation is not supported by this browser. Using default location.");
+	        // The map is already initialized to defaultCoords
+	    }
+        // Add markers for the POIs
+        data.forEach(poi => {
+          const Y = poi.lng;
+          const Yr = String(Y).replace('\r', '');
+          L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
+            .bindPopup(`<h2>${poi.name}</h2>
+	    ${poi.remarks ? `${poi.remarks}<br>` : ''}
+	    <br>開放時間: ${poi.openinghrs}
+	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">導航</button>
+     	 `);
+	})
+
+
+	      
+      })
+      .catch(error => console.error('Error fetching CSV data:', error));
+
+    
+
+	  
+  </script>
+</body>
+</html>
