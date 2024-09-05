@@ -4,12 +4,23 @@
   <title>POI Map</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    html, body {
+    html{
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
     }
+    body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #333; /* Dark grey background */
+            color: white; /* Change text color to white for better contrast */
+        }
     #map {
       width: 100%;
       height: calc(100vh - 100px);
