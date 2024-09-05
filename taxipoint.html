@@ -129,22 +129,22 @@
     <h2>的士站/扎馬位置</h2>
     <div class="dropdown-row">
         <div class="dropdown-container">
-            <label for="type-dropdown">Type:</label>
+            <label for="type-dropdown">的士種類:</label>
             <select id="type-dropdown">
             </select>
         </div>
         <div class="dropdown-container">
-            <label for="time-dropdown">Time:</label>
+            <label for="time-dropdown">時段:</label>
             <select id="time-dropdown">
             </select>
         </div>
         <div class="dropdown-container">
-            <label for="dangerous-dropdown">Dangerous:</label>
+            <label for="dangerous-dropdown">危險程度:</label>
             <select id="dangerous-dropdown">
             </select>
         </div>
         <div class="dropdown-container">
-            <label for="legal-dropdown">Legal:</label>
+            <label for="legal-dropdown">合法:</label>
             <select id="legal-dropdown">
             </select>
         </div>
@@ -295,10 +295,10 @@
 	    }).addTo(map);
 	
 	    // Populate the dropdowns
-	    const typeOptions = new Set(['all']);
-	    const timeOptions = new Set(['all']);
-	    const dangerousOptions = new Set(['all']);
-	    const legalOptions = new Set(['all']);
+	    const typeOptions = new Set(['全部']);
+	    const timeOptions = new Set(['全部']);
+	    const dangerousOptions = new Set(['全部']);
+	    const legalOptions = new Set(['全部']);
 	
 	    data.forEach(row => {
 	      typeOptions.add(row.type);
