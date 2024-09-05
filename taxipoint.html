@@ -221,10 +221,35 @@
 			// Check if the current header is "time" and apply the rules
 			if (header === 'time') {
 			    if (value === "Daytime") {
-				value = "日間"; // Change to "日間" for Daytime
+				value = "日間";
 			    } else if (value === "Midnight") {
-				value = "半夜"; // Change to "半夜" for Midnight
+				value = "半夜";
 			    }
+			}
+		        if (header === 'dangerous') {
+			    if (value === "Y") {
+				value = "危險";
+			    } else if (value === "N") {
+				value = "安全";
+			    }
+			}
+		        if (header === 'legal') {
+			    if (value === "Y") {
+				value = "正式的士站";
+			    } else if (value === "N") {
+				value = "非正式的士站";
+			    }
+			}
+		        if (header === 'type') {
+			    if (value === "urban") {
+				value = "市區的士";
+			    } else if (value === "NT") {
+				value = "新界的士";
+			    } else if (value === "lantau") {
+				value = "大嶼山的士";
+			    } else if (value === "cross-harbour") {
+				value = "過海的士";
+			    } 
 			}
 		
 			obj[header] = value; // Assign the modified value to the object
