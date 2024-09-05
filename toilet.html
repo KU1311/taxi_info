@@ -45,12 +45,29 @@
 	  font-weight: bold;
 	}
 	  
+	.footer {
+            padding: 10px;
+            background-color: #444; /* Slightly lighter grey for footer */
+            width: 100%;
+            position: fixed;
+            bottom: 0; /* Align to the bottom of the viewport */
+            left: 0; /* Align to the left of the viewport */
+        }
+        .footer h3 {
+            margin: 0; /* Remove default margin */
+            padding-left: 10px; /* Add some padding to the left */
+        }
+	  
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 </head>
 <body>
   <div id="map"></div>
+	<div class="footer">
+	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+	</div>
   <script>
 	  
 	// Function to open Google Maps navigation
