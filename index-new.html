@@ -32,6 +32,7 @@
             border: none;
             border-radius: 8px;
             width: calc(50% - 20px); /* Two buttons per row with space for margins */
+            height: 300px;
             padding-bottom: calc(50% - 20px); /* Create a square shape */
             position: relative; /* Allows absolute positioning for child elements */
             margin: 10px;
@@ -58,7 +59,13 @@
             padding: 10px;
             background-color: #444; /* Slightly lighter grey for footer */
             width: 100%;
-            position: relative;
+            position: fixed;
+            bottom: 0; /* Align to the bottom of the viewport */
+            left: 0; /* Align to the left of the viewport */
+        }
+        .footer h3 {
+            margin: 0; /* Remove default margin */
+            padding-left: 10px; /* Add some padding to the left */
         }
         .whatsapp-button {
             background-color: #25D366;
