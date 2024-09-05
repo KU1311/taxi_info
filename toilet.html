@@ -60,7 +60,7 @@
     }
 	  
     // Replace this with the URL of your CSV file on GitHub
-    const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv_test2.csv';
+    const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv_test3.csv';
 
     // Fetch the CSV data
     fetch(csvUrl)
@@ -121,8 +121,9 @@
           const Y = poi.lng;
           const Yr = String(Y).replace('\r', '');
           L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
-            .bindPopup(`<h3>${poi.name}</h3>
+            .bindPopup(`<h2>${poi.name}</h2>
 	    <br>${poi.remarks}
+	    <br>開放時間: ${poi.openinghrs}
 	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">導航</button>
      	 `);
 	})
