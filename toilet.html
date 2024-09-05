@@ -77,6 +77,11 @@
           }, {});
         });
 
+
+       // Default coordinates
+        const defaultCoords = [22.305451, 114.169656];
+	const defaultZoom = 12;
+	      
        // Initialize the map
       const map = L.map('map').setView(defaultCoords, defaultZoom);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
