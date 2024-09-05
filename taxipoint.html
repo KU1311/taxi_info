@@ -93,53 +93,66 @@
             text-align: center; /* Center text inside the div */
             z-index: 1001; /* Ensure it's above the map */
         }
-    .controls-container {
+	.controls-container {
 	    display: flex;
-	    align-items: flex-start; /* Align items to the left */
+	    flex-direction: column; /* Stack header and dropdowns vertically */
 	    padding: 10px; /* Optional padding around the container */
 	    background-color: #444; /* Optional background color for visibility */
 	    color: white; /* Text color for better contrast */
 	}
 	
+	h2 {
+	    margin-bottom: 10px; /* Space between title and dropdowns */
+	    text-align: center; /* Center the title */
+	}
+	
+	.dropdown-row {
+	    display: flex; /* Align dropdowns in a row */
+	    justify-content: space-between; /* Space out dropdowns evenly */
+	    width: 100%; /* Make dropdown row take full width */
+	}
+	
 	.dropdown-container {
-	    margin: 10px 0; /* Space between dropdowns */
+	    margin: 0 10px; /* Space between dropdowns */
 	}
 	
 	.dropdown-container label {
-	    margin-right: 10px; /* Space between label and dropdown */
+	    margin-right: 5px; /* Space between label and dropdown */
 	}
   </style>
 </head>
 <body>
   <div class="controls-container">
     <h2>的士站/扎馬位置</h2>
-    <div class="dropdown-container">
-        <label for="type-dropdown">Type:</label>
-        <select id="type-dropdown">
-            <option value="all">All</option>
-        </select>
-    </div>
-    <div class="dropdown-container">
-        <label for="time-dropdown">Time:</label>
-        <select id="time-dropdown">
-            <option value="all">All</option>
-        </select>
-    </div>
-    <div class="dropdown-container">
-        <label for="dangerous-dropdown">Dangerous:</label>
-        <select id="dangerous-dropdown">
-            <option value="all">All</option>
-            <option value="true">True</option>
-            <option value="false">False</option>
-        </select>
-    </div>
-    <div class="dropdown-container">
-        <label for="legal-dropdown">Legal:</label>
-        <select id="legal-dropdown">
-            <option value="all">All</option>
-            <option value="true">True</option>
-            <option value="false">False</option>
-        </select>
+    <div class="dropdown-row">
+        <div class="dropdown-container">
+            <label for="type-dropdown">Type:</label>
+            <select id="type-dropdown">
+                <option value="all">All</option>
+            </select>
+        </div>
+        <div class="dropdown-container">
+            <label for="time-dropdown">Time:</label>
+            <select id="time-dropdown">
+                <option value="all">All</option>
+            </select>
+        </div>
+        <div class="dropdown-container">
+            <label for="dangerous-dropdown">Dangerous:</label>
+            <select id="dangerous-dropdown">
+                <option value="all">All</option>
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
+        <div class="dropdown-container">
+            <label for="legal-dropdown">Legal:</label>
+            <select id="legal-dropdown">
+                <option value="all">All</option>
+                <option value="true">True</option>
+                <option value="false">False</option>
+            </select>
+        </div>
     </div>
 </div>
   <div id="map""></div>
