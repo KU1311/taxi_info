@@ -245,13 +245,12 @@
 	    const featureLayer = L.geoJSON(features, {
 	      onEachFeature: (feature, layer) => {
 	        layer.bindPopup(`
-	          <b>ID:</b> ${feature.properties.id}<br>
-	          <b>Type:</b> ${feature.properties.type}<br>
-	          <b>Name:</b> ${feature.properties.name}<br>
-	          <b>Time:</b> ${feature.properties.time}<br>
-	          <b>Dangerous:</b> ${feature.properties.dangerous ? 'True' : 'False'}<br>
-	          <b>Legal:</b> ${feature.properties.legal ? 'True' : 'False'}<br>
-	          <b>Remarks:</b> ${feature.properties.remarks}
+	          <b>種類:</b> ${feature.properties.type}<br>
+	          <b>名稱:</b> ${feature.properties.name}<br>
+	          <b>時間:</b> ${feature.properties.time}<br>
+	          <b>危險程度:</b> ${feature.properties.dangerous ? 'True' : 'False'}<br>
+	          <b>合法的士站:</b> ${feature.properties.legal ? 'True' : 'False'}<br>
+	          <b>備註:</b> ${feature.properties.remarks}
 	        `);
 	      }
 	    }).addTo(map);
