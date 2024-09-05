@@ -150,11 +150,45 @@
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
 	  let i = 1
-        const map = L.map('map').setView([22.305451, 114.169656], 12);
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
+        // Default coordinates
+	    const defaultCoords = [22.305451, 114.169656];
+	    const defaultZoom = 12;
 	
+	    // Initialize the map with default coordinates
+	    const map = L.map('map').setView(defaultCoords, defaultZoom);
+	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		opacity: 0.7
+	    }).addTo(map);
+	
+	    // Function to set the user location
+	    function setUserLocation(position) {
+	        const userCoords = [position.coords.latitude, position.coords.longitude];
+	        const userZoom = 16; // Set a higher zoom level for user location
+	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+	        // Create a custom marker for the user's location
+	        const userLocationMarker = L.divIcon({
+	            className: 'current-location-marker', // Custom class
+	            iconSize: [50, 50] // Size of the marker
+	        });
+	
+	        // Add the custom marker to the map
+	        L.marker(userCoords, { icon: userLocationMarker })
+	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
+	            .addTo(map);
+	    }
+	
+	    // Check for user's location
+	    if (navigator.geolocation) {
+	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+	            console.warn("Geolocation not allowed. Using default location.");
+	            // The map is already initialized to defaultCoords
+	        });
+	    } else {
+	        console.warn("Geolocation is not supported by this browser. Using default location.");
+	        // The map is already initialized to defaultCoords
+	    }
+	  
 	// Load the CSV data
     	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
 	fetch(csvUrl)
