@@ -92,7 +92,7 @@
 	    // Function to set the user location
 	    function setUserLocation(position) {
 	        const userCoords = [position.coords.latitude, position.coords.longitude];
-	        const userZoom = 20; // Set a higher zoom level for user location
+	        const userZoom = 18; // Set a higher zoom level for user location
 	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
 	        // Create a custom marker for the user's location
 	        const userLocationMarker = L.divIcon({
