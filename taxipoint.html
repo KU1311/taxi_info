@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>POI Map</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV Data on OpenStreetMap</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <style>
-  html {
+    html {
 	margin: 0;
 	padding: 0;
 	height: 100%;
 	overflow: hidden;
-  }
+    }
     body {
             display: flex;
             flex-direction: column;
@@ -21,11 +23,7 @@
             background-color: #333; /* Dark grey background */
             color: white; /* Change text color to white for better contrast */
         }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-   button {
+     button {
       display: flex;
       padding: 0.75rem;
       background-color: rgb(237, 28, 36 );
@@ -95,103 +93,212 @@
             text-align: center; /* Center text inside the div */
             z-index: 1001; /* Ensure it's above the map */
         }
+    .controls-container {
+	  display: flex;
+	  justify-content: space-around;
+	  align-items: center;
+	  background-color: #f1f1f1;
+	  padding: 10px;
+	  position: sticky;
+	  top: 0;
+	  z-index: 1000;
+	}
+	
+	.dropdown-container {
+	  display: flex;
+	  align-items: center;
+	}
+	
+	.dropdown-container label {
+	  margin-right: 5px;
+	}
+	
+	.dropdown-container select {
+	  padding: 5px;
+	  border-radius: 4px;
+	  border: 1px solid #ccc;
+	}
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 </head>
 <body>
-  <div id="map"></div>
-	<div class="floating-title">方便泊車的洗手間位置</div>
+  <div class="controls-container">
+    <div class="dropdown-container">
+      <label for="type-dropdown">Type:</label>
+      <select id="type-dropdown">
+        <option value="all">All</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="time-dropdown">Time:</label>
+      <select id="time-dropdown">
+        <option value="all">All</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="dangerous-dropdown">Dangerous:</label>
+      <select id="dangerous-dropdown">
+        <option value="all">All</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select>
+    </div>
+    <div class="dropdown-container">
+      <label for="legal-dropdown">Legal:</label>
+      <select id="legal-dropdown">
+        <option value="all">All</option>
+        <option value="true">True</option>
+        <option value="false">False</option>
+      </select>
+    </div>
+  </div>
+  <div id="map" style="height: 80vh;"></div>
+  <div class="floating-title">的士站/扎馬位置</div>
 	<div class="footer">
 	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
 	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
 	</div>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   <script>
-	  
-	// Function to open Google Maps navigation
-    function openGoogleMapsNavigation(lat, lng) {
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-      window.open(url, '_blank');
-    }
-	  
-    // Replace this with the URL of your CSV file on GitHub
-    const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
-
-    // Fetch the CSV data
-    fetch(csvUrl)
-      .then(response => response.text())
-      .then(csvData => {
-        // Parse the CSV data
-        const rows = csvData.trim().split('\n');
-			  const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-        const data = rows.slice(1).map(row => {
-          const values = row.split(',');
-          return headers.reduce((obj, header, i) => {
-            obj[header] = values[i];
-            return obj;
-          }, {});
-        });
-
-
-
-       // Default coordinates
-	    const defaultCoords = [22.305451, 114.169656];
-	    const defaultZoom = 12;
+	  let i = 1
+        const map = L.map('map').setView([22.305451, 114.169656], 12);
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
 	
-	    // Initialize the map with default coordinates
-	    const map = L.map('map').setView(defaultCoords, defaultZoom);
-	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-		opacity: 0.7
+	// Load the CSV data
+    	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
+	fetch(csvUrl)
+	  .then(response => response.text())
+	  .then(csvData => {
+		const rows = csvData.trim().split('\n');
+		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+		const data = rows.slice(1).map(row => {
+			const values = row.split(',');
+			return headers.reduce((obj, header, i) => {
+				obj[header] = String(values[i]).replace('\r', '');
+				return obj;
+			}, {});
+	    });
+		console.log(data)
+	    const features = data.map(row => {
+		  const latitude = parseFloat(row['lat']);
+		  const longitude = parseFloat(row['lng']);
+		console.log("row: ",i)
+		  // Log the coordinates
+		  console.log(`Coordinates: (${latitude}, ${longitude})`);
+		i+=1;
+		  return {
+		      type: 'Feature',
+		      geometry: {
+		        type: 'Point',
+		        coordinates: [longitude, latitude]
+		      },
+		      properties: {
+		        id: row['id'],
+		        type: row['type'],
+		        name: row['name'],
+		        time: row['time'],
+		        dangerous: row['dangerous'] === 'true',
+		        legal: row['legal'] === 'true',
+		        remarks: row['Remarks']
+		      }
+		  }
+	    }).filter(feature => feature !== null); // Remove any null values
+	
+	    const featureLayer = L.geoJSON(features, {
+	      onEachFeature: (feature, layer) => {
+	        layer.bindPopup(`
+	          <b>ID:</b> ${feature.properties.id}<br>
+	          <b>Type:</b> ${feature.properties.type}<br>
+	          <b>Name:</b> ${feature.properties.name}<br>
+	          <b>Time:</b> ${feature.properties.time}<br>
+	          <b>Dangerous:</b> ${feature.properties.dangerous ? 'True' : 'False'}<br>
+	          <b>Legal:</b> ${feature.properties.legal ? 'True' : 'False'}<br>
+	          <b>Remarks:</b> ${feature.properties.remarks}
+	        `);
+	      }
 	    }).addTo(map);
 	
-	    // Function to set the user location
-	    function setUserLocation(position) {
-	        const userCoords = [position.coords.latitude, position.coords.longitude];
-	        const userZoom = 16; // Set a higher zoom level for user location
-	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
-	        // Create a custom marker for the user's location
-	        const userLocationMarker = L.divIcon({
-	            className: 'current-location-marker', // Custom class
-	            iconSize: [50, 50] // Size of the marker
-	        });
+	    // Populate the dropdowns
+	    const typeOptions = new Set(['all']);
+	    const timeOptions = new Set(['all']);
+	    const dangerousOptions = new Set(['all', 'true', 'false']);
+	    const legalOptions = new Set(['all', 'true', 'false']);
 	
-	        // Add the custom marker to the map
-	        L.marker(userCoords, { icon: userLocationMarker })
-	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
-	            .addTo(map);
-	    }
+	    data.forEach(row => {
+	      typeOptions.add(row.type);
+	      timeOptions.add(row.time);
+	    });
 	
-	    // Check for user's location
-	    if (navigator.geolocation) {
-	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
-	            console.warn("Geolocation not allowed. Using default location.");
-	            // The map is already initialized to defaultCoords
-	        });
-	    } else {
-	        console.warn("Geolocation is not supported by this browser. Using default location.");
-	        // The map is already initialized to defaultCoords
+	    const typeDropdown = document.getElementById('type-dropdown');
+	    const timeDropdown = document.getElementById('time-dropdown');
+	    const dangerousDropdown = document.getElementById('dangerous-dropdown');
+	    const legalDropdown = document.getElementById('legal-dropdown');
+	
+	    typeOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      typeDropdown.appendChild(optionElement);
+	    });
+	
+	    timeOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      timeDropdown.appendChild(optionElement);
+	    });
+	
+	    dangerousOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      dangerousDropdown.appendChild(optionElement);
+	    });
+	
+	    legalOptions.forEach(option => {
+	      const optionElement = document.createElement('option');
+	      optionElement.value = option;
+	      optionElement.textContent = option;
+	      legalDropdown.appendChild(optionElement);
+	    });
+	
+	    // Add event listeners for the dropdowns
+	    typeDropdown.addEventListener('change', filterFeatures);
+	    timeDropdown.addEventListener('change', filterFeatures);
+	    dangerousDropdown.addEventListener('change', filterFeatures);
+	    legalDropdown.addEventListener('change', filterFeatures);
+	
+	    function filterFeatures() {
+	      const typeFilter = typeDropdown.value;
+	      const timeFilter = timeDropdown.value;
+	      const dangerousFilter = dangerousDropdown.value;
+	      const legalFilter = legalDropdown.value;
+	
+	      featureLayer.eachLayer(layer => {
+	        const feature = layer.feature;
+	        let shouldShow = true;
+	
+	        if (typeFilter !== 'all' && feature.properties.type !== typeFilter) {
+	          shouldShow = false;
+	        }
+	
+	        if (timeFilter !== 'all' && feature.properties.time !== timeFilter) {
+	          shouldShow = false;
+	        }
+	
+	        if (dangerousFilter !== 'all' && feature.properties.dangerous !== (dangerousFilter === 'true')) {
+	          shouldShow = false;
+	        }
+	
+	        if (legalFilter !== 'all' && feature.properties.legal !== (legalFilter === 'true')) {
+	          shouldShow = false;
+	        }
+	
+	        layer.setOpacity(shouldShow ? 1 : 0.3);
+	      });
 	    }
-        // Add markers for the POIs
-        data.forEach(poi => {
-          const Y = poi.lng;
-          const Yr = String(Y).replace('\r', '');
-          L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
-            .bindPopup(`<h2>${poi.name}</h2>
-	    ${poi.remarks ? `${poi.remarks}<br>` : ''}
-	    <br>開放時間: ${poi.openinghrs}
-	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">導航</button>
-     	 `);
-	})
-
-
-	      
-      })
-      .catch(error => console.error('Error fetching CSV data:', error));
-
-    
-
-	  
+	  });
   </script>
 </body>
 </html>
