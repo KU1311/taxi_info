@@ -123,14 +123,15 @@
 	    if (navigator.geolocation) {
 	      navigator.geolocation.getCurrentPosition(
 	        (position) => {
-	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
-			   icon: L.divIcon({
-			        className: 'current-location-marker',
-			        iconSize: [50, 50]
-			      })
-			  })
-			.bindPopup(`<div class="current-location-label">你的位置</div>`)
-			.addTo(map);
+	                const userLocationMarker = L.divIcon({
+		            className: 'current-location-marker', // Custom class
+		            iconSize: [50, 50] // Size of the marker
+		        });
+		
+		        // Add the custom marker to the map
+		        L.marker(userCoords, { icon: userLocationMarker })
+		            .bindPopup(`<div class="current-location-label">你的位置</div>`)
+		            .addTo(map);
 	        },
 	        (error) => {
 	          console.error("Error getting user location:", error);
