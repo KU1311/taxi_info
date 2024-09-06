@@ -139,25 +139,21 @@
         <div class="dropdown-container">
             <label for="type-dropdown">的士種類:</label>
             <select id="type-dropdown">
-                <!-- Options go here -->
             </select>
         </div>
         <div class="dropdown-container">
             <label for="time-dropdown">時段:</label>
             <select id="time-dropdown">
-                <!-- Options go here -->
             </select>
         </div>
         <div class="dropdown-container">
             <label for="dangerous-dropdown">危險程度:</label>
             <select id="dangerous-dropdown">
-                <!-- Options go here -->
             </select>
         </div>
         <div class="dropdown-container">
             <label for="legal-dropdown">合法:</label>
             <select id="legal-dropdown">
-                <!-- Options go here -->
             </select>
         </div>
     </div>
@@ -263,7 +259,32 @@
 	    const features = data.map(row => {
 		  const latitude = parseFloat(row['lat']);
 		  const longitude = parseFloat(row['lng']);
-		
+			
+		    	if (row['time'] === "Daytime") {
+				row['time'] = "日間";
+			    } else if (row['time'] === "Midnight") {
+				row['time'] = "半夜";
+			    }
+			if (row['dangerous'] === "Y") {
+				row['dangerous'] = "危險";
+			    } else if (row['dangerous'] === "N") {
+				row['dangerous'] = "安全";
+			    }
+		    	if (row['legal'] === "Y") {
+				row['legal'] = "正式的士站";
+			    } else if (row['legal'] === "N") {
+				row['legal'] = "非正式的士站";
+			    }
+		    	if (type: row['type'] === "urban") {
+				type: row['type'] = "市區的士";
+			    } else if (type: row['type'] === "NT") {
+				type: row['type'] = "新界的士";
+			    } else if (type: row['type'] === "lantau") {
+				type: row['type'] = "大嶼山的士";
+			    } else if (value === "cross-harbour") {
+				type: row['type'] = "過海的士";
+			    } 
+		    
 		i+=1;
 		  return {
 		      type: 'Feature',
@@ -276,8 +297,8 @@
 		        type: row['type'],
 		        name: row['name'],
 		        time: row['time'],
-		        dangerous: row['dangerous'] === 'true',
-		        legal: row['legal'] === 'true',
+		        dangerous: row['dangerous'],
+		        legal: row['legal'],
 		        remarks: row['Remarks']
 		      }
 		  }
