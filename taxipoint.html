@@ -34,8 +34,39 @@
       font-size: 1rem;
     }
 	#map {
+	    flex: 1; /* Allow the map to take up remaining space */
 	    width: 100%; /* Full width */
-	    height: 100%; /* Adjust this based on your footer height */
+	    z-index: 1; /* Lower z-index for the map */
+	    position: relative; /* Create a positioning context */
+	}
+	
+	.controls-container {
+	    position: relative; /* To position dropdowns absolutely */
+	    padding: 10px; /* Padding around the container */
+	    z-index: 10; /* Ensure dropdowns are above the map */
+	}
+	
+	h2 {
+	    margin-bottom: 10px; /* Space between title and dropdowns */
+	    text-align: center; /* Center the title */
+	}
+	
+	.dropdown-row {
+	    position: absolute; /* Position dropdowns absolutely */
+	    top: 10px; /* Distance from the top of the viewport */
+	    left: 50%; /* Center horizontally */
+	    transform: translateX(-50%); /* Adjust for centering */
+	    display: flex; /* Align dropdowns in a row */
+	    justify-content: space-between; /* Space out dropdowns evenly */
+	    z-index: 20; /* Higher z-index to ensure it floats above the map */
+	}
+	
+	.dropdown-container {
+	    margin: 0 10px; /* Space between dropdowns */
+	}
+	
+	.dropdown-container label {
+	    margin-right: 5px; /* Space between label and dropdown */
 	}
 	.current-location-marker {
 	  background-color: rgba(73, 167, 223, 0.5);
@@ -96,35 +127,7 @@
             text-align: center; /* Center text inside the div */
             z-index: 1001; /* Ensure it's above the map */
         }
-	.controls-container {
-	    position: relative; /* Position relative to enable absolute positioning of dropdowns */
-	    padding: 10px; /* Optional padding around the container */
-	    z-index: 10; /* Ensure it is above the map */
-	}
 	
-	h2 {
-	    margin-bottom: 10px; /* Space between title and dropdowns */
-	    text-align: center; /* Center the title */
-	}
-	
-	.dropdown-row {
-	    position: absolute; /* Position dropdowns absolutely */
-	    top: 10px; /* Distance from top of the viewport */
-	    left: 50%; /* Center horizontally */
-	    transform: translateX(-50%); /* Adjust for centering */
-	    display: flex; /* Align dropdowns in a row */
-	    justify-content: space-between; /* Space out dropdowns evenly */
-	    width: auto; /* Adjust width to fit dropdowns */
-	    z-index: 20; /* Higher z-index to ensure it floats above the map */
-	}
-	
-	.dropdown-container {
-	    margin: 0 10px; /* Space between dropdowns */
-	}
-	
-	.dropdown-container label {
-	    margin-right: 5px; /* Space between label and dropdown */
-	}
   </style>
 </head>
 <body>
