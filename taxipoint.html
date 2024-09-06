@@ -320,8 +320,8 @@
 	          <b>種類:</b> ${feature.properties.type}<br>
 	          <b>名稱:</b> ${feature.properties.name}<br>
 	          <b>時間:</b> ${timeDisplay}<br>
-	          <b>危險程度:</b> ${feature.properties.dangerous ? 'True' : 'False'}<br>
-	          <b>合法的士站:</b> ${feature.properties.legal ? 'True' : 'False'}<br>
+	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
+	          <b>合法的士站:</b> ${feature.properties.legal}<br>
 	          <b>備註:</b> ${feature.properties.remarks}
 	        `);
 	      }
@@ -389,19 +389,19 @@
 	        const feature = layer.feature;
 	        let shouldShow = true;
 	
-	        if (typeFilter !== 'all' && feature.properties.type !== typeFilter) {
+	        if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
 	          shouldShow = false;
 	        }
 	
-	        if (timeFilter !== 'all' && feature.properties.time !== timeFilter) {
+	        if (timeFilter !== '全部' && feature.properties.time !== timeFilter) {
 	          shouldShow = false;
 	        }
 	
-	        if (dangerousFilter !== 'all' && feature.properties.dangerous !== (dangerousFilter === 'true')) {
+	        if (dangerousFilter !== '全部' && feature.properties.dangerous !== (dangerousFilter === '危險')) {
 	          shouldShow = false;
 	        }
 	
-	        if (legalFilter !== 'all' && feature.properties.legal !== (legalFilter === 'true')) {
+	        if (legalFilter !== '全部' && feature.properties.legal !== (legalFilter === '正式的士站')) {
 	          shouldShow = false;
 	        }
 	
