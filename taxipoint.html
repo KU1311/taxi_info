@@ -389,7 +389,8 @@
     	      const dangerousFilter = dangerousDropdown.value;
     	      const legalFilter = legalDropdown.value;
     	
-    	      featureLayer.eachLayer(layer => {
+    	      const featureLayer = L.geoJSON(features, {
+	      onEachFeature: (feature, layer) => {
     	        const feature = layer.feature;
     	        let shouldShow = true;
     	
@@ -426,22 +427,25 @@
     	
     	        layer.setOpacity(shouldShow ? 1 : 0);
 		if (shouldShow) {
-			   		      
-	    	        layer.bindPopup(`
-	    	          <b>種類:</b> ${feature.properties.type}<br>
-	    	          <b>名稱:</b> ${feature.properties.name}<br>
-	    	          <b>時間:</b> ${feature.properties.time}<br>
-	    	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
-	    	          <b>合法的士站:</b> ${feature.properties.legal}<br>
-	    	          <b>備註:</b> ${feature.properties.remarks}
-			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-	    	        `);
+			      
+		    	        layer.bindPopup(`
+		    	          <b>種類:</b> ${feature.properties.type}<br>
+		    	          <b>名稱:</b> ${feature.properties.name}<br>
+		    	          <b>時間:</b> ${feature.properties.time}<br>
+		    	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
+		    	          <b>合法的士站:</b> ${feature.properties.legal}<br>
+		    	          <b>備註:</b> ${feature.properties.remarks}
+				  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+		    	        `);
+		    	      
+		    	   
 	    	      
 		} else {
 			if (layer._map) {
 		            layer.remove(); // Remove the marker from the map if it exists
 		        }
 		}
+	      }
     	      }).addTo(map);
     	    }
     	  });
