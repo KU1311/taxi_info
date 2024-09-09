@@ -389,8 +389,7 @@
     	      const dangerousFilter = dangerousDropdown.value;
     	      const legalFilter = legalDropdown.value;
     	
-    	      featureLayer = L.geoJSON(features, {
-	      onEachFeature: (feature, layer) => {
+    	      featureLayer.eachLayer(layer => {
     	         feature = layer.feature;
     	        let shouldShow = true;
     	
@@ -424,30 +423,19 @@
     	        if (legalFilter !== '全部' && feature.properties.legal !== legalFilter) {
     	          shouldShow = false;
     	        }
-    	
+
+
+	        const marker = L.marker([feature.geometry.longitude, feature.geometry.latitude);
     	        layer.setOpacity(shouldShow ? 1 : 0);
-		if (shouldShow) {
-			      
-		    	        layer.bindPopup(`
-		    	          <b>種類:</b> ${feature.properties.type}<br>
-		    	          <b>名稱:</b> ${feature.properties.name}<br>
-		    	          <b>時間:</b> ${feature.properties.time}<br>
-		    	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
-		    	          <b>合法的士站:</b> ${feature.properties.legal}<br>
-		    	          <b>備註:</b> ${feature.properties.remarks}
-				  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-		    	        `);
-		    	      
-		    	   
-	    	      
-		} else {
-			if (layer._map) {
-		            layer.remove(); // Remove the marker from the map if it exists
-		        }
-		}
-	      }
-    	      }).addTo(map);
-    	    }
+	        if (shouldShow) {
+		        marker.addTo(map); // Add the marker to the map
+		        marker.bindPopup(`<b>${feature.properties.name}</b><br>${feature.properties.description}`);
+		    } else {
+		        // If shouldShow is false, unbind the popup if it was already set
+		        marker.unbindPopup(); // This will disable the popup for this marker
+		    }
+    	      });
+    	    
     	  });
 
       function openGoogleMapsNavigation(lat, lng) {
