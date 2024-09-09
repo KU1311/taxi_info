@@ -312,130 +312,148 @@
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
-    	
-    	    const featureLayer = L.geoJSON(features, {
-    	      onEachFeature: (feature, layer) => {
-   		      
-    	        layer.bindPopup(`
-    	          <b>種類:</b> ${feature.properties.type}<br>
-    	          <b>名稱:</b> ${feature.properties.name}<br>
-    	          <b>時間:</b> ${feature.properties.time}<br>
-    	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
-    	          <b>合法的士站:</b> ${feature.properties.legal}<br>
-    	          <b>備註:</b> ${feature.properties.remarks}
-		  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-    	        `);
-    	      }
-    	    }).addTo(map);
-    	
-    	    // Populate the dropdowns
-    	    const typeOptions = new Set(['全部']);
-    	    const timeOptions = new Set(['全部']);
-    	    const dangerousOptions = new Set(['全部']);
-    	    const legalOptions = new Set(['全部']);
-    	
-    	    data.forEach(row => {
-    	      typeOptions.add(row.type);
-    	      timeOptions.add(row.time);
-    	      dangerousOptions.add(row.dangerous);
-    	      legalOptions.add(row.legal);
-    	    });
-    	
-    	    const typeDropdown = document.getElementById('type-dropdown');
-    	    const timeDropdown = document.getElementById('time-dropdown');
-    	    const dangerousDropdown = document.getElementById('dangerous-dropdown');
-    	    const legalDropdown = document.getElementById('legal-dropdown');
-    	
-    	    typeOptions.forEach(option => {
-    	      const optionElement = document.createElement('option');
-    	      optionElement.value = option;
-    	      optionElement.textContent = option;
-    	      typeDropdown.appendChild(optionElement);
-    	    });
-    	
-    	    timeOptions.forEach(option => {
-	      if (option === '下午至半夜') {
-	        return; // Skip this iteration if the option is to be excluded
-	      }
-    	      const optionElement = document.createElement('option');
-    	      optionElement.value = option;
-    	      optionElement.textContent = option;
-    	      timeDropdown.appendChild(optionElement);
-    	    });
-    	
-    	    dangerousOptions.forEach(option => {
-    	      const optionElement = document.createElement('option');
-    	      optionElement.value = option;
-    	      optionElement.textContent = option;
-    	      dangerousDropdown.appendChild(optionElement);
-    	    });
-    	
-    	    legalOptions.forEach(option => {
-    	      const optionElement = document.createElement('option');
-    	      optionElement.value = option;
-    	      optionElement.textContent = option;
-    	      legalDropdown.appendChild(optionElement);
-    	    });
-    	
-    	    // Add event listeners for the dropdowns
-    	    typeDropdown.addEventListener('change', filterFeatures);
-    	    timeDropdown.addEventListener('change', filterFeatures);
-    	    dangerousDropdown.addEventListener('change', filterFeatures);
-    	    legalDropdown.addEventListener('change', filterFeatures);
-    	
-    	    function filterFeatures() {
-    	      const typeFilter = typeDropdown.value;
-    	      const timeFilter = timeDropdown.value;
-    	      const dangerousFilter = dangerousDropdown.value;
-    	      const legalFilter = legalDropdown.value;
-    	
-    	      featureLayer.eachLayer(layer => {
-    	        let shouldShow = true;
-    	
-    	        if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
-    	          shouldShow = false;
-    	        }
-    	
-    	        if (timeFilter !== '全部' && feature.properties.time !== timeFilter) {
-    	          shouldShow = false;
-    	        }
-	        if (timeFilter === '日間' && feature.properties.time === '全日') {
-		        shouldShow = true;
-		    } else if (timeFilter === '半夜' && feature.properties.time === '全日') {
-		        shouldShow = true; 
-		    }
 
-		if (timeFilter === '半夜' && feature.properties.time === '下午至半夜') {
-		        shouldShow = true;
-		    } else if (timeFilter === '下午' && feature.properties.time === '下午至半夜') {
-		        shouldShow = true;
-		    }
+	    let markers = [];
 
-	        if (timeFilter === '日間' && feature.properties.time === '下午') {
-		        shouldShow = true;
+
+		// Initial load: Add all markers with popups
+		function loadMarkers() {
+		    features.forEach(feature => {
+			const marker = L.marker([feature.properties.lng, feature.properties.lat]);
+			marker.bindPopup(`
+   			  <b>種類:</b> ${feature.properties.type}<br>
+			  <b>名稱:</b> ${feature.properties.name}<br>
+			  <b>時間:</b> ${feature.properties.time}<br>
+			  <b>危險程度:</b> ${feature.properties.dangerous}<br>
+			  <b>合法的士站:</b> ${feature.properties.legal}<br>
+			  <b>備註:</b> ${feature.properties.remarks}
+			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+  			 `);
+			marker.addTo(map);
+			markers.push(marker); // Store marker reference
+		    });
 		}
-		      
-    	        if (dangerousFilter !== '全部' && feature.properties.dangerous !== dangerousFilter) {
-    	          shouldShow = false;
-    	        }
-    	
-    	        if (legalFilter !== '全部' && feature.properties.legal !== legalFilter) {
-    	          shouldShow = false;
-    	        }
 
+		// Populate the dropdowns
+	    	    const typeOptions = new Set(['全部']);
+	    	    const timeOptions = new Set(['全部']);
+	    	    const dangerousOptions = new Set(['全部']);
+	    	    const legalOptions = new Set(['全部']);
+	    	
+	    	    data.forEach(row => {
+	    	      typeOptions.add(row.type);
+	    	      timeOptions.add(row.time);
+	    	      dangerousOptions.add(row.dangerous);
+	    	      legalOptions.add(row.legal);
+	    	    });
+	    	
+	    	    const typeDropdown = document.getElementById('type-dropdown');
+	    	    const timeDropdown = document.getElementById('time-dropdown');
+	    	    const dangerousDropdown = document.getElementById('dangerous-dropdown');
+	    	    const legalDropdown = document.getElementById('legal-dropdown');
+	    	
+	    	    typeOptions.forEach(option => {
+	    	      const optionElement = document.createElement('option');
+	    	      optionElement.value = option;
+	    	      optionElement.textContent = option;
+	    	      typeDropdown.appendChild(optionElement);
+	    	    });
 
-	        const marker = L.marker([feature.properties.lng, feature.properties.lat]);
-    	        layer.setOpacity(shouldShow ? 1 : 0);
-	        if (shouldShow) {
-		        marker.addTo(map); // Add the marker to the map
-		        marker.bindPopup(`<b>${feature.properties.name}</b><br>${feature.properties.description}`);
-		    } else {
-		        // If shouldShow is false, unbind the popup if it was already set
-		        marker.unbindPopup(); // This will disable the popup for this marker
-		    }
-    	      });
-    	    
-    	  }
+		    timeOptions.forEach(option => {
+		      if (option === '下午至半夜') {
+		        return; // Skip this iteration if the option is to be excluded
+		      }
+	    	      const optionElement = document.createElement('option');
+	    	      optionElement.value = option;
+	    	      optionElement.textContent = option;
+	    	      timeDropdown.appendChild(optionElement);
+	    	    });
+	    	
+	    	    dangerousOptions.forEach(option => {
+	    	      const optionElement = document.createElement('option');
+	    	      optionElement.value = option;
+	    	      optionElement.textContent = option;
+	    	      dangerousDropdown.appendChild(optionElement);
+	    	    });
+	    	
+	    	    legalOptions.forEach(option => {
+	    	      const optionElement = document.createElement('option');
+	    	      optionElement.value = option;
+	    	      optionElement.textContent = option;
+	    	      legalDropdown.appendChild(optionElement);
+	    	    });
+	    	
+	    	    // Add event listeners for the dropdowns
+	    	    typeDropdown.addEventListener('change', filterFeatures);
+	    	    timeDropdown.addEventListener('change', filterFeatures);
+	    	    dangerousDropdown.addEventListener('change', filterFeatures);
+	    	    legalDropdown.addEventListener('change', filterFeatures);
+	    	
+
+		  
+		function filterMarkers() {
+
+		      const typeFilter = typeDropdown.value;
+	    	      const timeFilter = timeDropdown.value;
+	    	      const dangerousFilter = dangerousDropdown.value;
+	    	      const legalFilter = legalDropdown.value;
+			
+	            markers.forEach(marker => {
+	                // Get the feature based on the marker's popup content
+	                const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
+	                const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safely access feature name
+	                const feature = features.find(f => f.name === featureName); // Find the corresponding feature
+	
+	                let shouldShow = true; // Default to true
+
+			if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
+	    	          shouldShow = false;
+	    	        }
+	    	
+	    	        if (timeFilter !== '全部' && feature.properties.time !== timeFilter) {
+	    	          shouldShow = false;
+	    	        }
+		        if (timeFilter === '日間' && feature.properties.time === '全日') {
+			        shouldShow = true;
+			    } else if (timeFilter === '半夜' && feature.properties.time === '全日') {
+			        shouldShow = true; 
+			    }
+	
+			if (timeFilter === '半夜' && feature.properties.time === '下午至半夜') {
+			        shouldShow = true;
+			    } else if (timeFilter === '下午' && feature.properties.time === '下午至半夜') {
+			        shouldShow = true;
+			    }
+	
+		        if (timeFilter === '日間' && feature.properties.time === '下午') {
+			        shouldShow = true;
+			}
+			      
+	    	        if (dangerousFilter !== '全部' && feature.properties.dangerous !== dangerousFilter) {
+	    	          shouldShow = false;
+	    	        }
+	    	
+	    	        if (legalFilter !== '全部' && feature.properties.legal !== legalFilter) {
+	    	          shouldShow = false;
+	    	        }
+
+			// Set marker visibility
+	                if (shouldShow) {
+	                    marker.setOpacity(1); // Show marker
+	                    if (!marker._map) {
+	                        marker.addTo(map); // Ensure marker is added to the map
+	                    }
+	                } else {
+	                    marker.setOpacity(0); // Hide marker
+	                    marker.unbindPopup(); // Unbind popup to prevent click events
+	                }
+		 });
+	        }
+	
+	        // Load markers initially
+	        loadMarkers();
+
+    	  });
 
       function openGoogleMapsNavigation(lat, lng) {
 	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
