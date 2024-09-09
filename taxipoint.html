@@ -389,9 +389,9 @@
     	      const dangerousFilter = dangerousDropdown.value;
     	      const legalFilter = legalDropdown.value;
     	
-    	      const featureLayer2 = L.geoJSON(features, {
+    	      featureLayer = L.geoJSON(features, {
 	      onEachFeature: (feature, layer) => {
-    	        const feature = layer.feature;
+    	         feature = layer.feature;
     	        let shouldShow = true;
     	
     	        if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
