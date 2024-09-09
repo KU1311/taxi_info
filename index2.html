@@ -6,6 +6,11 @@
     <title>Map with Filters</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
+        /* Ensure the map takes the full height of the viewport */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
         #map {
             height: 100vh; /* Full height for the map */
             width: 100%;   /* Full width for the map */
@@ -68,4 +73,32 @@
                     shouldShow = true; // Show all
                 } else if (feature) { // Ensure feature is defined
                     if (timeFilter === '日間') {
-                        shouldShow = feature.time === '日間' ||
+                        shouldShow = feature.time === '日間' || feature.time === '全日';
+                    } else if (timeFilter === '半夜') {
+                        shouldShow = feature.time === '半夜' || feature.time === '全日';
+                    }
+                } else {
+                    shouldShow = false; // If feature is not found, hide the marker
+                }
+
+                // Set marker visibility
+                if (shouldShow) {
+                    marker.setOpacity(1); // Show marker
+                    if (!marker._map) {
+                        marker.addTo(map); // Ensure marker is added to the map
+                    }
+                } else {
+                    marker.setOpacity(0); // Hide marker
+                    marker.unbindPopup(); // Unbind popup to prevent click events
+                }
+            });
+        }
+
+        // Load markers initially
+        loadMarkers();
+
+        // Filter markers when the dropdown value changes
+        document.getElementById('time-dropdown').addEventListener('change', filterMarkers);
+    </script>
+</body>
+</html>
