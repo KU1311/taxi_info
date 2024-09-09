@@ -1,212 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-HK">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSV Data on OpenStreetMap</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-  <style>
-    .controls-container {
-	  display: flex;
-	  justify-content: space-around;
-	  align-items: center;
-	  background-color: #f1f1f1;
-	  padding: 10px;
-	  position: sticky;
-	  top: 0;
-	  z-index: 1000;
-	}
-	
-	.dropdown-container {
-	  display: flex;
-	  align-items: center;
-	}
-	
-	.dropdown-container label {
-	  margin-right: 5px;
-	}
-	
-	.dropdown-container select {
-	  padding: 5px;
-	  border-radius: 4px;
-	  border: 1px solid #ccc;
-	}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Page</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%; /* Ensures the body takes full height */
+            display: flex;
+            flex-direction: column; /* Column layout for the body */
+        }
+
+        #map {
+            flex: 1; /* Allow the map to take up remaining space */
+            width: 100%; /* Full width */
+            z-index: 1; /* Lower z-index for the map */
+            position: relative; /* Create a positioning context */
+        }
+
+        .controls-container {
+            position: relative; /* To position dropdowns absolutely */
+            z-index: 10; /* Ensure dropdowns are above the map */
+        }
+
+        h2 {
+            margin-bottom: 10px; /* Space between title and dropdowns */
+            text-align: center; /* Center the title */
+            color: white; /* Change header text color for visibility */
+        }
+
+        .dropdown-row {
+            position: absolute; /* Position dropdowns absolutely */
+            top: 10px; /* Distance from the top of the viewport */
+            left: 0; /* Align to the left of the viewport */
+            width: 100%; /* Make the dropdown row fill the entire width */
+            display: flex; /* Align dropdowns in a row */
+            justify-content: space-between; /* Space out dropdowns evenly */
+            z-index: 20; /* Higher z-index to ensure it floats above the map */
+            background-color: #333; /* Background color for the dropdown container */
+            padding: 10px; /* Padding around the dropdown row */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container {
+            flex: 1; /* Allow each dropdown to take equal space */
+            display: flex; /* Use flexbox for internal layout */
+            flex-direction: column; /* Stack label and dropdown vertically */
+            margin: 0 5px; /* Optional margin between dropdowns */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container label {
+            margin-bottom: 5px; /* Space between label and dropdown */
+            color: white; /* Change label color for visibility */
+            text-align: center; /* Center the label text */
+            white-space: nowrap; /* Prevent label text from wrapping */
+        }
+
+        select {
+            background-color: #444; /* Darker background for the select dropdowns */
+            color: white; /* White text for dropdowns */
+            border: none; /* Remove default border */
+            padding: 5px; /* Padding inside dropdown */
+            border-radius: 3px; /* Rounded corners for aesthetics */
+            width: 100%; /* Make select take full width of the container */
+            box-sizing: border-box; /* Ensure padding is included in width */
+        }
+
+        select:focus {
+            outline: none; /* Remove focus outline */
+            border: 1px solid #666; /* Optional border on focus */
+        }
+    </style>
 </head>
 <body>
-  <div class="controls-container">
-    <div class="dropdown-container">
-      <label for="type-dropdown">Type:</label>
-      <select id="type-dropdown">
-        <option value="all">All</option>
-      </select>
+    <div class="controls-container">
+        <h2>的士站/扎馬位置</h2>
+        <div class="dropdown-row">
+            <div class="dropdown-container">
+                <label for="type-dropdown">的士種類:</label>
+                <select id="type-dropdown">
+                    <option value="type1">類型1</option>
+                    <option value="type2">類型2</option>
+                    <option value="type3">類型3</option>
+                </select>
+            </div>
+            <div class="dropdown-container">
+                <label for="time-dropdown">時段:</label>
+                <select id="time-dropdown">
+                    <option value="morning">早上</option>
+                    <option value="afternoon">下午</option>
+                    <option value="evening">晚上</option>
+                </select>
+            </div>
+            <div class="dropdown-container">
+                <label for="dangerous-dropdown">危險程度:</label>
+                <select id="dangerous-dropdown">
+                    <option value="low">低</option>
+                    <option value="medium">中</option>
+                    <option value="high">高</option>
+                </select>
+            </div>
+            <div class="dropdown-container">
+                <label for="legal-dropdown">合法:</label>
+                <select id="legal-dropdown">
+                    <option value="yes">是</option>
+                    <option value="no">否</option>
+                </select>
+            </div>
+        </div>
     </div>
-    <div class="dropdown-container">
-      <label for="time-dropdown">Time:</label>
-      <select id="time-dropdown">
-        <option value="all">All</option>
-      </select>
-    </div>
-    <div class="dropdown-container">
-      <label for="dangerous-dropdown">Dangerous:</label>
-      <select id="dangerous-dropdown">
-        <option value="all">All</option>
-        <option value="true">True</option>
-        <option value="false">False</option>
-      </select>
-    </div>
-    <div class="dropdown-container">
-      <label for="legal-dropdown">Legal:</label>
-      <select id="legal-dropdown">
-        <option value="all">All</option>
-        <option value="true">True</option>
-        <option value="false">False</option>
-      </select>
-    </div>
-  </div>
-  <div id="map" style="height: 80vh;"></div>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script>
-	  let i = 1
-        const map = L.map('map').setView([22.305451, 114.169656], 12);
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-	}).addTo(map);
-	
-	// Load the CSV data
-    	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test1.csv';
-	fetch(csvUrl)
-	  .then(response => response.text())
-	  .then(csvData => {
-		const rows = csvData.trim().split('\n');
-		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-		const data = rows.slice(1).map(row => {
-			const values = row.split(',');
-			return headers.reduce((obj, header, i) => {
-				obj[header] = String(values[i]).replace('\r', '');
-				return obj;
-			}, {});
-	    });
-		console.log(data)
-	    const features = data.map(row => {
-		  const latitude = parseFloat(row['lat']);
-		  const longitude = parseFloat(row['lng']);
-		console.log("row: ",i)
-		  // Log the coordinates
-		  console.log(`Coordinates: (${latitude}, ${longitude})`);
-		i+=1;
-		  return {
-		      type: 'Feature',
-		      geometry: {
-		        type: 'Point',
-		        coordinates: [longitude, latitude]
-		      },
-		      properties: {
-		        id: row['id'],
-		        type: row['type'],
-		        name: row['name'],
-		        time: row['time'],
-		        dangerous: row['dangerous'] === 'true',
-		        legal: row['legal'] === 'true',
-		        remarks: row['Remarks']
-		      }
-		  }
-	    }).filter(feature => feature !== null); // Remove any null values
-	
-	    const featureLayer = L.geoJSON(features, {
-	      onEachFeature: (feature, layer) => {
-	        layer.bindPopup(`
-	          <b>ID:</b> ${feature.properties.id}<br>
-	          <b>Type:</b> ${feature.properties.type}<br>
-	          <b>Name:</b> ${feature.properties.name}<br>
-	          <b>Time:</b> ${feature.properties.time}<br>
-	          <b>Dangerous:</b> ${feature.properties.dangerous ? 'True' : 'False'}<br>
-	          <b>Legal:</b> ${feature.properties.legal ? 'True' : 'False'}<br>
-	          <b>Remarks:</b> ${feature.properties.remarks}
-	        `);
-	      }
-	    }).addTo(map);
-	
-	    // Populate the dropdowns
-	    const typeOptions = new Set(['all']);
-	    const timeOptions = new Set(['all']);
-	    const dangerousOptions = new Set(['all', 'true', 'false']);
-	    const legalOptions = new Set(['all', 'true', 'false']);
-	
-	    data.forEach(row => {
-	      typeOptions.add(row.type);
-	      timeOptions.add(row.time);
-	    });
-	
-	    const typeDropdown = document.getElementById('type-dropdown');
-	    const timeDropdown = document.getElementById('time-dropdown');
-	    const dangerousDropdown = document.getElementById('dangerous-dropdown');
-	    const legalDropdown = document.getElementById('legal-dropdown');
-	
-	    typeOptions.forEach(option => {
-	      const optionElement = document.createElement('option');
-	      optionElement.value = option;
-	      optionElement.textContent = option;
-	      typeDropdown.appendChild(optionElement);
-	    });
-	
-	    timeOptions.forEach(option => {
-	      const optionElement = document.createElement('option');
-	      optionElement.value = option;
-	      optionElement.textContent = option;
-	      timeDropdown.appendChild(optionElement);
-	    });
-	
-	    dangerousOptions.forEach(option => {
-	      const optionElement = document.createElement('option');
-	      optionElement.value = option;
-	      optionElement.textContent = option;
-	      dangerousDropdown.appendChild(optionElement);
-	    });
-	
-	    legalOptions.forEach(option => {
-	      const optionElement = document.createElement('option');
-	      optionElement.value = option;
-	      optionElement.textContent = option;
-	      legalDropdown.appendChild(optionElement);
-	    });
-	
-	    // Add event listeners for the dropdowns
-	    typeDropdown.addEventListener('change', filterFeatures);
-	    timeDropdown.addEventListener('change', filterFeatures);
-	    dangerousDropdown.addEventListener('change', filterFeatures);
-	    legalDropdown.addEventListener('change', filterFeatures);
-	
-	    function filterFeatures() {
-	      const typeFilter = typeDropdown.value;
-	      const timeFilter = timeDropdown.value;
-	      const dangerousFilter = dangerousDropdown.value;
-	      const legalFilter = legalDropdown.value;
-	
-	      featureLayer.eachLayer(layer => {
-	        const feature = layer.feature;
-	        let shouldShow = true;
-	
-	        if (typeFilter !== 'all' && feature.properties.type !== typeFilter) {
-	          shouldShow = false;
-	        }
-	
-	        if (timeFilter !== 'all' && feature.properties.time !== timeFilter) {
-	          shouldShow = false;
-	        }
-	
-	        if (dangerousFilter !== 'all' && feature.properties.dangerous !== (dangerousFilter === 'true')) {
-	          shouldShow = false;
-	        }
-	
-	        if (legalFilter !== 'all' && feature.properties.legal !== (legalFilter === 'true')) {
-	          shouldShow = false;
-	        }
-	
-	        layer.setOpacity(shouldShow ? 1 : 0.3);
-	      });
-	    }
-	  });
-  </script>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Default coordinates
+        const defaultCoords = [22.305451, 114.169656];
+        const defaultZoom = 12;
+
+        // Initialize the map with default coordinates
+        const map = L.map('map').setView(defaultCoords, defaultZoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            opacity: 0.7
+        }).addTo(map);
+    </script>
 </body>
 </html>
