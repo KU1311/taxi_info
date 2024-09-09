@@ -70,8 +70,6 @@
                         shouldShow = feature.time === '日間' || feature.time === '全日';
                     } else if (timeFilter === '半夜') {
                         shouldShow = feature.time === '半夜' || feature.time === '全日';
-                    } else {
-                        shouldShow = false; // Hide otherwise
                     }
                 } else {
                     shouldShow = false; // If feature is not found, hide the marker
@@ -83,7 +81,6 @@
                     if (!marker._map) {
                         marker.addTo(map); // Ensure marker is added to the map
                     }
-                    // Rebind popup only if it is not already bound
                     if (!marker.getPopup()) {
                         marker.bindPopup(`<b>${feature.name}</b><br>${feature.description}`); // Rebind popup
                     }
