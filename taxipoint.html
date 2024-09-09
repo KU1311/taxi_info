@@ -295,7 +295,28 @@
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
     	
-    	    
+    	    const featureLayer = L.geoJSON(features, {
+    	      onEachFeature: (feature, layer) => {
+    
+    		let timeDisplay;
+    		if (feature.properties.time === "Daytime") {
+    		    timeDisplay = "日間"; // Display "日間" for Daytime
+    		} else if (feature.properties.time === "Midnight") {
+    		    timeDisplay = "半夜"; // Display "半夜" for Midnight
+    		} else {
+    		    timeDisplay = feature.properties.time; // Fallback: display the original time if it doesn't match
+    		}
+    		      
+    	        layer.bindPopup(`
+    	          <b>種類:</b> ${feature.properties.type}<br>
+    	          <b>名稱:</b> ${feature.properties.name}<br>
+    	          <b>時間:</b> ${timeDisplay}<br>
+    	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
+    	          <b>合法的士站:</b> ${feature.properties.legal}<br>
+    	          <b>備註:</b> ${feature.properties.remarks}
+    	        `);
+    	      }
+    	    }).addTo(map);
     	
     	    // Populate the dropdowns
     	    const typeOptions = new Set(['全部']);
@@ -376,23 +397,6 @@
     	        }
     	
     	        layer.setOpacity(shouldShow ? 1 : 0);
-
-	      if (shouldShow) {
-		const featureLayer = L.geoJSON(features, {
-	    	      onEachFeature: (feature, layer) => {
-
-	    		      
-	    	        layer.bindPopup(`
-	    	          <b>種類:</b> ${feature.properties.type}<br>
-	    	          <b>名稱:</b> ${feature.properties.name}<br>
-	    	          <b>時間:</b> ${feature.properties.time}<br>
-	    	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
-	    	          <b>合法的士站:</b> ${feature.properties.legal}<br>
-	    	          <b>備註:</b> ${feature.properties.remarks}
-	    	        `);
-	    	      }
-	    	    }).addTo(map);
-	      }
     	      });
     	    }
     	  });
