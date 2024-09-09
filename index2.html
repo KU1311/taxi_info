@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         #map {
-            height: 100vh;
-            width: 100%;
+            height: 100vh; /* Full height for the map */
+            width: 100%;   /* Full width for the map */
         }
     </style>
 </head>
@@ -23,6 +23,7 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
+        // Initialize the map
         const map = L.map('map').setView([22.305451, 114.169656], 12);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -35,4 +36,63 @@
             { name: "Point B", description: "This is Point B", time: "半夜", coordinates: [114.169656, 22.315451] },
             { name: "Point C", description: "This is Point C", time: "全日", coordinates: [114.169656, 22.325451] },
             { name: "Point D", description: "This is Point D", time: "日間", coordinates: [114.169656, 22.335451] },
-            { name: "Point E", description: "This is Point E", time: "半夜", coordinates: [114.169656, 22.
+            { name: "Point E", description: "This is Point E", time: "半夜", coordinates: [114.169656, 22.345451] },
+        ];
+
+        let markers = []; // Store markers for reference
+
+        // Initial load: Add all markers with popups
+        function loadMarkers() {
+            features.forEach(feature => {
+                const marker = L.marker([feature.coordinates[1], feature.coordinates[0]]);
+                marker.bindPopup(`<b>${feature.name}</b><br>${feature.description}`);
+                marker.addTo(map);
+                markers.push(marker); // Store marker reference
+            });
+        }
+
+        // Filter markers based on selected time
+        function filterMarkers() {
+            const timeFilter = document.getElementById('time-dropdown').value;
+
+            markers.forEach(marker => {
+                // Get the feature based on the marker's popup content
+                const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
+                const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safely access feature name
+                const feature = features.find(f => f.name === featureName); // Find the corresponding feature
+
+                let shouldShow = true; // Default to true
+
+                // Apply the filtering logic
+                if (timeFilter === '全部') {
+                    shouldShow = true; // Show all
+                } else if (feature) { // Ensure feature is defined
+                    if (timeFilter === '日間') {
+                        shouldShow = feature.time === '日間' || feature.time === '全日';
+                    } else if (timeFilter === '半夜') {
+                        shouldShow = feature.time === '半夜' || feature.time === '全日';
+                    }
+                } else {
+                    shouldShow = false; // If feature is not found, hide the marker
+                }
+
+                // Set marker visibility
+                if (shouldShow) {
+                    marker.setOpacity(1); // Show marker
+                    if (!marker._map) {
+                        marker.addTo(map); // Ensure marker is added to the map
+                    }
+                } else {
+                    marker.setOpacity(0); // Hide marker
+                }
+            });
+        }
+
+        // Load markers initially
+        loadMarkers();
+
+        // Filter markers when the dropdown value changes
+        document.getElementById('time-dropdown').addEventListener('change', filterMarkers);
+    </script>
+</body>
+</html>
