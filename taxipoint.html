@@ -60,7 +60,7 @@
 	    justify-content: space-between; /* Space out dropdowns evenly */
 	    z-index: 20; /* Higher z-index to ensure it floats above the map */
 	    background-color: #333; /* Background color for the dropdown container */
-	    padding: 10px 0; /* Padding on top and bottom, remove side padding */
+	    padding: 10px 0; /* Padding on top and bottom */
 	    border-radius: 5px; /* Optional rounded corners for aesthetics */
 	}
 	
@@ -70,6 +70,7 @@
 	    flex-direction: column; /* Stack label and dropdown vertically */
 	    margin: 0; /* Remove margins */
 	    padding: 0 5px; /* Optional padding for spacing between dropdowns */
+	    box-sizing: border-box; /* Include padding in width */
 	}
 	
 	.dropdown-container label {
