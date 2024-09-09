@@ -75,7 +75,7 @@
 	    margin-bottom: 5px; /* Space between label and dropdown */
 	    color: white; /* Change label color for visibility */
 	    text-align: center; /* Center the label text */
-	    word-wrap: break-word; /* Allow breaking of long words */
+	    white-space: nowrap; /* Prevent label text from wrapping */
 	}
 	
 	select {
@@ -91,6 +91,10 @@
 	select:focus {
 	    outline: none; /* Remove focus outline */
 	    border: 1px solid #666; /* Optional border on focus */
+	}
+	
+	.dropdown-row {
+	    background-color: #333; /* Full width background color */
 	}
 	  
 	.current-location-label {
