@@ -434,6 +434,12 @@
     	        }
     	
     	        layer.setOpacity(shouldShow ? 1 : 0);
+		if (shouldShow) {
+		} else {
+			if (marker._map) {
+		            marker.remove(); // Remove the marker from the map if it exists
+		        }
+		}
     	      });
     	    }
     	  });
