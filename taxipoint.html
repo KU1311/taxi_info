@@ -436,8 +436,7 @@
 	    	          <b>備註:</b> ${feature.properties.remarks}
 			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
 	    	        `);
-	    	      }
-	    	    }).addTo(map);
+	    	      
 		} else {
 			if (layer._map) {
 		            layer.remove(); // Remove the marker from the map if it exists
