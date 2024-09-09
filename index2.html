@@ -55,7 +55,10 @@
             const timeFilter = document.getElementById('time-dropdown').value;
 
             markers.forEach(marker => {
-                const feature = features.find(f => f.name === marker.getPopup().getContent().split('<b>')[1].split('</b>')[0]);
+                // Get the feature based on the marker's popup content
+                const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
+                const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safe access with optional chaining
+                const feature = features.find(f => f.name === featureName);
 
                 let shouldShow = true; // Default to true
 
@@ -73,7 +76,9 @@
                 // Set marker opacity and manage popups
                 marker.setOpacity(shouldShow ? 1 : 0);
                 if (shouldShow) {
-                    marker.addTo(map); // Ensure marker is added to the map
+                    if (!marker._map) {
+                        marker.addTo(map); // Ensure marker is added to the map
+                    }
                     marker.bindPopup(`<b>${feature.name}</b><br>${feature.description}`); // Rebind popup
                 } else {
                     marker.unbindPopup(); // Unbind popup if not shown
