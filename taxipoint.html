@@ -41,59 +41,58 @@
 	}
 	
 	.controls-container {
-	    position: relative; /* To position dropdowns absolutely */
-	    padding: 10px; /* Padding around the container */
-	    z-index: 10; /* Ensure dropdowns are above the map */
-	}
-	
-	h2 {
-	    margin-bottom: 10px; /* Space between title and dropdowns */
-	    text-align: center; /* Center the title */
-	}
-	
-	.dropdown-row {
-	    position: absolute; /* Position dropdowns absolutely */
-	    top: 10px; /* Distance from the top of the viewport */
-	    left: 0; /* Align to the left of the viewport */
-	    width: 100%; /* Make the dropdown row fill the entire width */
-	    display: flex; /* Align dropdowns in a row */
-	    justify-content: space-between; /* Space out dropdowns evenly */
-	    z-index: 20; /* Higher z-index to ensure it floats above the map */
-	    background-color: #333; /* Background color for the dropdown container */
-	    padding: 10px; /* Padding around the dropdown row */
-	    box-sizing: border-box; /* Include padding in width */
-	}
-	
-	.dropdown-container {
-	    width: calc(25% - 20px); /* 25% width minus space for padding (10px on each side) */
-	    display: flex; /* Use flexbox for internal layout */
-	    flex-direction: column; /* Stack label and dropdown vertically */
-	    margin: 0; /* Remove margins */
-	    padding: 0; /* Remove padding */
-	    box-sizing: border-box; /* Include padding in width */
-	}
-	
-	.dropdown-container label {
-	    margin-bottom: 5px; /* Space between label and dropdown */
-	    color: white; /* Change label color for visibility */
-	    text-align: center; /* Center the label text */
-	    white-space: nowrap; /* Prevent label text from wrapping */
-	}
-	
-	select {
-	    background-color: #444; /* Darker background for the select dropdowns */
-	    color: white; /* White text for dropdowns */
-	    border: none; /* Remove default border */
-	    padding: 5px; /* Padding inside dropdown */
-	    border-radius: 3px; /* Rounded corners for aesthetics */
-	    width: 100%; /* Make select take full width of the container */
-	    box-sizing: border-box; /* Ensure padding is included in width */
-	}
-	
-	select:focus {
-	    outline: none; /* Remove focus outline */
-	    border: 1px solid #666; /* Optional border on focus */
-	}
+            position: relative; /* To position dropdowns absolutely */
+            z-index: 10; /* Ensure dropdowns are above the map */
+        }
+
+        h2 {
+            margin-bottom: 10px; /* Space between title and dropdowns */
+            text-align: center; /* Center the title */
+            color: white; /* Change header text color for visibility */
+        }
+
+        .dropdown-row {
+            position: absolute; /* Position dropdowns absolutely */
+            top: 10px; /* Distance from the top of the viewport */
+            left: 0; /* Align to the left of the viewport */
+            width: 100%; /* Make the dropdown row fill the entire width */
+            display: flex; /* Align dropdowns in a row */
+            justify-content: space-between; /* Space out dropdowns evenly */
+            z-index: 20; /* Higher z-index to ensure it floats above the map */
+            background-color: #333; /* Background color for the dropdown container */
+            padding: 10px; /* Padding around the dropdown row */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container {
+            flex: 1; /* Allow each dropdown to take equal space */
+            display: flex; /* Use flexbox for internal layout */
+            flex-direction: column; /* Stack label and dropdown vertically */
+            margin: 0 5px; /* Optional margin between dropdowns */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container label {
+            margin-bottom: 5px; /* Space between label and dropdown */
+            color: white; /* Change label color for visibility */
+            text-align: center; /* Center the label text */
+            white-space: nowrap; /* Prevent label text from wrapping */
+        }
+
+        select {
+            background-color: #444; /* Darker background for the select dropdowns */
+            color: white; /* White text for dropdowns */
+            border: none; /* Remove default border */
+            padding: 5px; /* Padding inside dropdown */
+            border-radius: 3px; /* Rounded corners for aesthetics */
+            width: 100%; /* Make select take full width of the container */
+            box-sizing: border-box; /* Ensure padding is included in width */
+        }
+
+        select:focus {
+            outline: none; /* Remove focus outline */
+            border: 1px solid #666; /* Optional border on focus */
+        }
 	
 	.dropdown-row {
 	    background-color: #333; /* Full width background color */
