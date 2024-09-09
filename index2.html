@@ -1,126 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-HK">
 <head>
-  <title>POI Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-   button {
-      display: flex;
-      padding: 0.75rem;
-      background-color: rgb(237, 28, 36 );
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-	.current-location-marker {
-	  background-color: rgba(73, 167, 223, 0.5);
-	  border-radius: 50%;
-	  width: 40px;
-	  height: 40px;
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-	  font-size: 12px;
-	  font-weight: bold;
-	  color: white;
-	}
-	
-	.current-location-label {
-	  padding: 4px 8px;
-	  border-radius: 4px;
-	  font-size: 12px;
-	  font-weight: bold;
-	}
-	  
-  </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with Filters</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-  <div id="map"></div>
-  <script>
-	  
-	// Function to open Google Maps navigation
-    function openGoogleMapsNavigation(lat, lng) {
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-      window.open(url, '_blank');
-    }
-	  
-    // Replace this with the URL of your CSV file on GitHub
-    const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv_test1.csv';
+    <select id="time-dropdown">
+        <option value="全部">全部</option>
+        <option value="日間">日間</option>
+        <option value="半夜">半夜</option>
+        <option value="全日">全日</option>
+    </select>
+    <div id="map"></div>
 
-    // Fetch the CSV data
-    fetch(csvUrl)
-      .then(response => response.text())
-      .then(csvData => {
-        // Parse the CSV data
-        const rows = csvData.trim().split('\n');
-			  const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-        const data = rows.slice(1).map(row => {
-          const values = row.split(',');
-          return headers.reduce((obj, header, i) => {
-            obj[header] = values[i];
-            return obj;
-          }, {});
-        });
-
-       // Initialize the map
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
         const map = L.map('map').setView([22.305451, 114.169656], 12);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            opacity: 0.7
         }).addTo(map);
-      
-        // Add markers for the POIs
-        data.forEach(poi => {
-          const Y = poi.lng;
-          const Yr = String(Y).replace('\r', '');
-          L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
-            .bindPopup(`<b>${poi.name}</b>
-	    <br>${poi.remarks}
-	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">Navigate</button>
-     	 `);
-	})
 
+        // Sample feature data
+        const features = [
+            { name: "Point A", description: "This is Point A", time: "日間", coordinates: [114.169656, 22.305451] },
+            { name: "Point B", description: "This is Point B", time: "半夜", coordinates: [114.169656, 22.315451] },
+            { name: "Point C", description: "This is Point C", time: "全日", coordinates: [114.169656, 22.325451] },
+            { name: "Point D", description: "This is Point D", time: "日間", coordinates: [114.169656, 22.335451] },
+            { name: "Point E", description: "This is Point E", time: "半夜", coordinates: [114.169656, 22.345451] },
+        ];
 
-	// Add the user's current location
-	    if (navigator.geolocation) {
-	      navigator.geolocation.getCurrentPosition(
-	        (position) => {
-	          const userLocationMarker = L.marker([position.coords.latitude, position.coords.longitude], {
-			   icon: L.divIcon({
-			        className: 'current-location-marker',
-			        iconSize: [50, 50]
-			      })
-			  })
-			.bindPopup(`<div class="current-location-label">你的位置</div>`)
-			.addTo(map);
-	        },
-	        (error) => {
-	          console.error("Error getting user location:", error);
-	        });
-	    } else {
-	      console.error("Geolocation is not supported by this browser.");
-	    }
-	      
-      })
-      .catch(error => console.error('Error fetching CSV data:', error));
+        let markers = []; // Store markers for reference
 
-    
+        // Initial load: Add all markers with popups
+        function loadMarkers() {
+            features.forEach(feature => {
+                const marker = L.marker([feature.coordinates[1], feature.coordinates[0]]);
+                marker.bindPopup(`<b>${feature.name}</b><br>${feature.description}`);
+                marker.addTo(map);
+                markers.push(marker); // Store marker reference
+            });
+        }
 
-	  
-  </script>
+        // Filter markers based on selected time
+        function filterMarkers() {
+            const timeFilter = document.getElementById('time-dropdown').value;
+
+            markers.forEach(marker => {
+                const feature = features.find(f => f.name === marker.getPopup().getContent().split('<b>')[1].split('</b>')[0]);
+
+                let shouldShow = true; // Default to true
+
+                // Apply the filtering logic
+                if (timeFilter === '全部') {
+                    shouldShow = true; // Show all
+                } else if (timeFilter === '日間') {
+                    shouldShow = feature.time === '日間' || feature.time === '全日';
+                } else if (timeFilter === '半夜') {
+                    shouldShow = feature.time === '半夜' || feature.time === '全日';
+                } else {
+                    shouldShow = false; // Hide otherwise
+                }
+
+                // Set marker opacity and manage popups
+                marker.setOpacity(shouldShow ? 1 : 0);
+                if (shouldShow) {
+                    marker.addTo(map); // Ensure marker is added to the map
+                    marker.bindPopup(`<b>${feature.name}</b><br>${feature.description}`); // Rebind popup
+                } else {
+                    marker.unbindPopup(); // Unbind popup if not shown
+                }
+            });
+        }
+
+        // Load markers initially
+        loadMarkers();
+
+        // Filter markers when the dropdown value changes
+        document.getElementById('time-dropdown').addEventListener('change', filterMarkers);
+    </script>
 </body>
 </html>
