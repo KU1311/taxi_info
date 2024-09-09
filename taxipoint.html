@@ -320,18 +320,18 @@
 		function loadMarkers() {
 		    features.forEach(feature => {
 			const marker = L.marker([feature.properties.lat, feature.properties.lng]);
-			marker.bindPopup(`
-   			  <b>${feature.properties.name}</b><br>
+		        const popupContent =
+			 `<b>${feature.properties.name}</b><br>
    			  <b>種類:</b> ${feature.properties.type}<br>
-			  <b>名稱:</b> ${feature.properties.name}<br>
 			  <b>時間:</b> ${feature.properties.time}<br>
 			  <b>危險程度:</b> ${feature.properties.dangerous}<br>
 			  <b>合法的士站:</b> ${feature.properties.legal}<br>
 			  <b>備註:</b> ${feature.properties.remarks}
 			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-  			 `);
+  			 `;
+			marker.bindPopup(popupContent);
 			marker.addTo(map);
-			markers.push({ marker, feature });
+			markers.push({ marker, feature, popupContent });
 		    });
 		}
 
@@ -440,6 +440,7 @@
 	                    if (!marker._map) {
 	                        marker.addTo(map); // Ensure marker is added to the map
 	                    }
+			    marker.bindPopup(popupContent);
 	                } else {
 	                    marker.setOpacity(0); // Hide marker
 	                    marker.unbindPopup(); // Unbind popup to prevent click events
