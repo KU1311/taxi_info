@@ -58,19 +58,23 @@
                 // Get the feature based on the marker's popup content
                 const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
                 const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safe access with optional chaining
-                const feature = features.find(f => f.name === featureName);
+                const feature = features.find(f => f.name === featureName); // Find the corresponding feature
 
                 let shouldShow = true; // Default to true
 
                 // Apply the filtering logic
                 if (timeFilter === '全部') {
                     shouldShow = true; // Show all
-                } else if (timeFilter === '日間') {
-                    shouldShow = feature.time === '日間' || feature.time === '全日';
-                } else if (timeFilter === '半夜') {
-                    shouldShow = feature.time === '半夜' || feature.time === '全日';
+                } else if (feature) { // Ensure feature is defined
+                    if (timeFilter === '日間') {
+                        shouldShow = feature.time === '日間' || feature.time === '全日';
+                    } else if (timeFilter === '半夜') {
+                        shouldShow = feature.time === '半夜' || feature.time === '全日';
+                    } else {
+                        shouldShow = false; // Hide otherwise
+                    }
                 } else {
-                    shouldShow = false; // Hide otherwise
+                    shouldShow = false; // If feature is not found, hide the marker
                 }
 
                 // Set marker opacity and manage popups
@@ -79,7 +83,10 @@
                     if (!marker._map) {
                         marker.addTo(map); // Ensure marker is added to the map
                     }
-                    marker.bindPopup(`<b>${feature.name}</b><br>${feature.description}`); // Rebind popup
+                    // Rebind popup only if it is not already bound
+                    if (!marker.getPopup()) {
+                        marker.bindPopup(`<b>${feature.name}</b><br>${feature.description}`); // Rebind popup
+                    }
                 } else {
                     marker.unbindPopup(); // Unbind popup if not shown
                 }
