@@ -300,7 +300,9 @@
     		        time: row['time'],
     		        dangerous: row['dangerous'],
     		        legal: row['legal'],
-    		        remarks: row['Remarks']
+    		        remarks: row['Remarks'],
+		        lat: latitude,
+			lng: longitude
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
@@ -324,7 +326,7 @@
     	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
     	          <b>合法的士站:</b> ${feature.properties.legal}<br>
     	          <b>備註:</b> ${feature.properties.remarks}
-		  <button onclick="openGoogleMapsNavigation(${feature.properties.latitude}, ${feature.properties.longitude})">導航</button>
+		  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
     	        `);
     	      }
     	    }).addTo(map);
