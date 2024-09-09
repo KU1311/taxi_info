@@ -399,7 +399,7 @@
 	    	      const dangerousFilter = dangerousDropdown.value;
 	    	      const legalFilter = legalDropdown.value;
 			
-	           markers.forEach(marker => {
+	           markers.forEach(({ marker, feature }) => { // Destructure to get marker and feature
 	                // Get the feature based on the marker's popup content
 	                const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
 	                const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safely access feature name
