@@ -73,6 +73,53 @@
             outline: none; /* Remove focus outline */
             border: 1px solid #666; /* Optional border on focus */
         }
+
+        .current-location-label {
+    	  padding: 4px 8px;
+    	  border-radius: 4px;
+    	  font-size: 12px;
+    	  font-weight: bold;
+    	}
+    	
+    	.current-location-marker {
+    	  background-color: rgba(73, 167, 223, 0.5);
+    	  border-radius: 50%;
+    	  width: 40px;
+    	  height: 40px;
+    	  display: flex;
+    	  justify-content: center;
+    	  align-items: center;
+    	  font-size: 12px;
+    	  font-weight: bold;
+    	  color: white;
+    	}
+    	  
+    	.footer {
+    	    padding: 10px;
+    	    background-color: #444; /* Slightly lighter grey for footer */
+    	    width: 100%;
+    	    position: fixed; /* Use relative positioning */
+                bottom: 0; /* Align to the bottom of the viewport */
+                left: 0; /* Align to the left of the viewport */
+    	    z-index: 1000; /* Ensure the footer is above other elements */
+    	}
+            .footer h3 {
+                margin: 0; /* Remove default margin */
+                padding-left: 10px; /* Add some padding to the left */
+            }
+    	.whatsapp-button {
+                background-color: #25D366;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+                text-decoration: none;
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
     </style>
 </head>
 <body>
@@ -82,50 +129,276 @@
             <div class="dropdown-container">
                 <label for="type-dropdown">的士種類:</label>
                 <select id="type-dropdown">
-                    <option value="type1">類型1</option>
-                    <option value="type2">類型2</option>
-                    <option value="type3">類型3</option>
                 </select>
             </div>
             <div class="dropdown-container">
                 <label for="time-dropdown">時段:</label>
                 <select id="time-dropdown">
-                    <option value="morning">早上</option>
-                    <option value="afternoon">下午</option>
-                    <option value="evening">晚上</option>
                 </select>
             </div>
             <div class="dropdown-container">
                 <label for="dangerous-dropdown">危險程度:</label>
                 <select id="dangerous-dropdown">
-                    <option value="low">低</option>
-                    <option value="medium">中</option>
-                    <option value="high">高</option>
                 </select>
             </div>
             <div class="dropdown-container">
                 <label for="legal-dropdown">合法:</label>
                 <select id="legal-dropdown">
-                    <option value="yes">是</option>
-                    <option value="no">否</option>
                 </select>
             </div>
         </div>
     </div>
     <div id="map"></div>
-
+    <div class="footer">
+    	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+    	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+	</div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        // Default coordinates
-        const defaultCoords = [22.305451, 114.169656];
-        const defaultZoom = 12;
-
-        // Initialize the map with default coordinates
-        const map = L.map('map').setView(defaultCoords, defaultZoom);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            opacity: 0.7
-        }).addTo(map);
-    </script>
+      <script>
+    	  let i = 1
+            // Default coordinates
+    	    const defaultCoords = [22.305451, 114.169656];
+    	    const defaultZoom = 12;
+    	
+    	    // Initialize the map with default coordinates
+    	    const map = L.map('map').setView(defaultCoords, defaultZoom);
+    	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    		opacity: 0.7
+    	    }).addTo(map);
+    	
+    	    // Function to set the user location
+    	    function setUserLocation(position) {
+    	        const userCoords = [position.coords.latitude, position.coords.longitude];
+    	        const userZoom = 16; // Set a higher zoom level for user location
+    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+    	        // Create a custom marker for the user's location
+    	        const userLocationMarker = L.divIcon({
+    	            className: 'current-location-marker', // Custom class
+    	            iconSize: [50, 50] // Size of the marker
+    	        });
+    	
+    	        // Add the custom marker to the map
+    	        L.marker(userCoords, { icon: userLocationMarker })
+    	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
+    	            .addTo(map);
+    	    }
+    	
+    	    // Check for user's location
+    	    if (navigator.geolocation) {
+    	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+    	            console.warn("Geolocation not allowed. Using default location.");
+    	            // The map is already initialized to defaultCoords
+    	        });
+    	    } else {
+    	        console.warn("Geolocation is not supported by this browser. Using default location.");
+    	        // The map is already initialized to defaultCoords
+    	    }
+    	  
+    	// Load the CSV data
+        	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv_test2.csv';
+    	fetch(csvUrl)
+    	  .then(response => response.text())
+    	  .then(csvData => {
+    		const rows = csvData.trim().split('\n');
+    		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+    		const data = rows.slice(1).map(row => {
+    		    const values = row.split(',');
+    		    return headers.reduce((obj, header, i) => {
+    			// Remove carriage return from the value
+    			let value = String(values[i]).replace('\r', '');
+    		
+    			// Check if the current header is "time" and apply the rules
+    			if (header === 'time') {
+    			    if (value === "Daytime") {
+    				value = "日間";
+    			    } else if (value === "Midnight") {
+    				value = "半夜";
+    			    }
+    			}
+    		        if (header === 'dangerous') {
+    			    if (value === "Y") {
+    				value = "危險";
+    			    } else if (value === "N") {
+    				value = "安全";
+    			    }
+    			}
+    		        if (header === 'legal') {
+    			    if (value === "Y") {
+    				value = "正式的士站";
+    			    } else if (value === "N") {
+    				value = "非正式的士站";
+    			    }
+    			}
+    		        if (header === 'type') {
+    			    if (value === "urban") {
+    				value = "市區的士";
+    			    } else if (value === "NT") {
+    				value = "新界的士";
+    			    } else if (value === "lantau") {
+    				value = "大嶼山的士";
+    			    } else if (value === "cross-harbour") {
+    				value = "過海的士";
+    			    } 
+    			}
+    		
+    			obj[header] = value; // Assign the modified value to the object
+    			return obj;
+    		    }, {});
+    		});
+    	    const features = data.map(row => {
+    		  const latitude = parseFloat(row['lat']);
+    		  const longitude = parseFloat(row['lng']);
+    			
+    		    	if (row['time'] === "Daytime") {
+    				row['time'] = "日間";
+    			    } else if (row['time'] === "Midnight") {
+    				row['time'] = "半夜";
+    			    }
+    			if (row['dangerous'] === "Y") {
+    				row['dangerous'] = "危險";
+    			    } else if (row['dangerous'] === "N") {
+    				row['dangerous'] = "安全";
+    			    }
+    		    	if (row['legal'] === "Y") {
+    				row['legal'] = "正式的士站";
+    			    } else if (row['legal'] === "N") {
+    				row['legal'] = "非正式的士站";
+    			    }
+    		    	if (row['type'] === "urban") {
+    				row['type'] = "市區的士";
+    			    } else if (row['type'] === "NT") {
+    				row['type'] = "新界的士";
+    			    } else if (row['type'] === "lantau") {
+    				row['type'] = "大嶼山的士";
+    			    } else if (row['type'] === "cross-harbour") {
+    				row['type'] = "過海的士";
+    			    } 
+    		    
+    		i+=1;
+    		  return {
+    		      type: 'Feature',
+    		      geometry: {
+    		        type: 'Point',
+    		        coordinates: [longitude, latitude]
+    		      },
+    		      properties: {
+    		        id: row['id'],
+    		        type: row['type'],
+    		        name: row['name'],
+    		        time: row['time'],
+    		        dangerous: row['dangerous'],
+    		        legal: row['legal'],
+    		        remarks: row['Remarks']
+    		      }
+    		  }
+    	    }).filter(feature => feature !== null); // Remove any null values
+    	
+    	    const featureLayer = L.geoJSON(features, {
+    	      onEachFeature: (feature, layer) => {
+    
+    		let timeDisplay;
+    		if (feature.properties.time === "Daytime") {
+    		    timeDisplay = "日間"; // Display "日間" for Daytime
+    		} else if (feature.properties.time === "Midnight") {
+    		    timeDisplay = "半夜"; // Display "半夜" for Midnight
+    		} else {
+    		    timeDisplay = feature.properties.time; // Fallback: display the original time if it doesn't match
+    		}
+    		      
+    	        layer.bindPopup(`
+    	          <b>種類:</b> ${feature.properties.type}<br>
+    	          <b>名稱:</b> ${feature.properties.name}<br>
+    	          <b>時間:</b> ${timeDisplay}<br>
+    	          <b>危險程度:</b> ${feature.properties.dangerous}<br>
+    	          <b>合法的士站:</b> ${feature.properties.legal}<br>
+    	          <b>備註:</b> ${feature.properties.remarks}
+    	        `);
+    	      }
+    	    }).addTo(map);
+    	
+    	    // Populate the dropdowns
+    	    const typeOptions = new Set(['全部']);
+    	    const timeOptions = new Set(['全部']);
+    	    const dangerousOptions = new Set(['全部']);
+    	    const legalOptions = new Set(['全部']);
+    	
+    	    data.forEach(row => {
+    	      typeOptions.add(row.type);
+    	      timeOptions.add(row.time);
+    	      dangerousOptions.add(row.dangerous);
+    	      legalOptions.add(row.legal);
+    	    });
+    	
+    	    const typeDropdown = document.getElementById('type-dropdown');
+    	    const timeDropdown = document.getElementById('time-dropdown');
+    	    const dangerousDropdown = document.getElementById('dangerous-dropdown');
+    	    const legalDropdown = document.getElementById('legal-dropdown');
+    	
+    	    typeOptions.forEach(option => {
+    	      const optionElement = document.createElement('option');
+    	      optionElement.value = option;
+    	      optionElement.textContent = option;
+    	      typeDropdown.appendChild(optionElement);
+    	    });
+    	
+    	    timeOptions.forEach(option => {
+    	      const optionElement = document.createElement('option');
+    	      optionElement.value = option;
+    	      optionElement.textContent = option;
+    	      timeDropdown.appendChild(optionElement);
+    	    });
+    	
+    	    dangerousOptions.forEach(option => {
+    	      const optionElement = document.createElement('option');
+    	      optionElement.value = option;
+    	      optionElement.textContent = option;
+    	      dangerousDropdown.appendChild(optionElement);
+    	    });
+    	
+    	    legalOptions.forEach(option => {
+    	      const optionElement = document.createElement('option');
+    	      optionElement.value = option;
+    	      optionElement.textContent = option;
+    	      legalDropdown.appendChild(optionElement);
+    	    });
+    	
+    	    // Add event listeners for the dropdowns
+    	    typeDropdown.addEventListener('change', filterFeatures);
+    	    timeDropdown.addEventListener('change', filterFeatures);
+    	    dangerousDropdown.addEventListener('change', filterFeatures);
+    	    legalDropdown.addEventListener('change', filterFeatures);
+    	
+    	    function filterFeatures() {
+    	      const typeFilter = typeDropdown.value;
+    	      const timeFilter = timeDropdown.value;
+    	      const dangerousFilter = dangerousDropdown.value;
+    	      const legalFilter = legalDropdown.value;
+    	
+    	      featureLayer.eachLayer(layer => {
+    	        const feature = layer.feature;
+    	        let shouldShow = true;
+    	
+    	        if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
+    	          shouldShow = false;
+    	        }
+    	
+    	        if (timeFilter !== '全部' && feature.properties.time !== timeFilter) {
+    	          shouldShow = false;
+    	        }
+    	
+    	        if (dangerousFilter !== '全部' && feature.properties.dangerous !== dangerousFilter) {
+    	          shouldShow = false;
+    	        }
+    	
+    	        if (legalFilter !== '全部' && feature.properties.legal !== legalFilter) {
+    	          shouldShow = false;
+    	        }
+    	
+    	        layer.setOpacity(shouldShow ? 1 : 0);
+    	      });
+    	    }
+    	  });
+      </script>
 </body>
 </html>
