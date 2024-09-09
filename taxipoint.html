@@ -390,7 +390,6 @@
     	      const legalFilter = legalDropdown.value;
     	
     	      featureLayer.eachLayer(layer => {
-    	         feature = layer.feature;
     	        let shouldShow = true;
     	
     	        if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
@@ -425,7 +424,7 @@
     	        }
 
 
-	        const marker = L.marker([feature.geometry.longitude, feature.geometry.latitude]);
+	        const marker = L.marker([feature.properties.lng, feature.properties.lat]);
     	        layer.setOpacity(shouldShow ? 1 : 0);
 	        if (shouldShow) {
 		        marker.addTo(map); // Add the marker to the map
@@ -442,6 +441,6 @@
 	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 	      window.open(url, '_blank');
 	    }
-      </script>
+</script>
 </body>
 </html>
