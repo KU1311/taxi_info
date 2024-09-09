@@ -399,7 +399,7 @@
 	    	      const dangerousFilter = dangerousDropdown.value;
 	    	      const legalFilter = legalDropdown.value;
 			
-	           markers.forEach(({ marker, feature }) => { // Destructure to get marker and feature
+	           markers.forEach(({ marker, feature, popupContent }) => {
 
 	                let shouldShow = true; // Default to true
 
