@@ -321,6 +321,7 @@
 		    features.forEach(feature => {
 			const marker = L.marker([feature.properties.lat, feature.properties.lng]);
 			marker.bindPopup(`
+   			  <b>${feature.properties.name}</b><br>
    			  <b>種類:</b> ${feature.properties.type}<br>
 			  <b>名稱:</b> ${feature.properties.name}<br>
 			  <b>時間:</b> ${feature.properties.time}<br>
@@ -398,24 +399,12 @@
 	    	      const dangerousFilter = dangerousDropdown.value;
 	    	      const legalFilter = legalDropdown.value;
 			
-	           features.forEach(feature => {
-			const marker = L.marker([feature.properties.lat, feature.properties.lng]);
-			marker.bindPopup(`
-   			  <b>種類:</b> ${feature.properties.type}<br>
-			  <b>名稱:</b> ${feature.properties.name}<br>
-			  <b>時間:</b> ${feature.properties.time}<br>
-			  <b>危險程度:</b> ${feature.properties.dangerous}<br>
-			  <b>合法的士站:</b> ${feature.properties.legal}<br>
-			  <b>備註:</b> ${feature.properties.remarks}
-			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-  			 `);
-			marker.addTo(map);
-			   
+	           markers.forEach(marker => {
 	                // Get the feature based on the marker's popup content
 	                const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
-	                //const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safely access feature name
-	                //const feature = features.find(f => f.name === featureName); // Find the corresponding feature
-			
+	                const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safely access feature name
+	                const feature = features.find(f => f.name === featureName); // Find the corresponding feature
+
 	                let shouldShow = true; // Default to true
 
 			if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
