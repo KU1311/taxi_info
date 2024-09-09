@@ -331,7 +331,7 @@
 			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
   			 `);
 			marker.addTo(map);
-			markers.push(marker); // Store marker reference
+			markers.push({ marker, feature });
 		    });
 		}
 
