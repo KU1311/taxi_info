@@ -398,7 +398,19 @@
 	    	      const dangerousFilter = dangerousDropdown.value;
 	    	      const legalFilter = legalDropdown.value;
 			
-	            markers.forEach(marker => {
+	           features.forEach(feature => {
+			const marker = L.marker([feature.properties.lng, feature.properties.lat]);
+			marker.bindPopup(`
+   			  <b>種類:</b> ${feature.properties.type}<br>
+			  <b>名稱:</b> ${feature.properties.name}<br>
+			  <b>時間:</b> ${feature.properties.time}<br>
+			  <b>危險程度:</b> ${feature.properties.dangerous}<br>
+			  <b>合法的士站:</b> ${feature.properties.legal}<br>
+			  <b>備註:</b> ${feature.properties.remarks}
+			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+  			 `);
+			marker.addTo(map);
+			   
 	                // Get the feature based on the marker's popup content
 	                const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
 	                const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safely access feature name
