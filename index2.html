@@ -68,31 +68,4 @@
                     shouldShow = true; // Show all
                 } else if (feature) { // Ensure feature is defined
                     if (timeFilter === '日間') {
-                        shouldShow = feature.time === '日間' || feature.time === '全日';
-                    } else if (timeFilter === '半夜') {
-                        shouldShow = feature.time === '半夜' || feature.time === '全日';
-                    }
-                } else {
-                    shouldShow = false; // If feature is not found, hide the marker
-                }
-
-                // Set marker visibility
-                if (shouldShow) {
-                    marker.setOpacity(1); // Show marker
-                    if (!marker._map) {
-                        marker.addTo(map); // Ensure marker is added to the map
-                    }
-                } else {
-                    marker.setOpacity(0); // Hide marker
-                }
-            });
-        }
-
-        // Load markers initially
-        loadMarkers();
-
-        // Filter markers when the dropdown value changes
-        document.getElementById('time-dropdown').addEventListener('change', filterMarkers);
-    </script>
-</body>
-</html>
+                        shouldShow = feature.time === '日間' ||
