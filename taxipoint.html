@@ -403,7 +403,7 @@
 	                const popupContent = marker.getPopup() ? marker.getPopup().getContent() : '';
 	                const featureName = popupContent.split('<b>')[1]?.split('</b>')[0]; // Safely access feature name
 	                const feature = features.find(f => f.name === featureName); // Find the corresponding feature
-	
+			console.log(feature)
 	                let shouldShow = true; // Default to true
 
 			if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
