@@ -407,30 +407,30 @@
 	    	          shouldShow = false;
 	    	        }
 	    	
-	    	        if (timeFilter !== '全部' && feature.properties.time !== timeFilter) {
+	    	        else if (timeFilter !== '全部' && feature.properties.time !== timeFilter) {
 	    	          shouldShow = false;
 	    	        }
-		        if (timeFilter === '日間' && feature.properties.time === '全日') {
+		        else if (timeFilter === '日間' && feature.properties.time === '全日') {
 			        shouldShow = true;
 			    } else if (timeFilter === '半夜' && feature.properties.time === '全日') {
 			        shouldShow = true; 
 			    }
 	
-			if (timeFilter === '半夜' && feature.properties.time === '下午至半夜') {
+			else if (timeFilter === '半夜' && feature.properties.time === '下午至半夜') {
 			        shouldShow = true;
 			    } else if (timeFilter === '下午' && feature.properties.time === '下午至半夜') {
 			        shouldShow = true;
 			    }
 	
-		        if (timeFilter === '日間' && feature.properties.time === '下午') {
+		        else if (timeFilter === '日間' && feature.properties.time === '下午') {
 			        shouldShow = true;
 			}
 			      
-	    	        if (dangerousFilter !== '全部' && feature.properties.dangerous !== dangerousFilter) {
+	    	        else if (dangerousFilter !== '全部' && feature.properties.dangerous !== dangerousFilter) {
 	    	          shouldShow = false;
 	    	        }
 	    	
-	    	        if (legalFilter !== '全部' && feature.properties.legal !== legalFilter) {
+	    	        else if (legalFilter !== '全部' && feature.properties.legal !== legalFilter) {
 	    	          shouldShow = false;
 	    	        }
 
