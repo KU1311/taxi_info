@@ -57,20 +57,28 @@
 	    left: 50%; /* Center horizontally */
 	    transform: translateX(-50%); /* Adjust for centering */
 	    display: flex; /* Align dropdowns in a row */
-	    justify-content: space-between; /* Space out dropdowns evenly */
+	    justify-content: space-around; /* Space out dropdowns evenly */
 	    z-index: 20; /* Higher z-index to ensure it floats above the map */
 	    background-color: #333; /* Background color for the dropdown container */
 	    padding: 10px; /* Optional padding for spacing inside the container */
 	    border-radius: 5px; /* Optional rounded corners for aesthetics */
+	    width: 90%; /* Set a width to the row to prevent it from being too wide */
 	}
 	
 	.dropdown-container {
-	    margin: 0 10px; /* Space between dropdowns */
+	    flex: 1; /* Allow each dropdown to take equal space */
+	    margin: 0 5px; /* Space between dropdowns */
+	    display: flex; /* Use flexbox for internal layout */
+	    flex-direction: column; /* Stack label and dropdown vertically */
 	}
 	
 	.dropdown-container label {
-	    margin-right: 5px; /* Space between label and dropdown */
+	    margin-bottom: 5px; /* Space between label and dropdown */
+	    color: white; /* Change label color for visibility */
+	    text-align: center; /* Center the label text */
+	    word-wrap: break-word; /* Allow breaking of long words */
 	}
+
 	.current-location-marker {
 	  background-color: rgba(73, 167, 223, 0.5);
 	  border-radius: 50%;
@@ -83,7 +91,22 @@
 	  font-weight: bold;
 	  color: white;
 	}
+
+	select {
+	    background-color: #444; /* Darker background for the select dropdowns */
+	    color: white; /* White text for dropdowns */
+	    border: none; /* Remove default border */
+	    padding: 5px; /* Padding inside dropdown */
+	    border-radius: 3px; /* Rounded corners for aesthetics */
+	    width: 100%; /* Make select take full width of the container */
+	    box-sizing: border-box; /* Ensure padding is included in width */
+	}
 	
+	select:focus {
+	    outline: none; /* Remove focus outline */
+	    border: 1px solid #666; /* Optional border on focus */
+	}
+	  
 	.current-location-label {
 	  padding: 4px 8px;
 	  border-radius: 4px;
