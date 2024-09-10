@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map with Custom Markers</title>
+    <title>Map with Circular Custom Markers</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         html, body {
@@ -64,7 +64,7 @@
 
         const markers = []; // Store markers and their features
 
-        // Function to create a custom marker icon
+        // Function to create a circular custom marker icon
         function createCustomIcon() {
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
@@ -72,91 +72,7 @@
             canvas.width = size;
             canvas.height = size;
 
-            // Draw the red "T"
+            // Draw the red circle
             context.fillStyle = 'red'; // Set the fill color to red
-            context.fillRect(0, 0, size, size); // Fill the square background
-
-            context.fillStyle = 'white'; // Set the text color to white
-            context.font = 'bold 24px Arial'; // Set the font style
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
-            context.fillText('T', size / 2, size / 2); // Draw the "T" in the center
-
-            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
-            return L.icon({
-                iconUrl: iconUrl,
-                iconSize: [size, size], // Set the icon size
-                iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
-                popupAnchor: [0, -size] // Position the popup above the marker
-            });
-        }
-
-        const customIcon = createCustomIcon(); // Create the custom icon
-
-        // Function to load markers
-        function loadMarkers() {
-            features.forEach(feature => {
-                const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
-                const popupContent = `
-                    <b>種類:</b> ${feature.properties.type}<br>
-                    <b>名稱:</b> ${feature.properties.name}<br>
-                    <b>時間:</b> ${feature.properties.time}<br>
-                    <b>危險程度:</b> ${feature.properties.dangerous}<br>
-                    <b>合法的士站:</b> ${feature.properties.legal}<br>
-                    <b>備註:</b> ${feature.properties.remarks}<br>
-                    <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-                `;
-                marker.bindPopup(popupContent);
-                marker.addTo(map); // Add marker to map
-                markers.push({ marker, feature, popupContent }); // Store marker, its corresponding feature, and popup content
-            });
-        }
-
-        // Function to filter markers based on selected time
-        function filterMarkers() {
-            const timeFilter = document.getElementById('time-dropdown').value;
-
-            markers.forEach(({ marker, feature, popupContent }) => {
-                let shouldShow = true; // Default to true
-
-                // Apply the filtering logic
-                if (timeFilter === '全部') {
-                    shouldShow = true; // Show all
-                } else if (feature) { // Ensure feature is defined
-                    if (timeFilter === '日間') {
-                        shouldShow = feature.properties.time === '日間' || feature.properties.time === '全日';
-                    } else if (timeFilter === '半夜') {
-                        shouldShow = feature.properties.time === '半夜' || feature.properties.time === '全日';
-                    }
-                } else {
-                    shouldShow = false; // If feature is not found, hide the marker
-                }
-
-                // Set marker visibility
-                if (shouldShow) {
-                    marker.setOpacity(1); // Show marker
-                    if (!marker._map) {
-                        marker.addTo(map); // Ensure marker is added to the map
-                    }
-                    marker.bindPopup(popupContent); // Rebind popup when marker is shown
-                } else {
-                    marker.setOpacity(0); // Hide marker
-                    marker.unbindPopup(); // Unbind popup to prevent click events
-                }
-            });
-        }
-
-        // Load markers initially
-        loadMarkers();
-
-        // Filter markers when the dropdown value changes
-        document.getElementById('time-dropdown').addEventListener('change', filterMarkers);
-
-        // Example function for Google Maps navigation
-        function openGoogleMapsNavigation(lat, lng) {
-            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-            window.open(url, '_blank'); // Open in a new tab
-        }
-    </script>
-</body>
-</html>
+            context.beginPath();
+            context.arc(size /
