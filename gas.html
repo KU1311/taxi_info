@@ -32,26 +32,25 @@
         }
 
         .dropdown-row {
-            position: absolute; /* Position dropdowns absolutely */
-            top: 10px; /* Distance from the top of the viewport */
-            left: 0; /* Align to the left of the viewport */
-            width: 100%; /* Make the dropdown row fill the entire width */
-            display: flex; /* Align dropdowns in a row */
-            justify-content: space-between; /* Space out dropdowns evenly */
-            z-index: 20; /* Higher z-index to ensure it floats above the map */
-            background-color: #333; /* Background color for the dropdown container */
-            padding: 10px; /* Padding around the dropdown row */
-            box-sizing: border-box; /* Include padding in width */
-        }
-
-        .dropdown-container {
-            flex: 1; /* Allow each dropdown to take equal space */
-            display: flex; /* Use flexbox for internal layout */
-            flex-direction: column; /* Stack label and dropdown vertically */
-            margin: 0 5px; /* Optional margin between dropdowns */
-            box-sizing: border-box; /* Include padding in width */
-        }
-
+	    position: absolute; /* Position dropdowns absolutely */
+	    top: 60px; /* Adjust this value to position below the title */
+	    left: 0; /* Align to the left of the viewport */
+	    width: 100%; /* Make the dropdown row fill the entire width */
+	    display: flex; /* Align dropdowns in a row */
+	    justify-content: space-between; /* Space out dropdowns evenly */
+	    z-index: 20; /* Higher z-index to ensure it floats above the map */
+	    background-color: #333; /* Background color for the dropdown container */
+	    padding: 10px; /* Padding around the dropdown row */
+	    box-sizing: border-box; /* Include padding in width */
+	}
+	
+	.dropdown-container {
+	    flex: 1; /* Allow each dropdown to take equal space */
+	    display: flex; /* Use flexbox for internal layout */
+	    flex-direction: column; /* Stack label and dropdown vertically */
+	    margin: 0 5px; /* Optional margin between dropdowns */
+	    box-sizing: border-box; /* Include padding in width */
+	}
         .dropdown-container label {
             margin-bottom: 5px; /* Space between label and dropdown */
             color: white; /* Change label color for visibility */
@@ -136,7 +135,9 @@
 <body style="background-color:#333;>
 
     <div class="controls-container">
-       <div><h2>汽站位置</h2></div> 
+        <div>
+            <h2 style="color: white; margin: 0;">汽站位置</h2>
+        </div>  
         <div class="dropdown-row">
             <div class="dropdown-container">
                 <label for="type-dropdown">價錢:</label>
