@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map with Circular Custom Markers</title>
+    <title>Map with Custom Colored Markers</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         html, body {
@@ -59,26 +59,76 @@
                     legal: "否",
                     remarks: "備註 B"
                 }
+            },
+            {
+                properties: {
+                    lng: 114.171000,
+                    lat: 22.307000,
+                    type: "type3",
+                    name: "Point C",
+                    time: "日間",
+                    dangerous: "低",
+                    legal: "是",
+                    remarks: "備註 C"
+                }
+            },
+            {
+                properties: {
+                    lng: 114.172000,
+                    lat: 22.308000,
+                    type: "type4",
+                    name: "Point D",
+                    time: "半夜",
+                    dangerous: "高",
+                    legal: "否",
+                    remarks: "備註 D"
+                }
             }
         ];
 
         const markers = []; // Store markers and their features
 
-        // Function to create a circular custom marker icon
-        function createCustomIcon() {
+        // Function to create a custom circular marker icon
+        function createCustomIcon(type, isLegal) {
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             const size = 40; // Size of the marker
             canvas.width = size;
             canvas.height = size;
 
-            // Draw the red circle
-            context.fillStyle = 'red'; // Set the fill color to red
+            // Set the fill color based on the type
+            let fillColor;
+            switch (type) {
+                case 'type1':
+                    fillColor = 'red';
+                    break;
+                case 'type2':
+                    fillColor = 'grey';
+                    break;
+                case 'type3':
+                    fillColor = 'green';
+                    break;
+                case 'type4':
+                    fillColor = 'blue';
+                    break;
+                default:
+                    fillColor = 'black'; // Default color for unknown types
+            }
+
+            // Draw the red circle (or the corresponding color)
+            context.fillStyle = fillColor; // Set the fill color
             context.beginPath();
             context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
             context.fill(); // Fill the circle
 
-            // Draw the white "T"
+            // Draw a white border if not legal
+            if (!isLegal) {
+                context.lineWidth = 4; // Set border thickness
+                context.strokeStyle = 'white'; // Set border color
+                context.stroke(); // Draw the border
+            }
+
+            // Draw the white "T" in the center
             context.fillStyle = 'white'; // Set the text color to white
             context.font = 'bold 20px Arial'; // Set the font style
             context.textAlign = 'center';
@@ -94,11 +144,13 @@
             });
         }
 
-        const customIcon = createCustomIcon(); // Create the custom icon
-
         // Function to load markers
         function loadMarkers() {
             features.forEach(feature => {
+                const type = feature.properties.type;
+                const isLegal = feature.properties.legal === "是";
+                const customIcon = createCustomIcon(type, isLegal); // Create custom icon based on type and legality
+
                 const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
                 const popupContent = `
                     <b>種類:</b> ${feature.properties.type}<br>
