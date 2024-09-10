@@ -107,6 +107,53 @@
 	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
 	</div>
   <script>
+
+	// Function to create a custom circular marker icon
+	function createCustomIcon(type) {
+	    const canvas = document.createElement('canvas');
+	    const context = canvas.getContext('2d');
+	    const size = 30; // Size of the marker
+	    canvas.width = size;
+	    canvas.height = size;
+
+	    // Set the fill color based on the type
+	    let fillColor;
+	    switch (type) {
+		case '便宜':
+		    fillColor = 'green';
+		    break;
+		case '貴':
+		    fillColor = 'orange';
+		    break;
+		case '超貴':
+		    fillColor = 'red';
+		    break;
+		default:
+		    fillColor = 'black'; // Default color for unknown types
+	    }
+
+	    // Draw the red circle (or the corresponding color)
+	    context.fillStyle = fillColor; // Set the fill color
+	    context.beginPath();
+	    context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
+	    context.fill(); // Fill the circle
+
+	    // Draw the "WC" text in the center
+	    context.fillStyle = 'white'; // Set the text color to white
+	    context.font = 'bold 10px Arial'; // Set a smaller font size
+	    context.textAlign = 'center';
+	    context.textBaseline = 'middle';
+	    context.fillText('WC', size / 2, size / 2); // Draw the "LPG" in the center
+
+	    const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
+	    return L.icon({
+		iconUrl: iconUrl,
+		iconSize: [size, size], // Set the icon size
+		iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
+		popupAnchor: [0, -size] // Position the popup above the marker
+	    });
+	}
+
 	  
 	// Function to open Google Maps navigation
     function openGoogleMapsNavigation(lat, lng) {
@@ -176,7 +223,8 @@
         data.forEach(poi => {
           const Y = poi.lng;
           const Yr = String(Y).replace('\r', '');
-          L.marker([parseFloat(poi.lat), parseFloat(Yr)]).addTo(map)
+	  const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
+          L.marker([parseFloat(poi.lat), parseFloat(Yr)], { icon: customIcon }).addTo(map)
             .bindPopup(`<h2>${poi.name}</h2>
 	    ${poi.remarks ? `${poi.remarks}<br>` : ''}
 	    <br>開放時間: ${poi.openinghrs}
