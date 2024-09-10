@@ -302,7 +302,7 @@
 		// Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
-			  const type = feature.properties.type;
+			  const type = feature.properties.category;
         const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
 
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
@@ -321,7 +321,7 @@
 	    	    const typeOptions = new Set(['全部']);
 	    	
 	    	    data.forEach(row => {
-	    	      typeOptions.add(row.category);
+	    	      typeOptions.add(row.Category);
 	    	    });
 	    	
 	    	    const typeDropdown = document.getElementById('type-dropdown');
