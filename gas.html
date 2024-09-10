@@ -194,12 +194,12 @@
 	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
 	            context.fill(); // Fill the circle
 	
-	            // Draw the white "T" in the center
-	            context.fillStyle = 'white'; // Set the text color to white
-	            context.font = 'bold 20px Arial'; // Set the font style
-	            context.textAlign = 'center';
-	            context.textBaseline = 'middle';
-	            context.fillText('LPG', size / 4, size / 4); // Draw the "T" in the center
+	            // Draw the "LPG" text in the center
+		    context.fillStyle = 'white'; // Set the text color to white
+		    context.font = 'bold 10px Arial'; // Set a smaller font size
+		    context.textAlign = 'center';
+		    context.textBaseline = 'middle';
+		    context.fillText('LPG', size / 2, size / 2); // Draw the "LPG" in the center
 	
 	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
 	            return L.icon({
