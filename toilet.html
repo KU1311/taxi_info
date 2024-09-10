@@ -109,7 +109,7 @@
   <script>
 
 	// Function to create a custom circular marker icon
-	function createCustomIcon(type) {
+	function createCustomIcon() {
 	    const canvas = document.createElement('canvas');
 	    const context = canvas.getContext('2d');
 	    const size = 30; // Size of the marker
@@ -117,21 +117,8 @@
 	    canvas.height = size;
 
 	    // Set the fill color based on the type
-	    let fillColor;
-	    switch (type) {
-		case '便宜':
-		    fillColor = 'green';
-		    break;
-		case '貴':
-		    fillColor = 'orange';
-		    break;
-		case '超貴':
-		    fillColor = 'red';
-		    break;
-		default:
-		    fillColor = 'black'; // Default color for unknown types
-	    }
-
+	    let fillColor = 'grey';
+		
 	    // Draw the red circle (or the corresponding color)
 	    context.fillStyle = fillColor; // Set the fill color
 	    context.beginPath();
@@ -223,7 +210,7 @@
         data.forEach(poi => {
           const Y = poi.lng;
           const Yr = String(Y).replace('\r', '');
-	  const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
+	  const customIcon = createCustomIcon(); // Create custom icon based on type and legality
           L.marker([parseFloat(poi.lat), parseFloat(Yr)], { icon: customIcon }).addTo(map)
             .bindPopup(`<h2>${poi.name}</h2>
 	    ${poi.remarks ? `${poi.remarks}<br>` : ''}
