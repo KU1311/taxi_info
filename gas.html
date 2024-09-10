@@ -1,1 +1,380 @@
-即將推出 Coming Soon
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽站位置</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%; /* Ensures the body takes full height */
+            display: flex;
+            flex-direction: column; /* Column layout for the body */
+        }
+
+        #map {
+            flex: 1; /* Allow the map to take up remaining space */
+            width: 100%; /* Full width */
+            z-index: 1; /* Lower z-index for the map */
+            position: relative; /* Create a positioning context */
+        }
+
+        .controls-container {
+            position: relative; /* To position dropdowns absolutely */
+            z-index: 10; /* Ensure dropdowns are above the map */
+        }
+
+        h2 {
+            margin-bottom: 10px; /* Space between title and dropdowns */
+            text-align: center; /* Center the title */
+            color: white; /* Change header text color for visibility */
+        }
+
+        .dropdown-row {
+            position: absolute; /* Position dropdowns absolutely */
+            top: 10px; /* Distance from the top of the viewport */
+            left: 0; /* Align to the left of the viewport */
+            width: 100%; /* Make the dropdown row fill the entire width */
+            display: flex; /* Align dropdowns in a row */
+            justify-content: space-between; /* Space out dropdowns evenly */
+            z-index: 20; /* Higher z-index to ensure it floats above the map */
+            background-color: #333; /* Background color for the dropdown container */
+            padding: 10px; /* Padding around the dropdown row */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container {
+            flex: 1; /* Allow each dropdown to take equal space */
+            display: flex; /* Use flexbox for internal layout */
+            flex-direction: column; /* Stack label and dropdown vertically */
+            margin: 0 5px; /* Optional margin between dropdowns */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container label {
+            margin-bottom: 5px; /* Space between label and dropdown */
+            color: white; /* Change label color for visibility */
+            text-align: center; /* Center the label text */
+            white-space: nowrap; /* Prevent label text from wrapping */
+        }
+
+        select {
+            background-color: #444; /* Darker background for the select dropdowns */
+            color: white; /* White text for dropdowns */
+            border: none; /* Remove default border */
+            padding: 5px; /* Padding inside dropdown */
+            border-radius: 3px; /* Rounded corners for aesthetics */
+            width: 100%; /* Make select take full width of the container */
+            box-sizing: border-box; /* Ensure padding is included in width */
+        }
+
+        select:focus {
+            outline: none; /* Remove focus outline */
+            border: 1px solid #666; /* Optional border on focus */
+        }
+
+        .current-location-label {
+    	  padding: 4px 8px;
+    	  border-radius: 4px;
+    	  font-size: 12px;
+    	  font-weight: bold;
+    	}
+    	
+    	.current-location-marker {
+    	  background-color: rgba(73, 167, 223, 0.5);
+    	  border-radius: 50%;
+    	  width: 40px;
+    	  height: 40px;
+    	  display: flex;
+    	  justify-content: center;
+    	  align-items: center;
+    	  font-size: 12px;
+    	  font-weight: bold;
+    	  color: white;
+    	}
+    	  
+    	.footer {
+    	    padding: 10px;
+    	    background-color: #444; /* Slightly lighter grey for footer */
+    	    width: 100%;
+    	    position: fixed; /* Use relative positioning */
+                bottom: 0; /* Align to the bottom of the viewport */
+                left: 0; /* Align to the left of the viewport */
+    	    z-index: 1000; /* Ensure the footer is above other elements */
+    	}
+            .footer h3 {
+                margin: 0; /* Remove default margin */
+                padding-left: 10px; /* Add some padding to the left */
+	        color: white;
+            }
+    	.whatsapp-button {
+                background-color: #25D366;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+                text-decoration: none;
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+       button {
+	      display: flex;
+	      padding: 0.75rem;
+	      background-color: rgb(237, 28, 36 );
+	      color: white;
+	      border: none;
+	      border-radius: 4px;
+	      cursor: pointer;
+	      font-size: 1rem;
+	    }
+    </style>
+</head>
+<body style="background-color:#333;>
+    <div class="controls-container">
+        <h2>汽站位置</h2>
+        <div class="dropdown-row">
+            <div class="dropdown-container">
+                <label for="type-dropdown">價錢:</label>
+                <select id="type-dropdown">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div class="footer">
+    	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+    	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+	</div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+      <script>
+    	  let i = 1
+            // Default coordinates
+    	    const defaultCoords = [22.305451, 114.169656];
+    	    const defaultZoom = 12;
+    	
+    	    // Initialize the map with default coordinates
+    	    const map = L.map('map').setView(defaultCoords, defaultZoom);
+    	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    		opacity: 0.7
+    	    }).addTo(map);
+
+
+	    // Function to create a custom circular marker icon
+	        function createCustomIcon(type) {
+	            const canvas = document.createElement('canvas');
+	            const context = canvas.getContext('2d');
+	            const size = 30; // Size of the marker
+	            canvas.width = size;
+	            canvas.height = size;
+	
+	            // Set the fill color based on the type
+	            let fillColor;
+	            switch (type) {
+	                case '便宜':
+	                    fillColor = 'green';
+	                    break;
+	                case '貴':
+	                    fillColor = 'orange';
+	                    break;
+	                case '超貴':
+	                    fillColor = 'red';
+	                    break;
+	                default:
+	                    fillColor = 'black'; // Default color for unknown types
+	            }
+	
+	            // Draw the red circle (or the corresponding color)
+	            context.fillStyle = fillColor; // Set the fill color
+	            context.beginPath();
+	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
+	            context.fill(); // Fill the circle
+	
+	            // Draw the white "T" in the center
+	            context.fillStyle = 'white'; // Set the text color to white
+	            context.font = 'bold 20px Arial'; // Set the font style
+	            context.textAlign = 'center';
+	            context.textBaseline = 'middle';
+	            context.fillText('LPG', size / 4, size / 4); // Draw the "T" in the center
+	
+	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
+	            return L.icon({
+	                iconUrl: iconUrl,
+	                iconSize: [size, size], // Set the icon size
+	                iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
+	                popupAnchor: [0, -size] // Position the popup above the marker
+	            });
+	        }
+
+	      
+    	    // Function to set the user location
+    	    function setUserLocation(position) {
+    	        const userCoords = [position.coords.latitude, position.coords.longitude];
+    	        const userZoom = 16; // Set a higher zoom level for user location
+    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+    	        // Create a custom marker for the user's location
+    	        const userLocationMarker = L.divIcon({
+    	            className: 'current-location-marker', // Custom class
+    	            iconSize: [50, 50] // Size of the marker
+    	        });
+    	
+    	        // Add the custom marker to the map
+    	        L.marker(userCoords, { icon: userLocationMarker })
+    	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
+    	            .addTo(map);
+    	    }
+    	
+    	    // Check for user's location
+    	    if (navigator.geolocation) {
+    	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+    	            console.warn("Geolocation not allowed. Using default location.");
+    	            // The map is already initialized to defaultCoords
+    	        });
+    	    } else {
+    	        console.warn("Geolocation is not supported by this browser. Using default location.");
+    	        // The map is already initialized to defaultCoords
+    	    }
+    	  
+    	// Load the CSV data
+        	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/gas_csv_test1.csv';
+    	fetch(csvUrl)
+    	  .then(response => response.text())
+    	  .then(csvData => {
+    		const rows = csvData.trim().split('\n');
+    		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+    		const data = rows.slice(1).map(row => {
+    		    const values = row.split(',');
+    		    return headers.reduce((obj, header, i) => {
+    			// Remove carriage return from the value
+    			let value = String(values[i]).replace('\r', '');
+    		
+    			// Check if the current header is "time" and apply the rules
+    			if (header === 'Category') {
+    			    if (value === "Cheap") {
+    				value = "便宜";
+    			    } else if (value === "Expensive") {
+    				value = "貴";
+    			    } else if (value === 'Very Expensive') {
+    				value = "超貴";
+    			    }
+    			}
+    		      
+    		
+    			obj[header] = value; // Assign the modified value to the object
+    			return obj;
+    		    }, {});
+    		});
+    	    const features = data.map(row => {
+    		  const latitude = parseFloat(row['lat']);
+    		  const longitude = parseFloat(row['lng']);
+    			
+    		    	if (row['Category'] === "Cheap") {
+    				row['Category'] = "便宜";
+    			    } else if (row['Category'] === "Expensive") {
+    				row['Category'] = "貴";
+    			    } else if (row['Category'] === "Very Expensive") {
+    				row['Category'] = "超貴";
+    		    
+    		i+=1;
+    		  return {
+    		      type: 'Feature',
+    		      geometry: {
+    		        type: 'Point',
+    		        coordinates: [longitude, latitude]
+    		      },
+    		      properties: {
+    		        id: row['id'],
+    		        category: row['Category'],
+    		        name: row['Name'],
+		        lat: latitude,
+			lng: longitude
+    		      }
+    		  }
+    	    }).filter(feature => feature !== null); // Remove any null values
+
+	    let markers = [];
+
+
+		// Initial load: Add all markers with popups
+		function loadMarkers() {
+		    features.forEach(feature => {
+			  const type = feature.properties.type;
+        const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
+
+			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
+		        const popupContent =
+			 `<b>${feature.properties.name}</b><br>
+   			  <b>價錢:</b> ${feature.properties.category}<br>
+			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+  			 `;
+			marker.bindPopup(popupContent);
+			marker.addTo(map);
+			markers.push({ marker, feature, popupContent });
+		    });
+		}
+
+		// Populate the dropdowns
+	    	    const typeOptions = new Set(['全部']);
+	    	
+	    	    data.forEach(row => {
+	    	      typeOptions.add(row.type);
+	    	      timeOptions.add(row.time);
+	    	      dangerousOptions.add(row.dangerous);
+	    	      legalOptions.add(row.legal);
+	    	    });
+	    	
+	    	    const typeDropdown = document.getElementById('type-dropdown');
+          
+	    	    typeOptions.forEach(option => {
+	    	      const optionElement = document.createElement('option');
+	    	      optionElement.value = option;
+	    	      optionElement.textContent = option;
+	    	      typeDropdown.appendChild(optionElement);
+	    	    });
+	    	
+	    	    // Add event listeners for the dropdowns
+	    	    typeDropdown.addEventListener('change', filterMarkers);
+	    	
+		function filterMarkers() {
+
+		      const typeFilter = typeDropdown.value;
+			
+	           markers.forEach(({ marker, feature, popupContent }) => {
+
+	                let shouldShow = true; // Default to true
+
+        			if (typeFilter !== '全部' && feature.properties.type !== typeFilter) {
+        	    	          shouldShow = false;
+        	    	        }
+        	    	
+        
+        			// Set marker visibility
+        	                if (shouldShow) {
+        	                    marker.setOpacity(1); // Show marker
+        	                    if (!marker._map) {
+        	                        marker.addTo(map); // Ensure marker is added to the map
+        	                    }
+        			    marker.bindPopup(popupContent);
+        	                } else {
+        	                    marker.setOpacity(0); // Hide marker
+        	                    marker.unbindPopup(); // Unbind popup to prevent click events
+        	                }
+        		 });
+	        }
+	
+	        // Load markers initially
+	        loadMarkers();
+
+    	  });
+
+      function openGoogleMapsNavigation(lat, lng) {
+	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+	      window.open(url, '_blank');
+	    }
+</script>
+</body>
+</html>
