@@ -59,9 +59,15 @@
 	.footer {
 	    display: flex; /* Use flexbox for layout */
 	    align-items: center; /* Center items vertically */
-	    background-color: #333; /* Optional: background color for footer */
+	    justify-content: space-between; /* Space between content and button */
+	    background-color: #333; /* Background color for footer */
 	    color: white; /* Text color */
 	    padding: 10px; /* Padding around the footer */
+	}
+	
+	.footer-content {
+	    display: flex; /* Use flexbox for inner content */
+	    align-items: center; /* Center the icon and text vertically */
 	}
 	
 	.footer-icon {
@@ -107,9 +113,11 @@
   <div id="map"></div>
 	<div class="floating-title">方便泊車的洗手間位置</div>
 	<div class="footer">
-	 <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
-	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
-	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+	    <div class="footer-content">
+	        <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
+	        <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+	    </div>
+	    <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
 	</div>
   <script>
 
