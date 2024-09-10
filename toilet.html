@@ -56,7 +56,7 @@
 	  font-weight: bold;
 	}
 	  
-	.footer {
+	..footer {
 	    display: flex; /* Use flexbox for layout */
 	    align-items: center; /* Center items vertically */
 	    justify-content: space-between; /* Space between content and button */
@@ -80,18 +80,14 @@
 	    line-height: 1.4; /* Adjust line height for spacing */
 	}
 	.whatsapp-button {
-            background-color: #25D366;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            text-decoration: none;
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+	    background-color: #25D366; /* WhatsApp green */
+	    color: white; /* Button text color */
+	    padding: 10px 15px; /* Padding for the button */
+	    border-radius: 5px; /* Rounded corners */
+	    text-decoration: none; /* Remove underline */
+	    display: flex; /* Center the text */
+	    align-items: center; /* Center text vertically */
+	}
 	.floating-title {
             position: absolute; /* Position relative to the map */
             top: 10px; /* Adjust as needed */
