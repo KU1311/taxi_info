@@ -177,7 +177,65 @@
     	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     		opacity: 0.7
     	    }).addTo(map);
-    	
+
+
+	    // Function to create a custom circular marker icon
+	        function createCustomIcon(type, isLegal) {
+	            const canvas = document.createElement('canvas');
+	            const context = canvas.getContext('2d');
+	            const size = 40; // Size of the marker
+	            canvas.width = size;
+	            canvas.height = size;
+	
+	            // Set the fill color based on the type
+	            let fillColor;
+	            switch (type) {
+	                case 'type1':
+	                    fillColor = 'red';
+	                    break;
+	                case 'type2':
+	                    fillColor = 'grey';
+	                    break;
+	                case 'type3':
+	                    fillColor = 'green';
+	                    break;
+	                case 'type4':
+	                    fillColor = 'blue';
+	                    break;
+	                default:
+	                    fillColor = 'black'; // Default color for unknown types
+	            }
+	
+	            // Draw the red circle (or the corresponding color)
+	            context.fillStyle = fillColor; // Set the fill color
+	            context.beginPath();
+	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
+	            context.fill(); // Fill the circle
+	
+	            // Draw a white border if not legal
+	            if (!isLegal) {
+	                context.lineWidth = 4; // Set border thickness
+	                context.strokeStyle = 'white'; // Set border color
+	                context.stroke(); // Draw the border
+	            }
+	
+	            // Draw the white "T" in the center
+	            context.fillStyle = 'white'; // Set the text color to white
+	            context.font = 'bold 20px Arial'; // Set the font style
+	            context.textAlign = 'center';
+	            context.textBaseline = 'middle';
+	            context.fillText('T', size / 2, size / 2); // Draw the "T" in the center
+	
+	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
+	            return L.icon({
+	                iconUrl: iconUrl,
+	                iconSize: [size, size], // Set the icon size
+	                iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
+	                popupAnchor: [0, -size] // Position the popup above the marker
+	            });
+	        }
+
+	      
     	    // Function to set the user location
     	    function setUserLocation(position) {
     	        const userCoords = [position.coords.latitude, position.coords.longitude];
@@ -319,7 +377,11 @@
 		// Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
-			const marker = L.marker([feature.properties.lat, feature.properties.lng]);
+			const type = feature.properties.type;
+	                const isLegal = feature.properties.legal === "正式的士站";
+	                const customIcon = createCustomIcon(type, isLegal); // Create custom icon based on type and legality
+
+			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
 		        const popupContent =
 			 `<b>${feature.properties.name}</b><br>
    			  <b>種類:</b> ${feature.properties.type}<br>
