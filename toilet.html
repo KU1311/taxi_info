@@ -57,18 +57,22 @@
 	}
 	  
 	.footer {
-	    padding: 10px;
-	    background-color: #444; /* Slightly lighter grey for footer */
-	    width: 100%;
-	    position: fixed; /* Use relative positioning */
-            bottom: 0; /* Align to the bottom of the viewport */
-            left: 0; /* Align to the left of the viewport */
-	    z-index: 1000; /* Ensure the footer is above other elements */
+	    display: flex; /* Use flexbox for layout */
+	    align-items: center; /* Center items vertically */
+	    background-color: #333; /* Optional: background color for footer */
+	    color: white; /* Text color */
+	    padding: 10px; /* Padding around the footer */
 	}
-        .footer h3 {
-            margin: 0; /* Remove default margin */
-            padding-left: 10px; /* Add some padding to the left */
-        }
+	
+	.footer-icon {
+	    height: 3em; /* Set height to match two lines of text */
+	    margin-right: 10px; /* Space between image and text */
+	}
+	
+	.footer h3 {
+	    margin: 0; /* Remove default margin */
+	    line-height: 1.4; /* Adjust line height for spacing */
+	}
 	.whatsapp-button {
             background-color: #25D366;
             color: white;
@@ -103,6 +107,7 @@
   <div id="map"></div>
 	<div class="floating-title">方便泊車的洗手間位置</div>
 	<div class="footer">
+	 <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
 	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
 	<a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
 	</div>
