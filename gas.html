@@ -316,7 +316,7 @@
 
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
 		        const popupContent =
-			 `<h2>${feature.properties.name}</h2><br>
+			 `<h3>${feature.properties.name}</h3><br>
    			  <b>價錢:</b> ${feature.properties.category}<br>
 			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
   			 `;
