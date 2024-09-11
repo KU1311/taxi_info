@@ -289,8 +289,8 @@
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
 		        const popupContent =
 			 `<h3>${feature.properties.name}</h3>
+			    開放時間: ${feature.properties.openinghrs}<br>
 			    ${feature.properties.remarks ? `${feature.properties.remarks}<br>` : ''}
-			    <br>開放時間: ${feature.properties.openinghrs}
 			     <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
 		     	 `;
 			marker.bindPopup(popupContent);
