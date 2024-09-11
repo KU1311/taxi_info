@@ -55,6 +55,63 @@
 	  font-size: 12px;
 	  font-weight: bold;
 	}
+
+	.controls-container {
+            position: relative; /* To position dropdowns absolutely */
+            z-index: 10; /* Ensure dropdowns are above the map */
+        }
+
+        h2 {
+            margin-bottom: 10px; /* Space between title and dropdowns */
+            text-align: center; /* Center the title */
+            color: white; /* Change header text color for visibility */
+        }
+
+	.title-dropdown-container {
+	    display: flex;
+	    flex-direction: column; /* Stack title and dropdowns vertically */
+	    width: 100%; /* Full width */
+	    padding: 10px; /* Optional padding around the container */
+	    box-sizing: border-box; /* Include padding in width */
+	}
+	
+	.dropdown-row {
+	    display: flex; /* Align dropdowns in a row */
+	    justify-content: space-between; /* Space out dropdowns evenly */
+	    z-index: 20; /* Higher z-index to ensure it floats above the map */
+	    background-color: #333; /* Background color for the dropdown container */
+	    padding: 10px; /* Padding around the dropdown row */
+	    box-sizing: border-box; /* Include padding in width */
+	}
+	
+	.dropdown-container {
+	    flex: 1; /* Allow each dropdown to take equal space */
+	    display: flex; /* Use flexbox for internal layout */
+	    flex-direction: column; /* Stack label and dropdown vertically */
+	    margin: 0 5px; /* Optional margin between dropdowns */
+	    box-sizing: border-box; /* Include padding in width */
+	}
+        .dropdown-container label {
+            margin-bottom: 5px; /* Space between label and dropdown */
+            color: white; /* Change label color for visibility */
+            text-align: center; /* Center the label text */
+            white-space: nowrap; /* Prevent label text from wrapping */
+        }
+
+        select {
+            background-color: #444; /* Darker background for the select dropdowns */
+            color: white; /* White text for dropdowns */
+            border: none; /* Remove default border */
+            padding: 5px; /* Padding inside dropdown */
+            border-radius: 3px; /* Rounded corners for aesthetics */
+            width: 100%; /* Make select take full width of the container */
+            box-sizing: border-box; /* Ensure padding is included in width */
+        }
+
+        select:focus {
+            outline: none; /* Remove focus outline */
+            border: 1px solid #666; /* Optional border on focus */
+        }
 	  
 	.footer {
 	    display: flex; /* Use flexbox for layout */
@@ -107,7 +164,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 </head>
 <body>
-<div class="floating-title">方便泊車的洗手間位置</div>
+<div class="controls-container">
+	<div class="title-dropdown-container">
+	    <h2 style="color: white; margin: 0;">方便泊車的洗手間位置</h2>
+	</div>  
+</div>
   <div id="map"></div>
 <div class="footer">
     <div class="footer-content">
