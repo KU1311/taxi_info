@@ -1,62 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-HK">
 <head>
-  <title>Toilet Map</title> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-  html {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	overflow: hidden;
-  }
-    body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            height: 100vh;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>方便泊車的洗手間位置</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        html, body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #333; /* Dark grey background */
-            color: white; /* Change text color to white for better contrast */
+            height: 100%; /* Ensures the body takes full height */
+            display: flex;
+            flex-direction: column; /* Column layout for the body */
         }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-   button {
-      display: flex;
-      padding: 0.75rem;
-      background-color: rgb(237, 28, 36 );
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
 
-	.current-location-marker {
-	  background-color: rgba(73, 167, 223, 0.5);
-	  border-radius: 50%;
-	  width: 40px;
-	  height: 40px;
-	  display: flex;
-	  justify-content: center;
-	  align-items: center;
-	  font-size: 12px;
-	  font-weight: bold;
-	  color: white;
-	}
-	
-	.current-location-label {
-	  padding: 4px 8px;
-	  border-radius: 4px;
-	  font-size: 12px;
-	  font-weight: bold;
-	}
+        #map {
+            flex: 1; /* Allow the map to take up remaining space */
+            width: 100%; /* Full width */
+            z-index: 1; /* Lower z-index for the map */
+            position: relative; /* Create a positioning context */
+        }
 
-	.controls-container {
+        .controls-container {
             position: relative; /* To position dropdowns absolutely */
             z-index: 10; /* Ensure dropdowns are above the map */
         }
@@ -67,6 +31,10 @@
             color: white; /* Change header text color for visibility */
         }
 
+        .controls-container {
+	    position: relative; /* Allows for absolute positioning of dropdowns */
+	}
+	
 	.title-dropdown-container {
 	    display: flex;
 	    flex-direction: column; /* Stack title and dropdowns vertically */
@@ -112,8 +80,28 @@
             outline: none; /* Remove focus outline */
             border: 1px solid #666; /* Optional border on focus */
         }
-	  
-	.footer {
+
+        .current-location-label {
+    	  padding: 4px 8px;
+    	  border-radius: 4px;
+    	  font-size: 12px;
+    	  font-weight: bold;
+    	}
+    	
+    	.current-location-marker {
+    	  background-color: rgba(73, 167, 223, 0.5);
+    	  border-radius: 50%;
+    	  width: 40px;
+    	  height: 40px;
+    	  display: flex;
+    	  justify-content: center;
+    	  align-items: center;
+    	  font-size: 12px;
+    	  font-weight: bold;
+    	  color: white;
+    	}
+    	  
+    	.footer {
 	    display: flex; /* Use flexbox for layout */
 	    align-items: center; /* Center items vertically */
 	    justify-content: space-between; /* Space between left content and button */
@@ -146,158 +134,180 @@
 	    align-items: center; /* Center text vertically */
 	    margin-left: 40px; /* Add space between footer content and button */
 	}
-	.floating-title {
-            position: absolute; /* Position relative to the map */
-            top: 10px; /* Adjust as needed */
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Adjust for centering */
-            background-color: #444; /* Dark grey background */
-            color: white; /* White text */
-            padding: 10px 20px; /* Some padding for aesthetics */
-            border-radius: 5px; /* Rounded corners */
-            font-size: 1.5rem; /* Size of the title */
-            text-align: center; /* Center text inside the div */
-            z-index: 1001; /* Ensure it's above the map */
-        }
-  </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+       button {
+	      display: flex;
+	      padding: 0.75rem;
+	      background-color: rgb(237, 28, 36 );
+	      color: white;
+	      border: none;
+	      border-radius: 4px;
+	      cursor: pointer;
+	      font-size: 1rem;
+	    }
+    </style>
 </head>
-<body>
-<div class="controls-container">
-	<div class="title-dropdown-container">
-	    <h2 style="color: white; margin: 0;">方便泊車的洗手間位置</h2>
-	</div>  
-</div>
-  <div id="map"></div>
-<div class="footer">
-    <div class="footer-content">
-	<img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
-	<h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+<body style="background-color:#333;>
+    <div class="controls-container">
+        <div class="title-dropdown-container">
+            <h2 style="color: white; margin: 0;">方便泊車的洗手間位置</h2>
+        </div>  
+        
     </div>
-    <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
-</div>
-  <script>
-
-	// Function to create a custom circular marker icon
-	function createCustomIcon() {
-	    const canvas = document.createElement('canvas');
-	    const context = canvas.getContext('2d');
-	    const size = 30; // Size of the marker
-	    canvas.width = size;
-	    canvas.height = size;
-
-	    // Set the fill color based on the type
-	    let fillColor = 'grey';
-		
-	    // Draw the red circle (or the corresponding color)
-	    context.fillStyle = fillColor; // Set the fill color
-	    context.beginPath();
-	    context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
-	    context.fill(); // Fill the circle
-
-	    // Draw the "WC" text in the center
-	    context.fillStyle = 'white'; // Set the text color to white
-	    context.font = 'bold 10px Arial'; // Set a smaller font size
-	    context.textAlign = 'center';
-	    context.textBaseline = 'middle';
-	    context.fillText('WC', size / 2, size / 2); // Draw the "LPG" in the center
-
-	    const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
-	    return L.icon({
-		iconUrl: iconUrl,
-		iconSize: [size, size], // Set the icon size
-		iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
-		popupAnchor: [0, -size] // Position the popup above the marker
-	    });
-	}
-
-	  
-	// Function to open Google Maps navigation
-    function openGoogleMapsNavigation(lat, lng) {
-      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-      window.open(url, '_blank');
-    }
-	  
-    // Replace this with the URL of your CSV file on GitHub
-    const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv_test3.csv';
-
-    // Fetch the CSV data
-    fetch(csvUrl)
-      .then(response => response.text())
-      .then(csvData => {
-        // Parse the CSV data
-        const rows = csvData.trim().split('\n');
-			  const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-        const data = rows.slice(1).map(row => {
-          const values = row.split(',');
-          return headers.reduce((obj, header, i) => {
-            obj[header] = values[i];
-            return obj;
-          }, {});
-        });
+    <div id="map"></div>
+    <div class="footer">
+	    <div class="footer-content">
+	        <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
+	        <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+	    </div>
+	    <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+	</div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+      <script>
+    	  let i = 1
+            // Default coordinates
+    	    const defaultCoords = [22.305451, 114.169656];
+    	    const defaultZoom = 12;
+    	
+    	    // Initialize the map with default coordinates
+    	    const map = L.map('map').setView(defaultCoords, defaultZoom);
+    	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    		opacity: 0.7
+    	    }).addTo(map);
 
 
-
-       // Default coordinates
-	    const defaultCoords = [22.305451, 114.169656];
-	    const defaultZoom = 12;
+	    // Function to create a custom circular marker icon
+	        function createCustomIcon() {
+	            const canvas = document.createElement('canvas');
+	            const context = canvas.getContext('2d');
+	            const size = 30; // Size of the marker
+	            canvas.width = size;
+	            canvas.height = size;
 	
-	    // Initialize the map with default coordinates
-	    const map = L.map('map').setView(defaultCoords, defaultZoom);
-	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-		opacity: 0.7
-	    }).addTo(map);
+	            // Set the fill color based on the type
+	            let fillColor = 'grey';
+	            
 	
-	    // Function to set the user location
-	    function setUserLocation(position) {
-	        const userCoords = [position.coords.latitude, position.coords.longitude];
-	        const userZoom = 16; // Set a higher zoom level for user location
-	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
-	        // Create a custom marker for the user's location
-	        const userLocationMarker = L.divIcon({
-	            className: 'current-location-marker', // Custom class
-	            iconSize: [50, 50] // Size of the marker
-	        });
+	            // Draw the red circle (or the corresponding color)
+	            context.fillStyle = fillColor; // Set the fill color
+	            context.beginPath();
+	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
+	            context.fill(); // Fill the circle
 	
-	        // Add the custom marker to the map
-	        L.marker(userCoords, { icon: userLocationMarker })
-	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
-	            .addTo(map);
-	    }
+	            // Draw text in the center
+		    context.fillStyle = 'white'; // Set the text color to white
+		    context.font = 'bold 10px Arial'; // Set a smaller font size
+		    context.textAlign = 'center';
+		    context.textBaseline = 'middle';
+		    context.fillText('WC', size / 2, size / 2); // Draw the "LPG" in the center
 	
-	    // Check for user's location
-	    if (navigator.geolocation) {
-	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
-	            console.warn("Geolocation not allowed. Using default location.");
-	            // The map is already initialized to defaultCoords
-	        });
-	    } else {
-	        console.warn("Geolocation is not supported by this browser. Using default location.");
-	        // The map is already initialized to defaultCoords
-	    }
-        // Add markers for the POIs
-        data.forEach(poi => {
-          const Y = poi.lng;
-          const Yr = String(Y).replace('\r', '');
-	  const customIcon = createCustomIcon(); // Create custom icon based on type and legality
-          L.marker([parseFloat(poi.lat), parseFloat(Yr)], { icon: customIcon }).addTo(map)
-            .bindPopup(`<h2>${poi.name}</h2>
-	    ${poi.remarks ? `${poi.remarks}<br>` : ''}
-	    <br>開放時間: ${poi.openinghrs}
-	     <button onclick="openGoogleMapsNavigation(${poi.lat}, ${Yr})">導航</button>
-     	 `);
-	})
-
+	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
+	            return L.icon({
+	                iconUrl: iconUrl,
+	                iconSize: [size, size], // Set the icon size
+	                iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
+	                popupAnchor: [0, -size] // Position the popup above the marker
+	            });
+	        }
 
 	      
-      })
-      .catch(error => console.error('Error fetching CSV data:', error));
-
+    	    // Function to set the user location
+    	    function setUserLocation(position) {
+    	        const userCoords = [position.coords.latitude, position.coords.longitude];
+    	        const userZoom = 16; // Set a higher zoom level for user location
+    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+    	        // Create a custom marker for the user's location
+    	        const userLocationMarker = L.divIcon({
+    	            className: 'current-location-marker', // Custom class
+    	            iconSize: [50, 50] // Size of the marker
+    	        });
+    	
+    	        // Add the custom marker to the map
+    	        L.marker(userCoords, { icon: userLocationMarker })
+    	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
+    	            .addTo(map);
+    	    }
+    	
+    	    // Check for user's location
+    	    if (navigator.geolocation) {
+    	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+    	            console.warn("Geolocation not allowed. Using default location.");
+    	            // The map is already initialized to defaultCoords
+    	        });
+    	    } else {
+    	        console.warn("Geolocation is not supported by this browser. Using default location.");
+    	        // The map is already initialized to defaultCoords
+    	    }
+    	  
+    	// Load the CSV data
+        	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv_test3.csv';
+    	fetch(csvUrl)
+    	  .then(response => response.text())
+    	  .then(csvData => {
+    		const rows = csvData.trim().split('\n');
+    		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+    		const data = rows.slice(1).map(row => {
+    		    const values = row.split(',');
+    		    return headers.reduce((obj, header, i) => {
+    			// Remove carriage return from the value
+    			let value = String(values[i]).replace('\r', '');    		      
+    		
+    			obj[header] = value; // Assign the modified value to the object
+    			return obj;
+    		    }, {});
+    		});
+    	    const features = data.map(row => {
+    		  const latitude = parseFloat(row['lat']);
+    		  const longitude = parseFloat(row['lng']);
     
+    		i+=1;
+    		  return {
+    		      type: 'Feature',
+    		      geometry: {
+    		        type: 'Point',
+    		        coordinates: [longitude, latitude]
+    		      },
+    		      properties: {
+    		        id: row['id'],
+    		        name: row['name'],
+    		        remarks: row['remarks'],
+		        lat: latitude,
+			lng: longitude,
+    		        openinghrs: row['openinghrs']
+    		      }
+    		  }
+    	    }).filter(feature => feature !== null); // Remove any null values
 
-	  
-  </script>
+	    let markers = [];
+
+		// Initial load: Add all markers with popups
+		function loadMarkers() {
+		    features.forEach(feature => {
+			const type = feature.properties.category;
+        		const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
+
+			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
+		        const popupContent =
+			 `<h3>${feature.properties.name}</h3>
+			    開放時間: ${feature.properties.openinghrs}<br>
+			    ${feature.properties.remarks ? `${feature.properties.remarks}<br>` : ''}
+			     <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+		     	 `;
+			marker.bindPopup(popupContent);
+			marker.addTo(map);
+			markers.push({ marker, feature, popupContent });
+		    });
+		}
+
+	        // Load markers initially
+	        loadMarkers();
+
+    	  });
+
+      function openGoogleMapsNavigation(lat, lng) {
+	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+	      window.open(url, '_blank');
+	    }
+</script>
 </body>
 </html>
