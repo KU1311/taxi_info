@@ -269,10 +269,11 @@
     		      },
     		      properties: {
     		        id: row['id'],
-    		        category: row['Category'],
-    		        name: row['Name'],
+    		        name: row['name'],
+    		        remarks: row['remarks'],
 		        lat: latitude,
-			lng: longitude
+			lng: longitude,
+    		        openinghrs: row['openinghrs']
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
