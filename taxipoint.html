@@ -159,12 +159,12 @@
                 </select>
             </div>
             <div class="dropdown-container">
-                <label for="dangerous-dropdown">危險程度:</label>
+                <label for="dangerous-dropdown">需注意上客位置(是/否):</label>
                 <select id="dangerous-dropdown">
                 </select>
             </div>
             <div class="dropdown-container">
-                <label for="legal-dropdown">合法:</label>
+                <label for="legal-dropdown">站點種類:</label>
                 <select id="legal-dropdown">
                 </select>
             </div>
@@ -307,9 +307,9 @@
     			}
     		        if (header === 'dangerous') {
     			    if (value === "Y") {
-    				value = "危險";
+    				value = "是";
     			    } else if (value === "N") {
-    				value = "安全";
+    				value = "否";
     			    }
     			}
     		        if (header === 'legal') {
@@ -345,9 +345,9 @@
     				row['time'] = "半夜";
     			    }
     			if (row['dangerous'] === "Y") {
-    				row['dangerous'] = "危險";
+    				row['dangerous'] = "是";
     			    } else if (row['dangerous'] === "N") {
-    				row['dangerous'] = "安全";
+    				row['dangerous'] = "否";
     			    }
     		    	if (row['legal'] === "Y") {
     				row['legal'] = "的士站";
@@ -400,7 +400,7 @@
 			 `<b>${feature.properties.name}</b><br>
    			  <b>種類:</b> ${feature.properties.type}<br>
 			  <b>時間:</b> ${feature.properties.time}<br>
-			  <b>危險程度:</b> ${feature.properties.dangerous}<br>
+			  <b>需注意上客位置:</b> ${feature.properties.dangerous}<br>
 			  <b>站點種類:</b> ${feature.properties.legal}<br>
 			  <b>備註:</b> ${feature.properties.remarks}
 			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
