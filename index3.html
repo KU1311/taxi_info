@@ -22,6 +22,19 @@
             position: relative; /* Create a positioning context */
         }
 
+	.locate-button {
+            position: absolute;
+            top: 10px; /* Distance from the top */
+            right: 10px; /* Distance from the right */
+            background-color: #d7454e; /* Button color */
+            color: white; /* Text color */
+            padding: 10px 15px; /* Padding for the button */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            z-index: 1000; /* Ensure it appears above the map */
+        }
+	    
         .controls-container {
             position: relative; /* To position dropdowns absolutely */
             z-index: 10; /* Ensure dropdowns are above the map */
@@ -179,6 +192,7 @@
         
     </div>
     <div id="map"></div>
+<button class="locate-button" onclick="locateUser()">Locate Me</button>
     <div class="footer">
 	    <div class="footer-content">
 	        <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
@@ -253,7 +267,29 @@
     	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
     	            .addTo(map);
     	    }
-    	
+
+		function locateUser() {
+	        map.locate({ setView: true, maxZoom: 16 }); // Locate the user and set the view
+	
+	        function onLocationFound(e) {
+	            const radius = e.accuracy / 2;
+	
+	            // Add a marker for the user's location
+	            L.marker(e.latlng).addTo(map)
+	                .bindPopup("You are within " + radius + " meters from this point").openPopup();
+	
+	            // Add a circle to indicate the accuracy of the location
+	            L.circle(e.latlng, radius).addTo(map);
+	        }
+	
+	        function onLocationError(e) {
+	            alert(e.message); // Show an error if location is not found
+	        }
+	
+	        map.on('locationfound', onLocationFound);
+	        map.on('locationerror', onLocationError);
+	    }
+	      
     	    // Check for user's location
     	    if (navigator.geolocation) {
     	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
