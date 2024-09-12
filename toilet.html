@@ -22,6 +22,19 @@
             position: relative; /* Create a positioning context */
         }
 
+	.locate-button {
+            position: absolute;
+            top: 10px; /* Distance from the top */
+            right: 10px; /* Distance from the right */
+            background-color: #d7454e; /* Button color */
+            color: white; /* Text color */
+            padding: 10px 15px; /* Padding for the button */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            z-index: 1000; /* Ensure it appears above the map */
+        }
+	    
         .controls-container {
             position: relative; /* To position dropdowns absolutely */
             z-index: 10; /* Ensure dropdowns are above the map */
@@ -179,6 +192,7 @@
         
     </div>
     <div id="map"></div>
+<button class="locate-button" onclick="locateUser()">Locate Me</button>
     <div class="footer">
 	    <div class="footer-content">
 	        <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
@@ -253,7 +267,15 @@
     	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
     	            .addTo(map);
     	    }
-    	
+
+		
+    	    function setUserLocationAgain(position) {
+    	        const userCoords = [position.coords.latitude, position.coords.longitude];
+    	        const userZoom = 16; // Set a higher zoom level for user location
+    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+    	        
+    	    }
+	      
     	    // Check for user's location
     	    if (navigator.geolocation) {
     	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
@@ -303,7 +325,34 @@
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
+		const locateControl = L.control({ position: 'topright' }); // Position the control
 
+	    locateControl.onAdd = function (map) {
+	        const button = L.DomUtil.create('button', 'locate-button'); // Create a button
+	        button.innerHTML = '🔍'; // You can use an emoji or an icon here
+	        button.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Button background color
+	        button.style.padding = '5px'; // Padding for the button
+	        button.style.cursor = 'pointer'; // Cursor style
+	        button.title = '我的位置'; // Tooltip
+	
+	        // Add click event to the button
+	        button.onclick = function () {
+	            if (navigator.geolocation) {
+	    	        navigator.geolocation.getCurrentPosition(setUserLocationAgain, function() {
+	    	            console.warn("Geolocation not allowed. Using default location.");
+	    	            // The map is already initialized to defaultCoords
+	    	        });
+	    	    } else {
+	    	        console.warn("Geolocation is not supported by this browser. Using default location.");
+	    	        // The map is already initialized to defaultCoords
+	    	    }
+	        };
+	
+	        return button; // Return the button element
+	    };
+
+	locateControl.addTo(map); // Add the control to the map
+		  
 	    let markers = [];
 	    const clustermarkers = L.markerClusterGroup();
 		// Initial load: Add all markers with popups
