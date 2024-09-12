@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>方便泊車的洗手間位置</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
     <style>
         html, body {
             margin: 0;
@@ -185,6 +187,7 @@
 	    <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
 	</div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
       <script>
     	  let i = 1
             // Default coordinates
@@ -302,7 +305,7 @@
     	    }).filter(feature => feature !== null); // Remove any null values
 
 	    let markers = [];
-
+	    const clustermarkers = L.markerClusterGroup();
 		// Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
@@ -317,7 +320,8 @@
 			     <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
 		     	 `;
 			marker.bindPopup(popupContent);
-			marker.addTo(map);
+			clustermarkers.addLayer(marker);
+			map.addLayer(clustermarkers); 
 			markers.push({ marker, feature, popupContent });
 		    });
 		}
