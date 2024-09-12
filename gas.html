@@ -268,6 +268,12 @@
     	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
     	            .addTo(map);
     	    }
+
+	      function setUserLocationAgain(position) {
+    	        const userCoords = [position.coords.latitude, position.coords.longitude];
+    	        const userZoom = 16; // Set a higher zoom level for user location
+    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+    	    }
     	
     	    // Check for user's location
     	    if (navigator.geolocation) {
@@ -337,6 +343,32 @@
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
 
+		locateControl.onAdd = function (map) {
+	        const button = L.DomUtil.create('button', 'locate-button'); // Create a button
+	        button.innerHTML = '🔍'; // You can use an emoji or an icon here
+	        button.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Button background color
+	        button.style.padding = '5px'; // Padding for the button
+	        button.style.cursor = 'pointer'; // Cursor style
+	        button.title = '我的位置'; // Tooltip
+	
+	        // Add click event to the button
+	        button.onclick = function () {
+	            if (navigator.geolocation) {
+	    	        navigator.geolocation.getCurrentPosition(setUserLocationAgain, function() {
+	    	            console.warn("Geolocation not allowed. Using default location.");
+	    	            // The map is already initialized to defaultCoords
+	    	        });
+	    	    } else {
+	    	        console.warn("Geolocation is not supported by this browser. Using default location.");
+	    	        // The map is already initialized to defaultCoords
+	    	    }
+	        };
+	
+	        return button; // Return the button element
+	    };
+
+	locateControl.addTo(map); // Add the control to the map
+		  
 	    let markers = [];
 
 
