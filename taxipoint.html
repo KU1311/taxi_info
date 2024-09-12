@@ -34,7 +34,7 @@
 	.title-dropdown-container {
 	    display: flex;
 	    align-items: center; /* Center items vertically */
-	    justify-content: space-between; /* Space between back button and title */
+	    justify-content: center; /* Center the title */
 	    width: 100%; /* Full width */
 	    padding: 10px; /* Padding around the container */
 	    box-sizing: border-box; /* Include padding in width */
@@ -42,6 +42,10 @@
 	}
 	
 	.back-button {
+	    position: absolute; /* Position it relative to the container */
+	    left: 10px; /* Distance from the left */
+	    top: 50%; /* Center vertically */
+	    transform: translateY(-50%); /* Adjust for the button height */
 	    background-color: #d7454e; /* Button color */
 	    color: white; /* Text color */
 	    padding: 10px 15px; /* Padding for the button */
@@ -49,6 +53,12 @@
 	    border-radius: 5px; /* Rounded corners */
 	    cursor: pointer; /* Pointer cursor on hover */
 	    z-index: 1000; /* Ensure it appears above other elements */
+	}
+	
+	.title {
+	    color: white; /* Title color */
+	    margin: 0; /* Remove default margin */
+	    text-align: center; /* Center the title text */
 	}
 	
 	.dropdown-row {
