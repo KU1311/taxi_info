@@ -339,7 +339,7 @@
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
-		const locateControl = L.control({ position: 'topleft' }); // Position the control
+		const locateControl = L.control({ position: 'topright' }); // Position the control
 
 	    locateControl.onAdd = function (map) {
 	        const button = L.DomUtil.create('button', 'locate-button'); // Create a button
