@@ -349,11 +349,19 @@
 	        button.style.borderRadius = '5px'; // Rounded corners
 	        button.style.padding = '5px'; // Padding for the button
 	        button.style.cursor = 'pointer'; // Cursor style
-	        button.title = 'Locate Me'; // Tooltip
+	        button.title = '我的位置'; // Tooltip
 	
 	        // Add click event to the button
 	        button.onclick = function () {
-	            locateUser();
+	            if (navigator.geolocation) {
+	    	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+	    	            console.warn("Geolocation not allowed. Using default location.");
+	    	            // The map is already initialized to defaultCoords
+	    	        });
+	    	    } else {
+	    	        console.warn("Geolocation is not supported by this browser. Using default location.");
+	    	        // The map is already initialized to defaultCoords
+	    	    }
 	        };
 	
 	        return button; // Return the button element
