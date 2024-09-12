@@ -219,10 +219,10 @@
 	                case '便宜':
 	                    fillColor = 'green';
 	                    break;
-	                case '貴':
+	                case '中等':
 	                    fillColor = 'orange';
 	                    break;
-	                case '超貴':
+	                case '昂貴':
 	                    fillColor = 'red';
 	                    break;
 	                default:
@@ -304,9 +304,9 @@
     			    if (value === "Cheap") {
     				value = "便宜";
     			    } else if (value === "Expensive") {
-    				value = "貴";
+    				value = "中等";
     			    } else if (value === 'Very Expensive') {
-    				value = "超貴";
+    				value = "昂貴";
     			    }
     			}
     		      
@@ -322,9 +322,9 @@
     		    	if (row['Category'] === "Cheap") {
     				row['Category'] = "便宜";
     			    } else if (row['Category'] === "Expensive") {
-    				row['Category'] = "貴";
+    				row['Category'] = "中等";
     			    } else if (row['Category'] === "Very Expensive") {
-    				row['Category'] = "超貴";
+    				row['Category'] = "昂貴";
 			}
     		i+=1;
     		  return {
@@ -342,7 +342,8 @@
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
-
+		  
+		const locateControl = L.control({ position: 'topright' }); // Position the control
 		locateControl.onAdd = function (map) {
 	        const button = L.DomUtil.create('button', 'locate-button'); // Create a button
 	        button.innerHTML = '🔍'; // You can use an emoji or an icon here
