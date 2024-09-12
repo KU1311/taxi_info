@@ -268,27 +268,17 @@
     	            .addTo(map);
     	    }
 
-		function locateUser() {
-	        map.locate({ setView: true, maxZoom: 16 }); // Locate the user and set the view
-	
-	        function onLocationFound(e) {
-	            const radius = e.accuracy / 2;
-	
-	            // Add a marker for the user's location
-	            L.marker(e.latlng).addTo(map)
-	                .bindPopup("You are within " + radius + " meters from this point").openPopup();
-	
-	            // Add a circle to indicate the accuracy of the location
-	            L.circle(e.latlng, radius).addTo(map);
-	        }
-	
-	        function onLocationError(e) {
-	            alert(e.message); // Show an error if location is not found
-	        }
-	
-	        map.on('locationfound', onLocationFound);
-	        map.on('locationerror', onLocationError);
-	    }
+		
+    	    function setUserLocationAgain(position) {
+    	        const userCoords = [position.coords.latitude, position.coords.longitude];
+    	        const userZoom = 16; // Set a higher zoom level for user location
+    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
+    	        // Create a custom marker for the user's location
+    	        const userLocationMarker = L.divIcon({
+    	            className: 'current-location-marker', // Custom class
+    	            iconSize: [50, 50] // Size of the marker
+    	        });
+    	    }
 	      
     	    // Check for user's location
     	    if (navigator.geolocation) {
@@ -354,7 +344,7 @@
 	        // Add click event to the button
 	        button.onclick = function () {
 	            if (navigator.geolocation) {
-	    	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+	    	        navigator.geolocation.getCurrentPosition(setUserLocationAgain, function() {
 	    	            console.warn("Geolocation not allowed. Using default location.");
 	    	            // The map is already initialized to defaultCoords
 	    	        });
