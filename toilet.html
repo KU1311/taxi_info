@@ -21,20 +21,7 @@
             z-index: 1; /* Lower z-index for the map */
             position: relative; /* Create a positioning context */
         }
-
-	.locate-button {
-            position: absolute;
-            top: 10px; /* Distance from the top */
-            right: 10px; /* Distance from the right */
-            background-color: #d7454e; /* Button color */
-            color: white; /* Text color */
-            padding: 10px 15px; /* Padding for the button */
-            border: none; /* No border */
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Pointer cursor on hover */
-            z-index: 1000; /* Ensure it appears above the map */
-        }
-	    
+    
         .controls-container {
             position: relative; /* To position dropdowns absolutely */
             z-index: 10; /* Ensure dropdowns are above the map */
@@ -186,7 +173,6 @@
 <body style="background-color:#333;>
     <div class="controls-container">
         <div class="title-dropdown-container">
-	    <button class="back-button" onclick="window.history.back();">Back</button>
             <h2 style="color: white; margin: 0;">方便泊車的洗手間位置</h2>
         </div>  
         
