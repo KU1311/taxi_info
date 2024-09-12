@@ -183,13 +183,13 @@
                 </select>
             </div>
             <div class="dropdown-container">
-                <label for="dangerous-dropdown">需注意上客位置(是/否):</label>
-                <select id="dangerous-dropdown">
+                <label for="legal-dropdown">站點種類:</label>
+                <select id="legal-dropdown">
                 </select>
             </div>
             <div class="dropdown-container">
-                <label for="legal-dropdown">站點種類:</label>
-                <select id="legal-dropdown">
+                <label for="dangerous-dropdown">需注意上客位置(是/否):</label>
+                <select id="dangerous-dropdown">
                 </select>
             </div>
         </div>
@@ -231,7 +231,7 @@
 	                case '市區的士':
 	                    fillColor = 'red';
 	                    break;
-	                case '過海的士':
+	                case '過海的士 (單程隧道)':
 	                    fillColor = 'grey';
 	                    break;
 	                case '新界的士':
@@ -351,7 +351,7 @@
     			    } else if (value === "lantau") {
     				value = "大嶼山的士";
     			    } else if (value === "cross-harbour") {
-    				value = "過海的士";
+    				value = "過海的士 (單程隧道)";
     			    } 
     			}
     		
@@ -385,7 +385,7 @@
     			    } else if (row['type'] === "lantau") {
     				row['type'] = "大嶼山的士";
     			    } else if (row['type'] === "cross-harbour") {
-    				row['type'] = "過海的士";
+    				row['type'] = "過海的士 (單程隧道)";
     			    } 
     		    
     		i+=1;
