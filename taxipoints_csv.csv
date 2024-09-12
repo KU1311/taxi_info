@@ -57,7 +57,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,cross-harbour,百德新街過海的士站,Daytime,N,Y,,22.2820077000,114.1850301000
 ,urban,天后的士站,"Daytime; Midnight",N,Y,,22.2832865500,114.1917671000
 ,cross-harbour,天后過海的士站,"Daytime; Midnight",N,Y,,22.2841863500,114.1915331000
-,urban,城市花園,Daytime,N,N,,22.2908426100,114.1942985000
+,urban,城市花園,Daytime,Y,N,,22.2908426100,114.1942985000
 ,cross-harbour,北角道過海的士站,"Daytime; Midnight",N,Y,,22.2917465300,114.1964713000
 ,urban,明園西街,Daytime,Y,N,,22.2907305400,114.1987085000
 ,urban,北角站,Midnight,Y,N,,22.2909777400,114.2003210000
@@ -503,7 +503,7 @@ id,type,name,time,dangerous,legal,Remarks,lat,lng
 ,urban,荔景站,Daytime,Y,N,小巴站尾,22.3480327700,114.1266762000
 ,urban,永得利廣場,PM,N,Y,大廈內設有的士站,22.3523305300,114.1242630000
 ,urban,葵涌嘉里中心,PM,N,Y,大廈內設有的士站,22.3628032600,114.1207260000
-,urban,馬灣的士站,Daytime,N,Y,,22.3498037400,114.0609352000
+,urban,馬灣迴旋處,Daytime,N,N,,22.3498037400,114.0609352000
 ,urban,馬灣 (入村),Daytime,N,N,,22.3532222000,114.0598089000
 ,NT,黃金泳灘,Daytime,Y,N,,22.3730400900,113.9885178000
 ,urban,屯隆街,Daytime,Y,N,,22.3936348000,113.9758443000
