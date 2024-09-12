@@ -420,14 +420,12 @@
 	                const customIcon = createCustomIcon(type, isLegal); // Create custom icon based on type and legality
 
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
-		        let suboutput = `<b>站點種類:</b> ${feature.properties.legal}<br>`;
-			
-		        const popupContent =
+
+		        let popupContent =
 			 `<b>${feature.properties.name}</b><br>
    			  <b>的士種類:</b> ${feature.properties.type}<br>
 			  <b>時間:</b> ${feature.properties.time}<br>
      			  <b>站點種類:</b> ${feature.properties.legal}<br>
-	 		  
   			 `;
 			if (feature.properties.legal !== '的士站') {
 			    popupContent += `<b>需注意上客位置:</b> ${feature.properties.dangerous}<br>`;
