@@ -1,159 +1,108 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>ArcGIS API for JavaScript Sample using Vector Map API</title>
-    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Points Map</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.25/"></script>
     <style>
-        html,
-        body {
-            width: 100%;
+        html, body, #viewDiv {
             height: 100%;
             margin: 0;
-            font-family: sans-serif;
-        }
-
-        #map-area {
-            width: 100%;
-            height: 100%;
-            filter: grayscale(100%); /* Apply greyscale filter */
-        }
-
-        .esri-attribution a {
-            color: black;
-        }
-
-        .esri-attribution {
-            background-color: transparent;
-            font-size: 12px;
-            font-family: sans-serif;
-            color: black;
-        }
-
-        .esri-attribution__powered-by {
-            display: none;
-        }
-
-        .copyright-url {
-            position: absolute;
-            bottom: 5px;
-            right: 40px;
-            padding: 0 4px;
-            font-family: sans-serif;
-            font-size: 12px;
-        }
-
-        .copyright-logo {
-            position: absolute;
-            bottom: 5px;
-            right: 10px;
-            width: 28px;
-            height: 28px;
-            display: inline-flex;
-            background: url(https://api.hkmapservice.gov.hk/mapapi/landsdlogo.jpg);
-            background-size: 28px;
+            padding: 0;
         }
     </style>
 </head>
-
 <body>
-    <script src="https://js.arcgis.com/4.29/"></script>
-    <div id="map-area"></div>
-</body>
+
+<div id="viewDiv"></div>
+
 <script>
     require([
-        "esri/Map", "esri/Basemap", "esri/layers/VectorTileLayer",
+        "esri/Map",
         "esri/views/MapView",
-        "esri/geometry/SpatialReference",
-        "esri/geometry/Point"
-    ], function (Map, Basemap, VectorTileLayer, MapView, SpatialReference, Point) {
-        const basemapVTURL = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/basemap/HK80";
-
-        const basemap = new Basemap({
-            baseLayers: [
-                new VectorTileLayer({
-                    url: basemapVTURL,
-                    copyright: '<a href="https://api.portal.hkmapservice.gov.hk/disclaimer" target="_blank" class="copyright-url">&copy; Map information from Lands Department</a><div class="copyright-logo" ></div>'
-                })
-            ]
-        });
+        "esri/layers/GraphicsLayer",
+        "esri/Graphic",
+        "esri/popup/PopupTemplate"
+    ], function(Map, MapView, GraphicsLayer, Graphic, PopupTemplate) {
+        
+        // Create the map and view
         const map = new Map({
-            basemap: basemap,
+            basemap: "streets-navigation-vector"
         });
-        const mView = new MapView({
-            container: "map-area",
+
+        const view = new MapView({
+            container: "viewDiv",
             map: map,
-            zoom: 10,
-            center: new Point(833359.88495, 822961.986247, new SpatialReference({
-                wkid: 2326
-            })),
+            center: [114.185, 22.285], // Longitude, latitude
+            zoom: 12
         });
+
+        // Load the CSV data
+        const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
+        fetch(csvUrl)
+            .then(response => response.text())
+            .then(csvData => {
+                const data = csvData.split('\n').slice(1).map(row => {
+                    const columns = row.split(',');
+                    return {
+                        id: columns[0],
+                        type: columns[1],
+                        name: columns[2],
+                        time: columns[3],
+                        dangerous: columns[4],
+                        legal: columns[5],
+                        remarks: columns[6],
+                        lat: parseFloat(columns[7]),
+                        lng: parseFloat(columns[8])
+                    };
+                });
+
+                // Create a graphics layer for markers
+                const graphicsLayer = new GraphicsLayer();
+                map.add(graphicsLayer);
+
+                data.forEach(row => {
+                    const point = {
+                        type: "point",
+                        longitude: row.lng,
+                        latitude: row.lat
+                    };
+
+                    const pointGraphic = new Graphic({
+                        geometry: point,
+                        symbol: {
+                            type: "simple-marker",
+                            color: "blue",
+                            size: "8px"
+                        },
+                        attributes: {
+                            id: row.id,
+                            type: row.type,
+                            name: row.name,
+                            time: row.time,
+                            dangerous: row.dangerous,
+                            legal: row.legal,
+                            remarks: row.remarks
+                        },
+                        popupTemplate: new PopupTemplate({
+                            title: "{name}",
+                            content: `
+                                <b>的士種類:</b> {type}<br>
+                                <b>時間:</b> {time}<br>
+                                <b>站點種類:</b> {legal}<br>
+                            `
+                        })
+                    });
+
+                    // Add the graphic to the graphics layer
+                    graphicsLayer.add(pointGraphic);
+                });
+            })
+            .catch(error => console.error("Error loading CSV data:", error));
     });
-
-	// Load the CSV data
-const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
-fetch(csvUrl)
-  .then(response => response.text())
-  .then(csvData => {
-    const data = csvData.split('\n').slice(1).map(row => {
-      const columns = row.split(',');
-      return {
-        id: columns[0],
-        type: columns[1],
-        name: columns[2],
-        time: columns[3],
-        dangerous: columns[4],
-        legal: columns[5],
-        remarks: columns[6],
-        lat: parseFloat(columns[7]),
-        lng: parseFloat(columns[8])
-      };
-    });
-
-    // Create a graphics layer for markers
-    const graphicsLayer = new esri.layers.GraphicsLayer();
-    map.add(graphicsLayer); // Assuming 'map' is your ArcGIS map object
-
-    data.forEach(row => {
-      const point = {
-        type: "point",
-        longitude: row.lng,
-        latitude: row.lat
-      };
-
-      const pointGraphic = new esri.Graphic({
-        geometry: point,
-        symbol: {
-          type: "simple-marker",
-          color: "blue",
-          size: "8px"
-        },
-        attributes: {
-          id: row.id,
-          type: row.type,
-          name: row.name,
-          time: row.time,
-          dangerous: row.dangerous,
-          legal: row.legal,
-          remarks: row.remarks
-        }
-      });
-
-      // Create a popup template
-      const popupTemplate = {
-        title: "{name}",
-        content: `
-          <b>的士種類:</b> {type}<br>
-          <b>時間:</b> {time}<br>
-          <b>站點種類:</b> {legal}<br>
-        `
-      };
-
-      pointGraphic.popupTemplate = popupTemplate;
-
-      // Add the graphic to the graphics layer
-      graphicsLayer.add(pointGraphic);
-    });
-  });
 </script>
 
+</body>
 </html>
