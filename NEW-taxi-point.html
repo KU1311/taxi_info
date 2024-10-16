@@ -86,7 +86,7 @@
         });
 
         // Load the CSV data
-        	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
+	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
     	fetch(csvUrl)
     	  .then(response => response.text())
     	  .then(csvData => {
@@ -194,8 +194,7 @@
 
         let markers = [];
 
-
-		// Initial load: Add all markers with popups
+		  // Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
 			const type = feature.properties.type;
@@ -252,6 +251,7 @@
             mView.graphics.add(graphic);
         });
     });
+}
 </script>
 
 </html>
