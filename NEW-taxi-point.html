@@ -85,26 +85,152 @@
             center: new Point(833359.88495, 822961.986247, new SpatialReference({ wkid: 2326 })),
         });
 
-        // Define marker locations and popups
-        const markers = [
-            {
-                coords: [833400, 822900], // Example coordinates
-                title: "Marker 1",
-                content: "This is the first marker."
-            },
-            {
-                coords: [833200, 822800], // Example coordinates
-                title: "Marker 2",
-                content: "This is the second marker."
-            }
-        ];
+        // Load the CSV data
+        	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
+    	fetch(csvUrl)
+    	  .then(response => response.text())
+    	  .then(csvData => {
+    		const rows = csvData.trim().split('\n');
+    		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+    		const data = rows.slice(1).map(row => {
+    		    const values = row.split(',');
+    		    return headers.reduce((obj, header, i) => {
+    			// Remove carriage return from the value
+    			let value = String(values[i]).replace('\r', '');
+    		
+    			// Check if the current header is "time" and apply the rules
+    			if (header === 'time') {
+    			    if (value === "Daytime") {
+    				value = "日間";
+    			    } else if (value === "Midnight") {
+    				value = "半夜";
+    			    } else if (value === '"Daytime; Midnight"') {
+    				value = "全日";
+    			    } else if (value === "PM") {
+    				value = "下午";
+    			    } else if (value === '"PM; Midnight"') {
+    				value = "下午至半夜";
+    			    }
+    			}
+    		        if (header === 'dangerous') {
+    			    if (value === "Y") {
+    				value = "是";
+    			    } else if (value === "N") {
+    				value = "否";
+    			    }
+    			}
+    		        if (header === 'legal') {
+    			    if (value === "Y") {
+    				value = "的士站";
+    			    } else if (value === "N") {
+    				value = "上客熱點";
+    			    }
+    			}
+    		        if (header === 'type') {
+    			    if (value === "urban") {
+    				value = "市區的士";
+    			    } else if (value === "NT") {
+    				value = "新界的士";
+    			    } else if (value === "lantau") {
+    				value = "大嶼山的士";
+    			    } else if (value === "cross-harbour") {
+    				value = "過海的士 (單程隧道)";
+    			    } 
+    			}
+    		
+    			obj[header] = value; // Assign the modified value to the object
+    			return obj;
+    		    }, {});
+    		});
+    	    const features = data.map(row => {
+    		  const latitude = parseFloat(row['lat']);
+    		  const longitude = parseFloat(row['lng']);
+    			
+    		    	if (row['time'] === "Daytime") {
+    				row['time'] = "日間";
+    			    } else if (row['time'] === "Midnight") {
+    				row['time'] = "半夜";
+    			    }
+    			if (row['dangerous'] === "Y") {
+    				row['dangerous'] = "是";
+    			    } else if (row['dangerous'] === "N") {
+    				row['dangerous'] = "否";
+    			    }
+    		    	if (row['legal'] === "Y") {
+    				row['legal'] = "的士站";
+    			    } else if (row['legal'] === "N") {
+    				row['legal'] = "上客熱點";
+    			    }
+    		    	if (row['type'] === "urban") {
+    				row['type'] = "市區的士";
+    			    } else if (row['type'] === "NT") {
+    				row['type'] = "新界的士";
+    			    } else if (row['type'] === "lantau") {
+    				row['type'] = "大嶼山的士";
+    			    } else if (row['type'] === "cross-harbour") {
+    				row['type'] = "過海的士 (單程隧道)";
+    			    } 
+    		    
+    		i+=1;
+    		  return {
+    		      type: 'Feature',
+    		      geometry: {
+    		        type: 'Point',
+    		        coordinates: [longitude, latitude]
+    		      },
+    		      properties: {
+    		        id: row['id'],
+    		        type: row['type'],
+    		        name: row['name'],
+    		        time: row['time'],
+    		        dangerous: row['dangerous'],
+    		        legal: row['legal'],
+    		        remarks: row['Remarks'],
+		        lat: latitude,
+			lng: longitude
+    		      }
+    		  }
+    	    }).filter(feature => feature !== null); // Remove any null values
 
+        let markers = [];
+
+
+		// Initial load: Add all markers with popups
+		function loadMarkers() {
+		    features.forEach(feature => {
+			const type = feature.properties.type;
+	                const isLegal = feature.properties.legal === "的士站";
+	                const customIcon = createCustomIcon(type, isLegal); // Create custom icon based on type and legality
+
+			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
+
+		        let content =
+			 `<b>${feature.properties.name}</b><br>
+   			  <b>的士種類:</b> ${feature.properties.type}<br>
+			  <b>時間:</b> ${feature.properties.time}<br>
+     			  <b>站點種類:</b> ${feature.properties.legal}<br>
+  			 `;
+			if (feature.properties.legal !== '的士站') {
+			    content += `<b>需注意上客位置:</b> ${feature.properties.dangerous}<br>`;
+			}
+		        content += `
+	  		  <b>備註:</b> ${feature.properties.remarks}
+			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+     			`;
+			// marker.bindPopup(content);
+			// marker.addTo(map);
+			markers.push({ coords: [feature.properties.lat, feature.properties.lng], feature, content });
+		    });
+		}
+              
+
+    
         // Add markers to the map
         markers.forEach(marker => {
             const point = new Point({
                 x: marker.coords[0],
                 y: marker.coords[1],
-                spatialReference: { wkid: 2326 }
+                spatialReference: { wkid: 4326 }
             });
 
             const graphic = new Graphic({
@@ -119,7 +245,6 @@
                     content: marker.content
                 },
                 popupTemplate: {
-                    title: "{title}",
                     content: "{content}"
                 }
             });
