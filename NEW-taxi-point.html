@@ -192,8 +192,18 @@
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
 
-        let markers = [];
-
+        //let markers = [];
+	const markers = [
+            {
+                coords: [22.2813, 114.1587], // Example coordinates for Marker 1 (Lat, Long)
+                content: "This is the first marker."
+            },
+            {
+                coords: [22.2875, 114.1448], // Example coordinates for Marker 2 (Lat, Long)
+                content: "This is the second marker."
+            }
+        ];
+		  
 		  // Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
@@ -218,7 +228,7 @@
      			`;
 			// marker.bindPopup(content);
 			// marker.addTo(map);
-			markers.push({ coords: [feature.properties.lat, feature.properties.lng], feature, content });
+			markers.push({ coords: [feature.properties.lat, feature.properties.lng], content });
 		    });
 		}
               
