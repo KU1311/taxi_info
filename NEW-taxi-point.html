@@ -85,6 +85,56 @@
             center: new Point(114.173986, 22.349011, new SpatialReference({ wkid: 4326 })),
         });
 
+	const features = data.map(row => {
+    		  const latitude = parseFloat(row['lat']);
+    		  const longitude = parseFloat(row['lng']);
+    			
+    		    	if (row['time'] === "Daytime") {
+    				row['time'] = "日間";
+    			    } else if (row['time'] === "Midnight") {
+    				row['time'] = "半夜";
+    			    }
+    			if (row['dangerous'] === "Y") {
+    				row['dangerous'] = "是";
+    			    } else if (row['dangerous'] === "N") {
+    				row['dangerous'] = "否";
+    			    }
+    		    	if (row['legal'] === "Y") {
+    				row['legal'] = "的士站";
+    			    } else if (row['legal'] === "N") {
+    				row['legal'] = "上客熱點";
+    			    }
+    		    	if (row['type'] === "urban") {
+    				row['type'] = "市區的士";
+    			    } else if (row['type'] === "NT") {
+    				row['type'] = "新界的士";
+    			    } else if (row['type'] === "lantau") {
+    				row['type'] = "大嶼山的士";
+    			    } else if (row['type'] === "cross-harbour") {
+    				row['type'] = "過海的士 (單程隧道)";
+    			    } 
+    		    
+    		
+    		  return {
+    		      type: 'Feature',
+    		      geometry: {
+    		        type: 'Point',
+    		        coordinates: [longitude, latitude]
+    		      },
+    		      properties: {
+    		        id: row['id'],
+    		        type: row['type'],
+    		        name: row['name'],
+    		        time: row['time'],
+    		        dangerous: row['dangerous'],
+    		        legal: row['legal'],
+    		        remarks: row['Remarks'],
+		        lat: latitude,
+			lng: longitude
+    		      }
+    		  }
+    	    }).filter(feature => feature !== null); // Remove any null values
+	    
         // Define marker locations and popups
         const markers = [
             {
