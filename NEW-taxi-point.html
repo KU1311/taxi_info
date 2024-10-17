@@ -85,7 +85,64 @@
             center: new Point(114.173986, 22.349011, new SpatialReference({ wkid: 4326 })),
         });
 
-	const features = data.map(row => {
+	// Load the CSV data
+	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
+    	fetch(csvUrl)
+    	  .then(response => response.text())
+    	  .then(csvData => {
+    		const rows = csvData.trim().split('\n');
+    		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+    		const data = rows.slice(1).map(row => {
+    		    const values = row.split(',');
+    		    return headers.reduce((obj, header, i) => {
+    			// Remove carriage return from the value
+    			let value = String(values[i]).replace('\r', '');
+    		
+    			// Check if the current header is "time" and apply the rules
+    			if (header === 'time') {
+    			    if (value === "Daytime") {
+    				value = "日間";
+    			    } else if (value === "Midnight") {
+    				value = "半夜";
+    			    } else if (value === '"Daytime; Midnight"') {
+    				value = "全日";
+    			    } else if (value === "PM") {
+    				value = "下午";
+    			    } else if (value === '"PM; Midnight"') {
+    				value = "下午至半夜";
+    			    }
+    			}
+    		        if (header === 'dangerous') {
+    			    if (value === "Y") {
+    				value = "是";
+    			    } else if (value === "N") {
+    				value = "否";
+    			    }
+    			}
+    		        if (header === 'legal') {
+    			    if (value === "Y") {
+    				value = "的士站";
+    			    } else if (value === "N") {
+    				value = "上客熱點";
+    			    }
+    			}
+    		        if (header === 'type') {
+    			    if (value === "urban") {
+    				value = "市區的士";
+    			    } else if (value === "NT") {
+    				value = "新界的士";
+    			    } else if (value === "lantau") {
+    				value = "大嶼山的士";
+    			    } else if (value === "cross-harbour") {
+    				value = "過海的士 (單程隧道)";
+    			    } 
+    			}
+    		
+    			obj[header] = value; // Assign the modified value to the object
+    			return obj;
+    		    }, {});
+    		});
+    	    const features = data.map(row => {
     		  const latitude = parseFloat(row['lat']);
     		  const longitude = parseFloat(row['lng']);
     			
