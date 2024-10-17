@@ -126,7 +126,7 @@
 			markers.push({ coords: [feature.properties.lat, feature.properties.lng], content });
 		    });
 		}
-        
+        loadMarkers()
         // Add markers to the map
         markers.forEach(marker => {
             const point = new Point({
