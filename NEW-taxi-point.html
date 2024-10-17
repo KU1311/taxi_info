@@ -82,7 +82,7 @@
             container: "map-area",
             map: map,
             zoom: 10,
-            center: new Point(22.349011, 114.173986, new SpatialReference({ wkid: 4326 })),
+            center: new Point(114.173986, 22.349011, new SpatialReference({ wkid: 4326 })),
         });
 
         // Define marker locations and popups
@@ -102,8 +102,8 @@
         // Add markers to the map
         markers.forEach(marker => {
             const point = new Point({
-                x: marker.coords[0],
-                y: marker.coords[1],
+                x: marker.coords[1],
+                y: marker.coords[0],
                 spatialReference: { wkid: 4326 }
             });
 
