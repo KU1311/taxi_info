@@ -49,7 +49,7 @@
             width: 28px;
             height: 28px;
             display: inline-flex;
-            background: url;
+            background: url(https://api.hkmapservice.gov.hk/mapapi/landsdlogo.jpg);
             background-size: 28px;
         }
     </style>
@@ -63,8 +63,8 @@
     require([
         "esri/Map", "esri/Basemap", "esri/layers/VectorTileLayer",
         "esri/views/MapView", "esri/geometry/SpatialReference",
-        "esri/geometry/Point", "esri/Graphic", "esri/geometry/geometryEngine"
-    ], function (Map, Basemap, VectorTileLayer, MapView, SpatialReference, Point, Graphic, geometryEngine) {
+        "esri/geometry/Point", "esri/Graphic", "esri/widgets/Popup"
+    ], function (Map, Basemap, VectorTileLayer, MapView, SpatialReference, Point, Graphic) {
         const basemapVTURL = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/basemap/HK80";
 
         const basemap = new Basemap({
@@ -85,15 +85,15 @@
             center: new Point(833359.88495, 822961.986247, new SpatialReference({ wkid: 2326 })),
         });
 
-        // Define marker locations using latitude and longitude
+        // Define marker locations and popups
         const markers = [
             {
-                coords: [22.2813, 114.1587], // Example coordinates for Marker 1 (Lat, Long)
+                coords: [833400, 822900], // Example coordinates
                 title: "Marker 1",
                 content: "This is the first marker."
             },
             {
-                coords: [22.2875, 114.1448], // Example coordinates for Marker 2 (Lat, Long)
+                coords: [833200, 822800], // Example coordinates
                 title: "Marker 2",
                 content: "This is the second marker."
             }
@@ -101,14 +101,11 @@
 
         // Add markers to the map
         markers.forEach(marker => {
-            const pointWGS84 = new Point({
-                longitude: marker.coords[1],
-                latitude: marker.coords[0],
-                spatialReference: { wkid: 4326 } // WGS84
+            const point = new Point({
+                x: marker.coords[0],
+                y: marker.coords[1],
+                spatialReference: { wkid: 2326 }
             });
-
-            // Convert the point to the map's spatial reference
-            const point = geometryEngine.project(pointWGS84, mView.spatialReference);
 
             const graphic = new Graphic({
                 geometry: point,
