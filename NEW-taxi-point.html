@@ -99,6 +99,34 @@
             }
         ];
 
+        // Initial load: Add all markers with popups
+		function loadMarkers() {
+		    features.forEach(feature => {
+			const type = feature.properties.type;
+	                const isLegal = feature.properties.legal === "的士站";
+	                const customIcon = createCustomIcon(type, isLegal); // Create custom icon based on type and legality
+
+			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
+
+		        let content =
+			 `<b>${feature.properties.name}</b><br>
+   			  <b>的士種類:</b> ${feature.properties.type}<br>
+			  <b>時間:</b> ${feature.properties.time}<br>
+     			  <b>站點種類:</b> ${feature.properties.legal}<br>
+  			 `;
+			if (feature.properties.legal !== '的士站') {
+			    content += `<b>需注意上客位置:</b> ${feature.properties.dangerous}<br>`;
+			}
+		        content += `
+	  		  <b>備註:</b> ${feature.properties.remarks}
+			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+     			`;
+			// marker.bindPopup(content);
+			// marker.addTo(map);
+			markers.push({ coords: [feature.properties.lat, feature.properties.lng], content });
+		    });
+		}
+        
         // Add markers to the map
         markers.forEach(marker => {
             const point = new Point({
