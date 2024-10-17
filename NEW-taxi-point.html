@@ -88,12 +88,12 @@
         // Define marker locations and popups
         const markers = [
             {
-                coords: [833400, 822900], // Example coordinates
+                coords: [22.416059, 114.211413], // Example coordinates
                 title: "Marker 1",
                 content: "This is the first marker."
             },
             {
-                coords: [833200, 822800], // Example coordinates
+                coords: [22.381530, 114.188253], // Example coordinates
                 title: "Marker 2",
                 content: "This is the second marker."
             }
@@ -104,7 +104,7 @@
             const point = new Point({
                 x: marker.coords[0],
                 y: marker.coords[1],
-                spatialReference: { wkid: 2326 }
+                spatialReference: { wkid: 4326 }
             });
 
             const graphic = new Graphic({
