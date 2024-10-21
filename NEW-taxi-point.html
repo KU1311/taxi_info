@@ -66,6 +66,7 @@
         "esri/geometry/Point", "esri/Graphic", "esri/widgets/Popup"
     ], function (Map, Basemap, VectorTileLayer, MapView, SpatialReference, Point, Graphic) {
         const basemapVTURL = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/basemap/HK80";
+        const mapLabelVTUrl = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/label/hk/en/HK80";
 
         const basemap = new Basemap({
             baseLayers: [
@@ -262,6 +263,8 @@
             mView.graphics.add(graphic);
         });
     });
+	    
+        map.add(new VectorTileLayer(mapLabelVTUrl));
 });
 </script>
 
