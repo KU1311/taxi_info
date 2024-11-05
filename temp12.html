@@ -16,7 +16,7 @@
             width: 100%;
             height: 100%;
         }
-                
+
         .esri-attribution a {
             color: black;
         }
@@ -52,16 +52,16 @@
             background-size: 28px;
         }
 
+        /* Style for the navigate button */
         .navigate-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none; /* Initially hidden */
             background-color: #4CAF50; /* Green */
             color: white;
             border: none;
             padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            margin: 4px 2px;
             cursor: pointer;
             border-radius: 4px; /* Rounded corners */
         }
@@ -71,162 +71,156 @@
 <body>
     <script src="https://js.arcgis.com/4.29/"></script>
     <div id="map-area"></div>
-</body>
-<script>
-    require([
-        "esri/Map", "esri/Basemap", "esri/layers/VectorTileLayer",
-        "esri/views/MapView", "esri/geometry/SpatialReference",
-        "esri/geometry/Point", "esri/Graphic", "esri/widgets/Popup"
-    ], function (Map, Basemap, VectorTileLayer, MapView, SpatialReference, Point, Graphic) {
-        const basemapVTURL = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/basemap/HK80";
-        const mapLabelVTUrl = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/label/hk/en/HK80";
+    
+    <script>
+        require([
+            "esri/Map", "esri/Basemap", "esri/layers/VectorTileLayer",
+            "esri/views/MapView", "esri/geometry/SpatialReference",
+            "esri/geometry/Point", "esri/Graphic", "esri/widgets/Popup"
+        ], function (Map, Basemap, VectorTileLayer, MapView, SpatialReference, Point, Graphic) {
+            const basemapVTURL = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/basemap/HK80";
+            const mapLabelVTUrl = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/label/hk/en/HK80";
 
-        const basemap = new Basemap({
-            baseLayers: [
-                new VectorTileLayer({
-                    url: basemapVTURL,
-                    copyright: '<a href="https://api.portal.hkmapservice.gov.hk/disclaimer" target="_blank" class="copyright-url">&copy; Map information from Lands Department</a><div class="copyright-logo" ></div>'
-                })
-            ]
-        });
+            const basemap = new Basemap({
+                baseLayers: [
+                    new VectorTileLayer({
+                        url: basemapVTURL,
+                        copyright: '<a href="https://api.portal.hkmapservice.gov.hk/disclaimer" target="_blank" class="copyright-url">&copy; Map information from Lands Department</a><div class="copyright-logo" ></div>'
+                    })
+                ]
+            });
 
-        const map = new Map({
-            basemap: basemap,
-        });
+            const map = new Map({
+                basemap: basemap,
+            });
 
-        const mView = new MapView({
-            container: "map-area",
-            map: map,
-            zoom: 10,
-            center: new Point(114.173986, 22.349011, new SpatialReference({ wkid: 4326 })),
-            
-        });
+            const mView = new MapView({
+                container: "map-area",
+                map: map,
+                zoom: 10,
+                center: new Point(114.173986, 22.349011, new SpatialReference({ wkid: 4326 })),
+            });
 
-        // Load the CSV data
-        const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
-        fetch(csvUrl)
-            .then(response => response.text())
-            .then(csvData => {
-                const rows = csvData.trim().split('\n');
-                const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-                const data = rows.slice(1).map(row => {
-                    const values = row.split(',');
-                    return headers.reduce((obj, header, i) => {
-                        let value = String(values[i]).replace('\r', '');
-                        // Add your existing transformation logic here...
-                        obj[header] = value;
-                        return obj;
-                    }, {});
-                });
-                
-                const features = data.map(row => {
-                    // Add your existing feature creation logic here...
-                    return {
-                        type: 'Feature',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [parseFloat(row['lng']), parseFloat(row['lat'])]
-                        },
-                        properties: {
-                            id: row['id'],
-                            type: row['type'],
-                            name: row['name'],
-                            time: row['time'],
-                            dangerous: row['dangerous'],
-                            legal: row['legal'],
-                            remarks: row['Remarks'],
-                        }
-                    };
-                }).filter(feature => feature !== null); // Remove any null values
+            // Variable to store the current feature for navigation
+            let currentFeature = null;
 
-                // Define color mapping for markers
-                const colorMapping = {
-                    "urban": "red",
-                    "lantau": "#45c0ff",
-                    "NT": "#41c400",
-                    "cross-harbour": "black"
-                };
-                
-                // Variable to store the current feature for navigation
-                let currentFeature = null;
-                
-                // Add markers to the map
-                features.forEach(feature => {
-                    const point = new Point({
-                        x: feature.geometry.coordinates[0],
-                        y: feature.geometry.coordinates[1],
-                        spatialReference: { wkid: 4326 }
+            // Load the CSV data
+            const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/taxipoints_csv.csv';
+            fetch(csvUrl)
+                .then(response => response.text())
+                .then(csvData => {
+                    const rows = csvData.trim().split('\n');
+                    const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+                    const data = rows.slice(1).map(row => {
+                        const values = row.split(',');
+                        return headers.reduce((obj, header, i) => {
+                            let value = String(values[i]).replace('\r', '');
+                            obj[header] = value;
+                            return obj;
+                        }, {});
                     });
-                
-                    const color = colorMapping[feature.properties.type] || "gray"; // Default to gray if type is not found
-                
-                    const graphic = new Graphic({
-                        geometry: point,
-                        symbol: {
-                            type: "simple-marker",
-                            color: color,
-                            size: "12px"
-                        },
-                        attributes: {
-                            title: feature.properties.name,
-                            content: `
-                                <b>${feature.properties.name}</b><br>
-                                <b>的士種類:</b> ${feature.properties.type}<br>
-                                <b>時間:</b> ${feature.properties.time}<br>
-                                <b>站點種類:</b> ${feature.properties.legal}<br>
-                                <b>備註:</b> ${feature.properties.remarks}
-                            `
-                        },
-                        popupTemplate: {
-                            title: "{title}",
-                            content: function (feature) {
-                                return feature.attributes.content;
+                    const features = data.map(row => {
+                        return {
+                            type: 'Feature',
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [parseFloat(row['lng']), parseFloat(row['lat'])]
+                            },
+                            properties: {
+                                id: row['id'],
+                                type: row['type'],
+                                name: row['name'],
+                                time: row['time'],
+                                dangerous: row['dangerous'],
+                                legal: row['legal'],
+                                remarks: row['Remarks'],
                             }
-                        }
-                    });
-                
-                    mView.graphics.add(graphic);
-                
-                    // Set up the click event to capture the current feature
-                    graphic.on("click", function() {
-                        currentFeature = feature; // Store the current feature
-                        mView.popup.open({
-                            features: [graphic],
-                            location: point
+                        };
+                    }).filter(feature => feature !== null);
+
+                    // Define color mapping for markers
+                    const colorMapping = {
+                        "urban": "red",
+                        "lantau": "blue",
+                        "NT": "green",
+                        "過海的士 (單程隧道)": "orange"
+                    };
+
+                    // Add markers to the map
+                    features.forEach(feature => {
+                        const point = new Point({
+                            x: feature.geometry.coordinates[0],
+                            y: feature.geometry.coordinates[1],
+                            spatialReference: { wkid: 4326 }
+                        });
+
+                        const color = colorMapping[feature.properties.type] || "gray";
+
+                        const graphic = new Graphic({
+                            geometry: point,
+                            symbol: {
+                                type: "simple-marker",
+                                color: color,
+                                size: "12px"
+                            },
+                            attributes: {
+                                title: feature.properties.name,
+                                content: `
+                                    <b>${feature.properties.name}</b><br>
+                                    <b>的士種類:</b> ${feature.properties.type}<br>
+                                    <b>時間:</b> ${feature.properties.time}<br>
+                                    <b>站點種類:</b> ${feature.properties.legal}<br>
+                                    <b>備註:</b> ${feature.properties.remarks}
+                                `
+                            },
+                            popupTemplate: {
+                                title: "{title}",
+                                content: function (feature) {
+                                    return feature.attributes.content;
+                                }
+                            }
+                        });
+
+                        mView.graphics.add(graphic);
+
+                        // Set up the click event to capture the current feature
+                        graphic.on("click", function() {
+                            currentFeature = feature;
+                            mView.popup.open({
+                                features: [graphic],
+                                location: point
+                            });
                         });
                     });
-                });
-                
-                // Add a custom button for navigation
-                const navigateButton = document.createElement('button');
-                navigateButton.innerHTML = '導航';
-                navigateButton.style.position = 'absolute';
-                navigateButton.style.top = '10px';
-                navigateButton.style.right = '10px';
-                navigateButton.style.display = 'none'; // Initially hidden
-                document.body.appendChild(navigateButton);
-                
-                // Handle the button click for navigation
-                navigateButton.onclick = function() {
-                    if (currentFeature) {
-                        const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${currentFeature.geometry.coordinates[1]},${currentFeature.geometry.coordinates[0]}`;
-                        window.open(navigateUrl, '_blank');
-                    }
-                };
-                
-                // Show the navigate button when a popup opens
-                mView.popup.on('open', function() {
-                    navigateButton.style.display = 'block'; // Show the button
-                });
-                
-                // Hide the navigate button when the popup closes
-                mView.popup.on('close', function() {
-                    navigateButton.style.display = 'none'; // Hide the button
+
+                    // Add a custom button for navigation
+                    const navigateButton = document.createElement('button');
+                    navigateButton.innerHTML = '導航';
+                    navigateButton.className = 'navigate-button';
+                    document.body.appendChild(navigateButton);
+
+                    // Handle the button click for navigation
+                    navigateButton.onclick = function() {
+                        if (currentFeature) {
+                            const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${currentFeature.geometry.coordinates[1]},${currentFeature.geometry.coordinates[0]}`;
+                            window.open(navigateUrl, '_blank');
+                        }
+                    };
+
+                    // Show the navigate button when a popup opens
+                    mView.popup.on('open', function() {
+                        navigateButton.style.display = 'block'; // Show the button
+                    });
+
+                    // Hide the navigate button when the popup closes
+                    mView.popup.on('close', function() {
+                        navigateButton.style.display = 'none'; // Hide the button
+                    });
                 });
 
-
-        map.add(new VectorTileLayer(mapLabelVTUrl));
-    });
-</script>
+            map.add(new VectorTileLayer(mapLabelVTUrl));
+        });
+    </script>
+</body>
 
 </html>
