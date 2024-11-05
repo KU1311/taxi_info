@@ -182,15 +182,6 @@
                         });
 
                         mView.graphics.add(graphic);
-
-                        // Set up the click event to capture the current feature
-                        graphic.on("click", function() {
-                            currentFeature = feature;
-                            mView.popup.open({
-                                features: [graphic],
-                                location: point
-                            });
-                        });
                     });
 
                     // Add a custom button for navigation
@@ -208,8 +199,24 @@
                     };
 
                     // Show the navigate button when a popup opens
-                    mView.popup.on('open', function() {
-                        navigateButton.style.display = 'block'; // Show the button
+                    mView.on('click', function(event) {
+                        mView.hitTest(event).then(function(response) {
+                            if (response.results.length > 0) {
+                                const graphic = response.results[0].graphic;
+                                currentFeature = graphic.attributes; // Store the current feature
+
+                                // Open the popup
+                                mView.popup.open({
+                                    features: [graphic],
+                                    location: graphic.geometry
+                                });
+
+                                navigateButton.style.display = 'block'; // Show the button
+                            } else {
+                                mView.popup.close(); // Close the popup if nothing is clicked
+                                navigateButton.style.display = 'none'; // Hide the button
+                            }
+                        });
                     });
 
                     // Hide the navigate button when the popup closes
