@@ -222,9 +222,9 @@
                         });
                     });
 
-                    // Listen for the popup close event
-                    mView.popup.watch("visible", function(visible) {
-                        if (!visible) {
+                    // Handle popup close
+                    mView.popup.on("trigger-action", function(event) {
+                        if (event.action.id === "close") {
                             navigateButton.style.display = 'none'; // Hide the button when popup closes
                         }
                     });
