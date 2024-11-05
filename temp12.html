@@ -118,6 +118,7 @@
                         return obj;
                     }, {});
                 });
+                
                 const features = data.map(row => {
                     // Add your existing feature creation logic here...
                     return {
@@ -145,7 +146,10 @@
                     "NT": "#41c400",
                     "cross-harbour": "black"
                 };
-
+                
+                // Variable to store the current feature for navigation
+                let currentFeature = null;
+                
                 // Add markers to the map
                 features.forEach(feature => {
                     const point = new Point({
@@ -153,9 +157,9 @@
                         y: feature.geometry.coordinates[1],
                         spatialReference: { wkid: 4326 }
                     });
-
+                
                     const color = colorMapping[feature.properties.type] || "gray"; // Default to gray if type is not found
-                    const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${feature.geometry.coordinates[1]},${feature.geometry.coordinates[0]}`;
+                
                     const graphic = new Graphic({
                         geometry: point,
                         symbol: {
@@ -171,14 +175,54 @@
                                 <b>時間:</b> ${feature.properties.time}<br>
                                 <b>站點種類:</b> ${feature.properties.legal}<br>
                                 <b>備註:</b> ${feature.properties.remarks}
-                                <button class="navigate-button" onclick="window.open('${navigateUrl}', '_blank')">導航</button>
                             `
                         },
                         popupTemplate: {
                             title: "{title}",
-                            content: "{content}"
+                            content: function (feature) {
+                                return feature.attributes.content;
+                            }
                         }
                     });
+                
+                    mView.graphics.add(graphic);
+                
+                    // Set up the click event to capture the current feature
+                    graphic.on("click", function() {
+                        currentFeature = feature; // Store the current feature
+                        mView.popup.open({
+                            features: [graphic],
+                            location: point
+                        });
+                    });
+                });
+                
+                // Add a custom button for navigation
+                const navigateButton = document.createElement('button');
+                navigateButton.innerHTML = '導航';
+                navigateButton.style.position = 'absolute';
+                navigateButton.style.top = '10px';
+                navigateButton.style.right = '10px';
+                navigateButton.style.display = 'none'; // Initially hidden
+                document.body.appendChild(navigateButton);
+                
+                // Handle the button click for navigation
+                navigateButton.onclick = function() {
+                    if (currentFeature) {
+                        const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${currentFeature.geometry.coordinates[1]},${currentFeature.geometry.coordinates[0]}`;
+                        window.open(navigateUrl, '_blank');
+                    }
+                };
+                
+                // Show the navigate button when a popup opens
+                mView.popup.on('open', function() {
+                    navigateButton.style.display = 'block'; // Show the button
+                });
+                
+                // Hide the navigate button when the popup closes
+                mView.popup.on('close', function() {
+                    navigateButton.style.display = 'none'; // Hide the button
+                });
 
                     mView.graphics.add(graphic);
                 });
