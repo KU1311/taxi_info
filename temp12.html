@@ -127,8 +127,8 @@
                 // Define color mapping for markers
                 const colorMapping = {
                     "urban": "red",
-                    "lantau": "blue",
-                    "NT": "green",
+                    "lantau": "#45c0ff",
+                    "NT": "#41c400",
                     "cross-harbour": "black"
                 };
 
@@ -157,6 +157,7 @@
                                 <b>時間:</b> ${feature.properties.time}<br>
                                 <b>站點種類:</b> ${feature.properties.legal}<br>
                                 <b>備註:</b> ${feature.properties.remarks}
+                                <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
                             `
                         },
                         popupTemplate: {
