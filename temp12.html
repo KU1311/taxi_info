@@ -203,7 +203,7 @@
                         mView.hitTest(event).then(function(response) {
                             if (response.results.length > 0) {
                                 const graphic = response.results[0].graphic;
-                                currentFeature = graphic.attributes; // Store the current feature
+                                currentFeature = graphic; // Store the current feature
 
                                 // Open the popup
                                 mView.popup.open({
@@ -219,9 +219,11 @@
                         });
                     });
 
-                    // Hide the navigate button when the popup closes
-                    mView.popup.on('close', function() {
-                        navigateButton.style.display = 'none'; // Hide the button
+                    // Handle popup close
+                    mView.popup.on('trigger-action', function(event) {
+                        if (event.action.id === "close") {
+                            navigateButton.style.display = 'none'; // Hide the button
+                        }
                     });
                 });
 
