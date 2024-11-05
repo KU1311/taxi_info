@@ -213,7 +213,7 @@
 
                                 navigateButton.style.display = 'block'; // Show the button
                             } else {
-                                // Close the popup and hide the button if the click is outside the graphics
+                                // Close the popup and hide the button if click is outside graphics
                                 if (mView.popup.visible) {
                                     mView.popup.close(); // Close the popup
                                     navigateButton.style.display = 'none'; // Hide the button
@@ -222,9 +222,9 @@
                         });
                     });
 
-                    // Handle popup close
-                    mView.popup.on("trigger-action", function(event) {
-                        if (event.action.id === "close") {
+                    // Handle popup close based on visibility
+                    mView.popup.watch("visible", function(visible) {
+                        if (!visible) {
                             navigateButton.style.display = 'none'; // Hide the button when popup closes
                         }
                     });
