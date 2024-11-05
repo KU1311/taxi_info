@@ -76,7 +76,7 @@
         require([
             "esri/Map", "esri/Basemap", "esri/layers/VectorTileLayer",
             "esri/views/MapView", "esri/geometry/SpatialReference",
-            "esri/geometry/Point", "esri/Graphic", "esri/widgets/Popup"
+            "esri/geometry/Point", "esri/Graphic"
         ], function (Map, Basemap, VectorTileLayer, MapView, SpatialReference, Point, Graphic) {
             const basemapVTURL = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/basemap/HK80";
             const mapLabelVTUrl = "https://mapapi.geodata.gov.hk/gs/api/v1.0.0/vt/label/hk/en/HK80";
@@ -219,11 +219,9 @@
                         });
                     });
 
-                    // Handle popup close
-                    mView.popup.on('trigger-action', function(event) {
-                        if (event.action.id === "close") {
-                            navigateButton.style.display = 'none'; // Hide the button
-                        }
+                    // Listen for the popup close event
+                    mView.popup.on("close", function() {
+                        navigateButton.style.display = 'none'; // Hide the button when popup closes
                     });
                 });
 
