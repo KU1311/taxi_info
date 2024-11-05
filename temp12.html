@@ -213,15 +213,20 @@
 
                                 navigateButton.style.display = 'block'; // Show the button
                             } else {
-                                mView.popup.close(); // Close the popup if nothing is clicked
-                                navigateButton.style.display = 'none'; // Hide the button
+                                // Close the popup and hide the button if the click is outside the graphics
+                                if (mView.popup.visible) {
+                                    mView.popup.close(); // Close the popup
+                                    navigateButton.style.display = 'none'; // Hide the button
+                                }
                             }
                         });
                     });
 
                     // Listen for the popup close event
-                    mView.popup.on("close", function() {
-                        navigateButton.style.display = 'none'; // Hide the button when popup closes
+                    mView.popup.watch("visible", function(visible) {
+                        if (!visible) {
+                            navigateButton.style.display = 'none'; // Hide the button when popup closes
+                        }
                     });
                 });
 
