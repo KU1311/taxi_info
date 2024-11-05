@@ -141,7 +141,7 @@
                     });
 
                     const color = colorMapping[feature.properties.type] || "gray"; // Default to gray if type is not found
-
+                    const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${feature.geometry.coordinates[1]},${feature.geometry.coordinates[0]}`;
                     const graphic = new Graphic({
                         geometry: point,
                         symbol: {
@@ -157,7 +157,7 @@
                                 <b>時間:</b> ${feature.properties.time}<br>
                                 <b>站點種類:</b> ${feature.properties.legal}<br>
                                 <b>備註:</b> ${feature.properties.remarks}
-                                <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+                                <button onclick="window.open('${navigateUrl}', '_blank')">導航</button>
                             `
                         },
                         popupTemplate: {
