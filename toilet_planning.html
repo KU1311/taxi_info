@@ -176,7 +176,7 @@
         </div>  
         <div class="dropdown-row">
             <div class="dropdown-container">
-                <label for="type-dropdown">開放時間:</label>
+                <label for="type-dropdown">價錢:</label>
                 <select id="type-dropdown">
                 </select>
             </div>
@@ -300,22 +300,31 @@
     			let value = String(values[i]).replace('\r', '');
     		
     			// Check if the current header is "time" and apply the rules
-    			if (header === 'openinghrs') {
-    			    if (value === "24小時") {
-    				value = "24小時";
+    			if (header === 'Category') {
+    			    if (value === "Cheap") {
+    				value = "便宜";
+    			    } else if (value === "Expensive") {
+    				value = "中等";
+    			    } else if (value === 'Very Expensive') {
+    				value = "昂貴";
+    			    }
     			}
     		      
     		
     			obj[header] = value; // Assign the modified value to the object
     			return obj;
-    		    }
+    		    }, {});
     		});
     	    const features = data.map(row => {
     		  const latitude = parseFloat(row['lat']);
     		  const longitude = parseFloat(row['lng']);
     			
-    		    	if (row['openinghrs'] === "24小時") {
-    				row['Category'] = "24小時";
+    		    	if (row['Category'] === "Cheap") {
+    				row['Category'] = "便宜";
+    			    } else if (row['Category'] === "Expensive") {
+    				row['Category'] = "中等";
+    			    } else if (row['Category'] === "Very Expensive") {
+    				row['Category'] = "昂貴";
 			}
     		i+=1;
     		  return {
@@ -326,9 +335,8 @@
     		      },
     		      properties: {
     		        id: row['id'],
-    		        category: row['openinghrs'],
-    		        name: row['name'],
-    		        remarks: row['remarks'],
+    		        category: row['Category'],
+    		        name: row['Name'],
 		        lat: latitude,
 			lng: longitude
     		      }
@@ -374,7 +382,7 @@
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
 		        const popupContent =
 			 `<h3>${feature.properties.name}</h3>
-   			  <b>開放時間:</b> ${feature.properties.category}<br>
+   			  <b>價錢:</b> ${feature.properties.category}<br>
 			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
   			 `;
 			marker.bindPopup(popupContent);
