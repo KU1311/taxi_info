@@ -120,6 +120,7 @@
                 <select id="type-dropdown">
                     <option value="only toilets">Only Toilets</option>
                     <option value="1km invert">1km Invert</option>
+                    <option value="2km invert">2km Invert</option>
                 </select>
             </div>
         </div>
@@ -144,7 +145,8 @@
         }).addTo(map);
 
         const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv20250326.csv';
-        const bufferGeoJsonUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
+        const bufferGeoJsonUrl1km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
+        const bufferGeoJsonUrl2km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km_invert.geojson'; // New 2km buffer URL
         let bufferLayer; 
         let markers = [];
 
@@ -241,13 +243,14 @@
             });
         }
 
-        function loadBuffer() {
+        function loadBuffer(bufferType) {
+            const bufferGeoJsonUrl = bufferType === '1km' ? bufferGeoJsonUrl1km : bufferGeoJsonUrl2km;
             fetch(bufferGeoJsonUrl)
                 .then(response => response.json())
                 .then(data => {
                     bufferLayer = L.geoJSON(data, {
                         style: {
-                            color: 'blue',
+                            color: bufferType === '1km' ? 'blue' : 'green',
                             weight: 2,
                             opacity: 0.5
                         }
@@ -260,9 +263,16 @@
             const typeFilter = typeDropdown.value;
             if (typeFilter === '1km invert') {
                 if (!bufferLayer) {
-                    loadBuffer(); // Load the buffer if not already loaded
+                    loadBuffer('1km'); // Load the 1km buffer if not already loaded
                 } else {
-                    map.addLayer(bufferLayer); // Show the buffer layer
+                    map.addLayer(bufferLayer); // Show the 1km buffer layer
+                }
+                markers.forEach(marker => marker.addTo(map)); // Show all toilet markers
+            } else if (typeFilter === '2km invert') {
+                if (!bufferLayer) {
+                    loadBuffer('2km'); // Load the 2km buffer if not already loaded
+                } else {
+                    map.addLayer(bufferLayer); // Show the 2km buffer layer
                 }
                 markers.forEach(marker => marker.addTo(map)); // Show all toilet markers
             } else if (typeFilter === 'only toilets') {
