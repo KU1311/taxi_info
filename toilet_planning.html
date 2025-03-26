@@ -240,7 +240,7 @@
 		    context.font = 'bold 10px Arial'; // Set a smaller font size
 		    context.textAlign = 'center';
 		    context.textBaseline = 'middle';
-		    context.fillText('LPG', size / 2, size / 2); // Draw the "LPG" in the center
+		    context.fillText('WC', size / 2, size / 2); // Draw the "LPG" in the center
 	
 	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
 	            return L.icon({
@@ -300,7 +300,7 @@
     			let value = String(values[i]).replace('\r', '');
     		
     			// Check if the current header is "time" and apply the rules
-    			if (header === 'Category') {
+    			if (header === 'openinghrs') {
     			    if (value === "Cheap") {
     				value = "便宜";
     			    } else if (value === "Expensive") {
@@ -319,12 +319,12 @@
     		  const latitude = parseFloat(row['lat']);
     		  const longitude = parseFloat(row['lng']);
     			
-    		    	if (row['Category'] === "Cheap") {
-    				row['Category'] = "便宜";
-    			    } else if (row['Category'] === "Expensive") {
-    				row['Category'] = "中等";
-    			    } else if (row['Category'] === "Very Expensive") {
-    				row['Category'] = "昂貴";
+    		    	if (row['openinghrs'] === "Cheap") {
+    				row['openinghrs'] = "便宜";
+    			    } else if (row['openinghrs'] === "Expensive") {
+    				row['openinghrs'] = "中等";
+    			    } else if (row['openinghrs'] === "Very Expensive") {
+    				row['openinghrs'] = "昂貴";
 			}
     		i+=1;
     		  return {
@@ -335,8 +335,8 @@
     		      },
     		      properties: {
     		        id: row['id'],
-    		        category: row['Category'],
-    		        name: row['Name'],
+    		        openinghrs: row['openinghrs'],
+    		        name: row['name'],
 		        lat: latitude,
 			lng: longitude
     		      }
@@ -376,13 +376,13 @@
 		// Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
-			  const type = feature.properties.category;
+			  const type = feature.properties.openinghrs;
         const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
 
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
 		        const popupContent =
 			 `<h3>${feature.properties.name}</h3>
-   			  <b>價錢:</b> ${feature.properties.category}<br>
+   			  <b>價錢:</b> ${feature.properties.openinghrs}<br>
 			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
   			 `;
 			marker.bindPopup(popupContent);
@@ -395,7 +395,7 @@
 	    	    const typeOptions = new Set(['全部']);
 	    	
 	    	    data.forEach(row => {
-	    	      typeOptions.add(row.Category);
+	    	      typeOptions.add(row.openinghrs);
 	    	    });
 	    	
 	    	    const typeDropdown = document.getElementById('type-dropdown');
@@ -418,7 +418,7 @@
 
 	                let shouldShow = true; // Default to true
 
-        			if (typeFilter !== '全部' && feature.properties.category !== typeFilter) {
+        			if (typeFilter !== '全部' && feature.properties.openinghrs !== typeFilter) {
         	    	          shouldShow = false;
         	    	        }
         	    	
