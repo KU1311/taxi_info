@@ -8,486 +8,275 @@
     <style>
         html, body {
             margin: 0;
-            height: 100%; /* Ensures the body takes full height */
+            height: 100%;
             display: flex;
-            flex-direction: column; /* Column layout for the body */
+            flex-direction: column;
         }
 
         #map {
-            flex: 1; /* Allow the map to take up remaining space */
-            width: 100%; /* Full width */
-            z-index: 1; /* Lower z-index for the map */
-            position: relative; /* Create a positioning context */
+            flex: 1;
+            width: 100%;
+            z-index: 1;
+            position: relative;
         }
 
         .controls-container {
-            position: relative; /* To position dropdowns absolutely */
-            z-index: 10; /* Ensure dropdowns are above the map */
+            position: relative;
+            z-index: 10;
         }
 
         h2 {
-            margin-bottom: 10px; /* Space between title and dropdowns */
-            text-align: center; /* Center the title */
-            color: white; /* Change header text color for visibility */
+            margin-bottom: 10px;
+            text-align: center;
+            color: white;
         }
 
-        .controls-container {
-	    position: relative; /* Allows for absolute positioning of dropdowns */
-	}
-	
-	.title-dropdown-container {
-	    display: flex;
-	    align-items: center; /* Center items vertically */
-	    justify-content: center; /* Center the title */
-	    width: 100%; /* Full width */
-	    padding: 10px; /* Padding around the container */
-	    box-sizing: border-box; /* Include padding in width */
-	    position: relative; /* Positioning context for absolute elements */
-	}
-	
-	.back-button {
-	    position: absolute; /* Position it relative to the container */
-	    left: 10px; /* Distance from the left */
-	    top: 50%; /* Center vertically */
-	    transform: translateY(-50%); /* Adjust for the button height */
-	    background-color: #d7454e; /* Button color */
-	    color: white; /* Text color */
-	    padding: 10px 15px; /* Padding for the button */
-	    border: none; /* No border */
-	    border-radius: 5px; /* Rounded corners */
-	    cursor: pointer; /* Pointer cursor on hover */
-	    z-index: 1000; /* Ensure it appears above other elements */
-	}
-	
-	.title {
-	    color: white; /* Title color */
-	    margin: 0; /* Remove default margin */
-	    text-align: center; /* Center the title text */
-	}
-	
-	.dropdown-row {
-	    display: flex; /* Align dropdowns in a row */
-	    justify-content: space-between; /* Space out dropdowns evenly */
-	    z-index: 20; /* Higher z-index to ensure it floats above the map */
-	    background-color: #333; /* Background color for the dropdown container */
-	    padding: 10px; /* Padding around the dropdown row */
-	    box-sizing: border-box; /* Include padding in width */
-	}
-	
-	.dropdown-container {
-	    flex: 1; /* Allow each dropdown to take equal space */
-	    display: flex; /* Use flexbox for internal layout */
-	    flex-direction: column; /* Stack label and dropdown vertically */
-	    margin: 0 5px; /* Optional margin between dropdowns */
-	    box-sizing: border-box; /* Include padding in width */
-	}
+        .dropdown-row {
+            display: flex;
+            justify-content: space-between;
+            z-index: 20;
+            background-color: #333;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .dropdown-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin: 0 5px;
+            box-sizing: border-box;
+        }
+
         .dropdown-container label {
-            margin-bottom: 5px; /* Space between label and dropdown */
-            color: white; /* Change label color for visibility */
-            text-align: center; /* Center the label text */
-            white-space: nowrap; /* Prevent label text from wrapping */
+            margin-bottom: 5px;
+            color: white;
+            text-align: center;
         }
 
         select {
-            background-color: #444; /* Darker background for the select dropdowns */
-            color: white; /* White text for dropdowns */
-            border: none; /* Remove default border */
-            padding: 5px; /* Padding inside dropdown */
-            border-radius: 3px; /* Rounded corners for aesthetics */
-            width: 100%; /* Make select take full width of the container */
-            box-sizing: border-box; /* Ensure padding is included in width */
+            background-color: #444;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 3px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        select:focus {
-            outline: none; /* Remove focus outline */
-            border: 1px solid #666; /* Optional border on focus */
+        .current-location-marker {
+            background-color: rgba(73, 167, 223, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
         }
 
-        .current-location-label {
-    	  padding: 4px 8px;
-    	  border-radius: 4px;
-    	  font-size: 12px;
-    	  font-weight: bold;
-    	}
-    	
-    	.current-location-marker {
-    	  background-color: rgba(73, 167, 223, 0.5);
-    	  border-radius: 50%;
-    	  width: 40px;
-    	  height: 40px;
-    	  display: flex;
-    	  justify-content: center;
-    	  align-items: center;
-    	  font-size: 12px;
-    	  font-weight: bold;
-    	  color: white;
-    	}
-    	  
-    	.footer {
-	    display: flex; /* Use flexbox for layout */
-	    align-items: center; /* Center items vertically */
-	    justify-content: space-between; /* Space between left content and button */
-	    background-color: #333; /* Background color for footer */
-	    color: white; /* Text color */
-	    padding: 10px; /* Padding around the footer */
-	}
-	
-	.footer-content {
-	    display: flex; /* Use flexbox for inner content */
-	    align-items: center; /* Center the icon and text vertically */
-	}
-	
-	.footer-icon {
-	    height: 3em; /* Set height to match two lines of text */
-	    margin-right: 10px; /* Space between image and text */
-	}
-	
-	.footer h3 {
-	    margin: 0; /* Remove default margin */
-	    line-height: 1.4; /* Adjust line height for spacing */
-	}
-	.whatsapp-button {
-	    background-color: #25D366; /* WhatsApp green */
-	    color: white; /* Button text color */
-	    padding: 10px 15px; /* Padding for the button */
-	    border-radius: 5px; /* Rounded corners */
-	    text-decoration: none; /* Remove underline */
-	    display: flex; /* Center the text */
-	    align-items: center; /* Center text vertically */
-	    margin-left: 40px; /* Add space between footer content and button */
-	}
-       button {
-	      display: flex;
-	      padding: 0.75rem;
-	      background-color: rgb(237, 28, 36 );
-	      color: white;
-	      border: none;
-	      border-radius: 4px;
-	      cursor: pointer;
-	      font-size: 1rem;
-	    }
+        .footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        .footer-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-icon {
+            height: 3em;
+            margin-right: 10px;
+        }
+
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            margin-left: 40px;
+        }
     </style>
 </head>
-<body style="background-color:#333;>
+<body style="background-color:#333;">
     <div class="controls-container">
         <div class="title-dropdown-container">
-	    <button class="back-button" onclick="window.history.back();">Back</button>
+            <button class="back-button" onclick="window.history.back();">Back</button>
             <h2 style="color: white; margin: 0;">規劃建議 - 方便泊車的洗手間</h2>
         </div>  
         <div class="dropdown-row">
             <div class="dropdown-container">
                 <label for="type-dropdown">顯示項目:</label>
                 <select id="type-dropdown">
-			<option value="1km invert">1km 外</option>
+                    <option value="only toilets">Only Toilets</option>
+                    <option value="1km invert">1km Invert</option>
                 </select>
             </div>
         </div>
     </div>
     <div id="map"></div>
     <div class="footer">
-	    <div class="footer-content">
-	        <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
-	        <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
-	    </div>
-	    <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
-	</div>
+        <div class="footer-content">
+            <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
+            <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+        </div>
+        <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+    </div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-      <script>
-    	  let i = 1
-            // Default coordinates
-    	    const defaultCoords = [22.305451, 114.169656];
-    	    const defaultZoom = 12;
-    	
-    	    // Initialize the map with default coordinates
-    	    const map = L.map('map').setView(defaultCoords, defaultZoom);
-    	    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    	        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    		opacity: 0.7
-    	    }).addTo(map);
+    <script>
+        const defaultCoords = [22.305451, 114.169656];
+        const defaultZoom = 12;
 
+        const map = L.map('map').setView(defaultCoords, defaultZoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            opacity: 0.7
+        }).addTo(map);
 
-	    // Function to create a custom circular marker icon
-	        function createCustomIcon(type) {
-	            const canvas = document.createElement('canvas');
-	            const context = canvas.getContext('2d');
-	            const size = 30; // Size of the marker
-	            canvas.width = size;
-	            canvas.height = size;
-	
-	            // Set the fill color based on the type
-	            let fillColor;
-	            switch (type) {
-	                case '便宜':
-	                    fillColor = 'green';
-	                    break;
-	                case '中等':
-	                    fillColor = 'orange';
-	                    break;
-	                case '昂貴':
-	                    fillColor = 'red';
-	                    break;
-	                default:
-	                    fillColor = 'black'; // Default color for unknown types
-	            }
-	
-	            // Draw the red circle (or the corresponding color)
-	            context.fillStyle = fillColor; // Set the fill color
-	            context.beginPath();
-	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
-	            context.fill(); // Fill the circle
-	
-	            // Draw the "LPG" text in the center
-		    context.fillStyle = 'white'; // Set the text color to white
-		    context.font = 'bold 10px Arial'; // Set a smaller font size
-		    context.textAlign = 'center';
-		    context.textBaseline = 'middle';
-		    context.fillText('WC', size / 2, size / 2); // Draw the "LPG" in the center
-	
-	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
-	            return L.icon({
-	                iconUrl: iconUrl,
-	                iconSize: [size, size], // Set the icon size
-	                iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
-	                popupAnchor: [0, -size] // Position the popup above the marker
-	            });
-	        }
+        const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv20250326.csv';
+        const bufferGeoJsonUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
+        let bufferLayer; 
+        let markers = [];
 
-	      
-    	    // Function to set the user location
-    	    function setUserLocation(position) {
-    	        const userCoords = [position.coords.latitude, position.coords.longitude];
-    	        const userZoom = 16; // Set a higher zoom level for user location
-    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
-    	        // Create a custom marker for the user's location
-    	        const userLocationMarker = L.divIcon({
-    	            className: 'current-location-marker', // Custom class
-    	            iconSize: [50, 50] // Size of the marker
-    	        });
-    	
-    	        // Add the custom marker to the map
-    	        L.marker(userCoords, { icon: userLocationMarker })
-    	            .bindPopup(`<div class="current-location-label">你的位置</div>`)
-    	            .addTo(map);
-    	    }
+        function createCustomIcon() {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const size = 30;
+            canvas.width = size;
+            canvas.height = size;
+            context.fillStyle = 'green'; // Default color
+            context.beginPath();
+            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            context.fill();
+            context.fillStyle = 'white';
+            context.font = 'bold 10px Arial';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillText('WC', size / 2, size / 2);
+            const iconUrl = canvas.toDataURL();
+            return L.icon({
+                iconUrl: iconUrl,
+                iconSize: [size, size],
+                iconAnchor: [size / 2, size],
+                popupAnchor: [0, -size]
+            });
+        }
 
-	      function setUserLocationAgain(position) {
-    	        const userCoords = [position.coords.latitude, position.coords.longitude];
-    	        const userZoom = 16; // Set a higher zoom level for user location
-    	        map.setView(userCoords, userZoom); // Center the map on the user's location with a higher zoom level
-    	    }
-    	
-    	    // Check for user's location
-    	    if (navigator.geolocation) {
-    	        navigator.geolocation.getCurrentPosition(setUserLocation, function() {
-    	            console.warn("Geolocation not allowed. Using default location.");
-    	            // The map is already initialized to defaultCoords
-    	        });
-    	    } else {
-    	        console.warn("Geolocation is not supported by this browser. Using default location.");
-    	        // The map is already initialized to defaultCoords
-    	    }
-    	  
-    	// Load the CSV data
-        	const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv20250326.csv';
-    	fetch(csvUrl)
-    	  .then(response => response.text())
-    	  .then(csvData => {
-    		const rows = csvData.trim().split('\n');
-    		const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-    		const data = rows.slice(1).map(row => {
-    		    const values = row.split(',');
-    		    return headers.reduce((obj, header, i) => {
-    			// Remove carriage return from the value
-    			let value = String(values[i]).replace('\r', '');
-    		
-    			// Check if the current header is "time" and apply the rules
-    			if (header === 'openinghrs') {
-    			    if (value === "Cheap") {
-    				value = "便宜";
-    			    } else if (value === "Expensive") {
-    				value = "中等";
-    			    } else if (value === 'Very Expensive') {
-    				value = "昂貴";
-    			    }
-    			}
-    		      
-    		
-    			obj[header] = value; // Assign the modified value to the object
-    			return obj;
-    		    }, {});
-    		});
-    	    const features = data.map(row => {
-    		  const latitude = parseFloat(row['lat']);
-    		  const longitude = parseFloat(row['lng']);
-    			
-    		    	if (row['openinghrs'] === "Cheap") {
-    				row['openinghrs'] = "便宜";
-    			    } else if (row['openinghrs'] === "Expensive") {
-    				row['openinghrs'] = "中等";
-    			    } else if (row['openinghrs'] === "Very Expensive") {
-    				row['openinghrs'] = "昂貴";
-			}
-    		i+=1;
-    		  return {
-    		      type: 'Feature',
-    		      geometry: {
-    		        type: 'Point',
-    		        coordinates: [longitude, latitude]
-    		      },
-    		      properties: {
-    		        id: row['id'],
-    		        openinghrs: row['openinghrs'],
-    		        name: row['name'],
-		        lat: latitude,
-			lng: longitude
-    		      }
-    		  }
-    	    }).filter(feature => feature !== null); // Remove any null values
-		  
-		const locateControl = L.control({ position: 'topright' }); // Position the control
-		locateControl.onAdd = function (map) {
-	        const button = L.DomUtil.create('button', 'locate-button'); // Create a button
-	        button.innerHTML = '🔍'; // You can use an emoji or an icon here
-	        button.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Button background color
-	        button.style.padding = '5px'; // Padding for the button
-	        button.style.cursor = 'pointer'; // Cursor style
-	        button.title = '我的位置'; // Tooltip
-	
-	        // Add click event to the button
-	        button.onclick = function () {
-	            if (navigator.geolocation) {
-	    	        navigator.geolocation.getCurrentPosition(setUserLocationAgain, function() {
-	    	            console.warn("Geolocation not allowed. Using default location.");
-	    	            // The map is already initialized to defaultCoords
-	    	        });
-	    	    } else {
-	    	        console.warn("Geolocation is not supported by this browser. Using default location.");
-	    	        // The map is already initialized to defaultCoords
-	    	    }
-	        };
-	
-	        return button; // Return the button element
-	    };
+        function setUserLocation(position) {
+            const userCoords = [position.coords.latitude, position.coords.longitude];
+            const userZoom = 16;
+            map.setView(userCoords, userZoom);
+            const userLocationMarker = L.divIcon({
+                className: 'current-location-marker',
+                iconSize: [50, 50]
+            });
+            L.marker(userCoords, { icon: userLocationMarker })
+                .bindPopup(`<div class="current-location-label">你的位置</div>`)
+                .addTo(map);
+        }
 
-	locateControl.addTo(map); // Add the control to the map
-		  
-	    let markers = [];
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setUserLocation, function() {
+                console.warn("Geolocation not allowed. Using default location.");
+            });
+        }
 
+        fetch(csvUrl)
+            .then(response => response.text())
+            .then(csvData => {
+                const rows = csvData.trim().split('\n');
+                const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
+                const data = rows.slice(1).map(row => {
+                    const values = row.split(',');
+                    return headers.reduce((obj, header, i) => {
+                        let value = String(values[i]).replace('\r', '');
+                        obj[header] = value;
+                        return obj;
+                    }, {});
+                });
 
-		// Initial load: Add all markers with popups
-		function loadMarkers() {
-		    features.forEach(feature => {
-			  const type = feature.properties.openinghrs;
-        const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
+                const features = data.map(row => {
+                    const latitude = parseFloat(row['lat']);
+                    const longitude = parseFloat(row['lng']);
+                    return {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [longitude, latitude]
+                        },
+                        properties: {
+                            id: row['id'],
+                            openinghrs: row['openinghrs'],
+                            name: row['name'],
+                            lat: latitude,
+                            lng: longitude
+                        }
+                    };
+                });
 
-			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
-		        const popupContent =
-			 `<h3>${feature.properties.name}</h3>
-   			  <b>開放時間:</b> ${feature.properties.openinghrs}<br>
-			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-  			 `;
-			marker.bindPopup(popupContent);
-			marker.addTo(map);
-			markers.push({ marker, feature, popupContent });
-		    });
-		}
+                loadMarkers(features);
+            });
 
-		// Populate the dropdowns
-	    	    const typeOptions = new Set(['全部']);
-	    	
-	    	    data.forEach(row => {
-	    	      typeOptions.add(row.openinghrs);
-	    	    });
-	    	
-	    	    const typeDropdown = document.getElementById('type-dropdown');
-          
-	    	    typeOptions.forEach(option => {
-	    	      const optionElement = document.createElement('option');
-	    	      optionElement.value = option;
-	    	      optionElement.textContent = option;
-	    	      typeDropdown.appendChild(optionElement);
-	    	    });
-	    	
-	    	    // Add event listeners for the dropdowns
-	    	    typeDropdown.addEventListener('change', filterMarkers);
-	    	
-		function filterMarkers() {
+        function loadMarkers(features) {
+            features.forEach(feature => {
+                const customIcon = createCustomIcon();
+                const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
+                const popupContent =
+                    `<h3>${feature.properties.name}</h3>
+                     <b>開放時間:</b> ${feature.properties.openinghrs}<br>
+                     <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>`;
+                marker.bindPopup(popupContent);
+                marker.addTo(map);
+                markers.push(marker);
+            });
+        }
 
-		      const typeFilter = typeDropdown.value;
-			
-	           markers.forEach(({ marker, feature, popupContent }) => {
+        function loadBuffer() {
+            fetch(bufferGeoJsonUrl)
+                .then(response => response.json())
+                .then(data => {
+                    bufferLayer = L.geoJSON(data, {
+                        style: {
+                            color: 'blue',
+                            weight: 2,
+                            opacity: 0.5
+                        }
+                    }).addTo(map);
+                });
+        }
 
-	                let shouldShow = true; // Default to true
+        const typeDropdown = document.getElementById('type-dropdown');
+        typeDropdown.addEventListener('change', function() {
+            const typeFilter = typeDropdown.value;
+            if (typeFilter === '1km invert') {
+                if (!bufferLayer) {
+                    loadBuffer(); // Load the buffer if not already loaded
+                } else {
+                    map.addLayer(bufferLayer); // Show the buffer layer
+                }
+                markers.forEach(marker => marker.addTo(map)); // Show all toilet markers
+            } else if (typeFilter === 'only toilets') {
+                if (bufferLayer) {
+                    map.removeLayer(bufferLayer); // Hide the buffer layer
+                }
+                markers.forEach(marker => marker.addTo(map)); // Show only toilet markers
+            }
+        });
 
-        			if (typeFilter !== '全部' && feature.properties.openinghrs !== typeFilter) {
-        	    	          shouldShow = false;
-        	    	        }
-        	    	
-        
-        			// Set marker visibility
-        	                if (shouldShow) {
-        	                    marker.setOpacity(1); // Show marker
-        	                    if (!marker._map) {
-        	                        marker.addTo(map); // Ensure marker is added to the map
-        	                    }
-        			    marker.bindPopup(popupContent);
-        	                } else {
-        	                    marker.setOpacity(0); // Hide marker
-        	                    marker.unbindPopup(); // Unbind popup to prevent click events
-        	                }
-        		 });
-	        }
-	
-	        // Load markers initially
-	        loadMarkers();
-
-    	  });
-
-      function openGoogleMapsNavigation(lat, lng) {
-	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-	      window.open(url, '_blank');
-	    }
-
-	// URL to your GeoJSON file
-	const bufferGeoJsonUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
-	let bufferLayer; // Variable to hold the GeoJSON layer
-	
-	// Function to load the GeoJSON buffer
-	function loadBuffer() {
-	    fetch(bufferGeoJsonUrl)
-	        .then(response => response.json())
-	        .then(data => {
-	            bufferLayer = L.geoJSON(data, {
-	                style: {
-	                    color: 'blue', // Color of the buffer
-	                    weight: 2, // Width of the lines
-	                    opacity: 0.5 // Opacity of the lines
-	                }
-	            });
-	            bufferLayer.addTo(map); // Add buffer to the map
-	        });
-	}
-	
-	// Add event listener to the dropdown for "1km invert"
-	typeDropdown.addEventListener('change', function() {
-	    const typeFilter = typeDropdown.value;
-	
-	    // Show or hide the buffer layer based on dropdown selection
-	    if (typeFilter === '1km invert') {
-	        if (!bufferLayer) {
-	            loadBuffer(); // Load the buffer if not already loaded
-	        } else {
-	            map.addLayer(bufferLayer); // Show the buffer layer
-	        }
-	    } else {
-	        if (bufferLayer) {
-	            map.removeLayer(bufferLayer); // Hide the buffer layer when not selected
-	        }
-	    }
-	
-	    // Call the existing filterMarkers function
-	    filterMarkers();
-	});
-</script>
+        function openGoogleMapsNavigation(lat, lng) {
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+            window.open(url, '_blank');
+        }
+    </script>
 </body>
 </html>
