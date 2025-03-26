@@ -176,7 +176,7 @@
         </div>  
         <div class="dropdown-row">
             <div class="dropdown-container">
-                <label for="type-dropdown">項目:</label>
+                <label for="type-dropdown">開放時間:</label>
                 <select id="type-dropdown">
                 </select>
             </div>
@@ -206,7 +206,7 @@
 
 
 	    // Function to create a custom circular marker icon
-	        function createCustomIcon() {
+	        function createCustomIcon(type) {
 	            const canvas = document.createElement('canvas');
 	            const context = canvas.getContext('2d');
 	            const size = 30; // Size of the marker
@@ -214,8 +214,20 @@
 	            canvas.height = size;
 	
 	            // Set the fill color based on the type
-	            let fillColor = 'grey';
-	            
+	            let fillColor;
+	            switch (type) {
+	                case '便宜':
+	                    fillColor = 'green';
+	                    break;
+	                case '中等':
+	                    fillColor = 'orange';
+	                    break;
+	                case '昂貴':
+	                    fillColor = 'red';
+	                    break;
+	                default:
+	                    fillColor = 'black'; // Default color for unknown types
+	            }
 	
 	            // Draw the red circle (or the corresponding color)
 	            context.fillStyle = fillColor; // Set the fill color
@@ -223,12 +235,12 @@
 	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
 	            context.fill(); // Fill the circle
 	
-	            // Draw text in the center
+	            // Draw the "LPG" text in the center
 		    context.fillStyle = 'white'; // Set the text color to white
 		    context.font = 'bold 10px Arial'; // Set a smaller font size
 		    context.textAlign = 'center';
 		    context.textBaseline = 'middle';
-		    context.fillText('WC', size / 2, size / 2); // Draw the "LPG" in the center
+		    context.fillText('LPG', size / 2, size / 2); // Draw the "LPG" in the center
 	
 	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
 	            return L.icon({
@@ -238,6 +250,7 @@
 	                popupAnchor: [0, -size] // Position the popup above the marker
 	            });
 	        }
+
 	      
     	    // Function to set the user location
     	    function setUserLocation(position) {
@@ -284,7 +297,14 @@
     		    const values = row.split(',');
     		    return headers.reduce((obj, header, i) => {
     			// Remove carriage return from the value
-    			let value = String(values[i]).replace('\r', '');    		      
+    			let value = String(values[i]).replace('\r', '');
+    		
+    			// Check if the current header is "time" and apply the rules
+    			if (header === 'openinghrs') {
+    			    if (value === "24小時") {
+    				value = "24小時";
+    			}
+    		      
     		
     			obj[header] = value; // Assign the modified value to the object
     			return obj;
@@ -293,7 +313,10 @@
     	    const features = data.map(row => {
     		  const latitude = parseFloat(row['lat']);
     		  const longitude = parseFloat(row['lng']);
-    
+    			
+    		    	if (row['openinghrs'] === "24小時") {
+    				row['Category'] = "24小時";
+			}
     		i+=1;
     		  return {
     		      type: 'Feature',
@@ -303,17 +326,17 @@
     		      },
     		      properties: {
     		        id: row['id'],
+    		        category: row['openinghrs'],
     		        name: row['name'],
     		        remarks: row['remarks'],
 		        lat: latitude,
-			lng: longitude,
-    		        openinghrs: row['openinghrs']
+			lng: longitude
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
+		  
 		const locateControl = L.control({ position: 'topright' }); // Position the control
-
-	    locateControl.onAdd = function (map) {
+		locateControl.onAdd = function (map) {
 	        const button = L.DomUtil.create('button', 'locate-button'); // Create a button
 	        button.innerHTML = '🔍'; // You can use an emoji or an icon here
 	        button.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Button background color
@@ -340,28 +363,27 @@
 	locateControl.addTo(map); // Add the control to the map
 		  
 	    let markers = [];
-	    const clustermarkers = L.markerClusterGroup();
+
+
 		// Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
-			const type = feature.properties.category;
-        		const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
+			  const type = feature.properties.category;
+        const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
 
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
 		        const popupContent =
 			 `<h3>${feature.properties.name}</h3>
-			    開放時間: ${feature.properties.openinghrs}<br>
-			    ${feature.properties.remarks ? `${feature.properties.remarks}<br>` : ''}
-			     <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-		     	 `;
+   			  <b>開放時間:</b> ${feature.properties.category}<br>
+			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+  			 `;
 			marker.bindPopup(popupContent);
-			clustermarkers.addLayer(marker);
-			map.addLayer(clustermarkers); 
+			marker.addTo(map);
 			markers.push({ marker, feature, popupContent });
 		    });
 		}
 
-	        // Populate the dropdowns
+		// Populate the dropdowns
 	    	    const typeOptions = new Set(['全部']);
 	    	
 	    	    data.forEach(row => {
@@ -416,9 +438,6 @@
 	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 	      window.open(url, '_blank');
 	    }
-
-
-	
 </script>
 </body>
 </html>
