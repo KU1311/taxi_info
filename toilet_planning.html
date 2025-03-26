@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>汽站位置</title>
+    <title>規劃建議 - 方便泊車的洗手間</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         html, body {
@@ -172,11 +172,11 @@
     <div class="controls-container">
         <div class="title-dropdown-container">
 	    <button class="back-button" onclick="window.history.back();">Back</button>
-            <h2 style="color: white; margin: 0;">汽站位置</h2>
+            <h2 style="color: white; margin: 0;">規劃建議 - 方便泊車的洗手間</h2>
         </div>  
         <div class="dropdown-row">
             <div class="dropdown-container">
-                <label for="type-dropdown">價錢:</label>
+                <label for="type-dropdown">項目:</label>
                 <select id="type-dropdown">
                 </select>
             </div>
@@ -206,7 +206,7 @@
 
 
 	    // Function to create a custom circular marker icon
-	        function createCustomIcon(type) {
+	        function createCustomIcon() {
 	            const canvas = document.createElement('canvas');
 	            const context = canvas.getContext('2d');
 	            const size = 30; // Size of the marker
@@ -214,20 +214,8 @@
 	            canvas.height = size;
 	
 	            // Set the fill color based on the type
-	            let fillColor;
-	            switch (type) {
-	                case '便宜':
-	                    fillColor = 'green';
-	                    break;
-	                case '中等':
-	                    fillColor = 'orange';
-	                    break;
-	                case '昂貴':
-	                    fillColor = 'red';
-	                    break;
-	                default:
-	                    fillColor = 'black'; // Default color for unknown types
-	            }
+	            let fillColor = 'grey';
+	            
 	
 	            // Draw the red circle (or the corresponding color)
 	            context.fillStyle = fillColor; // Set the fill color
@@ -235,12 +223,12 @@
 	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
 	            context.fill(); // Fill the circle
 	
-	            // Draw the "LPG" text in the center
+	            // Draw text in the center
 		    context.fillStyle = 'white'; // Set the text color to white
 		    context.font = 'bold 10px Arial'; // Set a smaller font size
 		    context.textAlign = 'center';
 		    context.textBaseline = 'middle';
-		    context.fillText('LPG', size / 2, size / 2); // Draw the "LPG" in the center
+		    context.fillText('WC', size / 2, size / 2); // Draw the "LPG" in the center
 	
 	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
 	            return L.icon({
@@ -250,7 +238,6 @@
 	                popupAnchor: [0, -size] // Position the popup above the marker
 	            });
 	        }
-
 	      
     	    // Function to set the user location
     	    function setUserLocation(position) {
@@ -297,19 +284,7 @@
     		    const values = row.split(',');
     		    return headers.reduce((obj, header, i) => {
     			// Remove carriage return from the value
-    			let value = String(values[i]).replace('\r', '');
-    		
-    			// Check if the current header is "time" and apply the rules
-    			if (header === 'Category') {
-    			    if (value === "Cheap") {
-    				value = "便宜";
-    			    } else if (value === "Expensive") {
-    				value = "中等";
-    			    } else if (value === 'Very Expensive') {
-    				value = "昂貴";
-    			    }
-    			}
-    		      
+    			let value = String(values[i]).replace('\r', '');    		      
     		
     			obj[header] = value; // Assign the modified value to the object
     			return obj;
@@ -318,14 +293,7 @@
     	    const features = data.map(row => {
     		  const latitude = parseFloat(row['lat']);
     		  const longitude = parseFloat(row['lng']);
-    			
-    		    	if (row['Category'] === "Cheap") {
-    				row['Category'] = "便宜";
-    			    } else if (row['Category'] === "Expensive") {
-    				row['Category'] = "中等";
-    			    } else if (row['Category'] === "Very Expensive") {
-    				row['Category'] = "昂貴";
-			}
+    
     		i+=1;
     		  return {
     		      type: 'Feature',
@@ -335,16 +303,17 @@
     		      },
     		      properties: {
     		        id: row['id'],
-    		        category: row['Category'],
-    		        name: row['Name'],
+    		        name: row['name'],
+    		        remarks: row['remarks'],
 		        lat: latitude,
-			lng: longitude
+			lng: longitude,
+    		        openinghrs: row['openinghrs']
     		      }
     		  }
     	    }).filter(feature => feature !== null); // Remove any null values
-		  
 		const locateControl = L.control({ position: 'topright' }); // Position the control
-		locateControl.onAdd = function (map) {
+
+	    locateControl.onAdd = function (map) {
 	        const button = L.DomUtil.create('button', 'locate-button'); // Create a button
 	        button.innerHTML = '🔍'; // You can use an emoji or an icon here
 	        button.style.backgroundColor = 'rgba(255, 255, 255, 0.7)'; // Button background color
@@ -371,72 +340,27 @@
 	locateControl.addTo(map); // Add the control to the map
 		  
 	    let markers = [];
-
-
+	    const clustermarkers = L.markerClusterGroup();
 		// Initial load: Add all markers with popups
 		function loadMarkers() {
 		    features.forEach(feature => {
-			  const type = feature.properties.category;
-        const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
+			const type = feature.properties.category;
+        		const customIcon = createCustomIcon(type); // Create custom icon based on type and legality
 
 			const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
 		        const popupContent =
 			 `<h3>${feature.properties.name}</h3>
-   			  <b>價錢:</b> ${feature.properties.category}<br>
-			  <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
-  			 `;
+			    開放時間: ${feature.properties.openinghrs}<br>
+			    ${feature.properties.remarks ? `${feature.properties.remarks}<br>` : ''}
+			     <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>
+		     	 `;
 			marker.bindPopup(popupContent);
-			marker.addTo(map);
+			clustermarkers.addLayer(marker);
+			map.addLayer(clustermarkers); 
 			markers.push({ marker, feature, popupContent });
 		    });
 		}
 
-		// Populate the dropdowns
-	    	    const typeOptions = new Set(['全部']);
-	    	
-	    	    data.forEach(row => {
-	    	      typeOptions.add(row.Category);
-	    	    });
-	    	
-	    	    const typeDropdown = document.getElementById('type-dropdown');
-          
-	    	    typeOptions.forEach(option => {
-	    	      const optionElement = document.createElement('option');
-	    	      optionElement.value = option;
-	    	      optionElement.textContent = option;
-	    	      typeDropdown.appendChild(optionElement);
-	    	    });
-	    	
-	    	    // Add event listeners for the dropdowns
-	    	    typeDropdown.addEventListener('change', filterMarkers);
-	    	
-		function filterMarkers() {
-
-		      const typeFilter = typeDropdown.value;
-			
-	           markers.forEach(({ marker, feature, popupContent }) => {
-
-	                let shouldShow = true; // Default to true
-
-        			if (typeFilter !== '全部' && feature.properties.category !== typeFilter) {
-        	    	          shouldShow = false;
-        	    	        }
-        	    	
-        
-        			// Set marker visibility
-        	                if (shouldShow) {
-        	                    marker.setOpacity(1); // Show marker
-        	                    if (!marker._map) {
-        	                        marker.addTo(map); // Ensure marker is added to the map
-        	                    }
-        			    marker.bindPopup(popupContent);
-        	                } else {
-        	                    marker.setOpacity(0); // Hide marker
-        	                    marker.unbindPopup(); // Unbind popup to prevent click events
-        	                }
-        		 });
-	        }
-	
 	        // Load markers initially
 	        loadMarkers();
 
