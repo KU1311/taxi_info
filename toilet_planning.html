@@ -176,8 +176,9 @@
         </div>  
         <div class="dropdown-row">
             <div class="dropdown-container">
-                <label for="type-dropdown">價錢:</label>
+                <label for="type-dropdown">顯示項目:</label>
                 <select id="type-dropdown">
+			<option value="1km invert">1km 外</option>
                 </select>
             </div>
         </div>
@@ -446,6 +447,47 @@
 	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 	      window.open(url, '_blank');
 	    }
+
+	// URL to your GeoJSON file
+	const bufferGeoJsonUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
+	let bufferLayer; // Variable to hold the GeoJSON layer
+	
+	// Function to load the GeoJSON buffer
+	function loadBuffer() {
+	    fetch(bufferGeoJsonUrl)
+	        .then(response => response.json())
+	        .then(data => {
+	            bufferLayer = L.geoJSON(data, {
+	                style: {
+	                    color: 'blue', // Color of the buffer
+	                    weight: 2, // Width of the lines
+	                    opacity: 0.5 // Opacity of the lines
+	                }
+	            });
+	            bufferLayer.addTo(map); // Add buffer to the map
+	        });
+	}
+	
+	// Add event listener to the dropdown for "1km invert"
+	typeDropdown.addEventListener('change', function() {
+	    const typeFilter = typeDropdown.value;
+	
+	    // Show or hide the buffer layer based on dropdown selection
+	    if (typeFilter === '1km invert') {
+	        if (!bufferLayer) {
+	            loadBuffer(); // Load the buffer if not already loaded
+	        } else {
+	            map.addLayer(bufferLayer); // Show the buffer layer
+	        }
+	    } else {
+	        if (bufferLayer) {
+	            map.removeLayer(bufferLayer); // Hide the buffer layer when not selected
+	        }
+	    }
+	
+	    // Call the existing filterMarkers function
+	    filterMarkers();
+	});
 </script>
 </body>
 </html>
