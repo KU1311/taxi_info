@@ -361,6 +361,52 @@
 		    });
 		}
 
+	        // Populate the dropdowns
+	    	    const typeOptions = new Set(['全部']);
+	    	
+	    	    data.forEach(row => {
+	    	      typeOptions.add(row.Category);
+	    	    });
+	    	
+	    	    const typeDropdown = document.getElementById('type-dropdown');
+          
+	    	    typeOptions.forEach(option => {
+	    	      const optionElement = document.createElement('option');
+	    	      optionElement.value = option;
+	    	      optionElement.textContent = option;
+	    	      typeDropdown.appendChild(optionElement);
+	    	    });
+	    	
+	    	    // Add event listeners for the dropdowns
+	    	    typeDropdown.addEventListener('change', filterMarkers);
+	    	
+		function filterMarkers() {
+
+		      const typeFilter = typeDropdown.value;
+			
+	           markers.forEach(({ marker, feature, popupContent }) => {
+
+	                let shouldShow = true; // Default to true
+
+        			if (typeFilter !== '全部' && feature.properties.category !== typeFilter) {
+        	    	          shouldShow = false;
+        	    	        }
+        	    	
+        
+        			// Set marker visibility
+        	                if (shouldShow) {
+        	                    marker.setOpacity(1); // Show marker
+        	                    if (!marker._map) {
+        	                        marker.addTo(map); // Ensure marker is added to the map
+        	                    }
+        			    marker.bindPopup(popupContent);
+        	                } else {
+        	                    marker.setOpacity(0); // Hide marker
+        	                    marker.unbindPopup(); // Unbind popup to prevent click events
+        	                }
+        		 });
+	        }
+	
 	        // Load markers initially
 	        loadMarkers();
 
@@ -371,31 +417,8 @@
 	      window.open(url, '_blank');
 	    }
 
-      document.getElementById('type-dropdown').addEventListener('change', function() {
-	    loadMarkers(); // Call the function to load markers regardless of dropdown selection
-	});
+
 	
-	// Function to load all markers
-	function loadMarkers() {
-	    // Clear existing markers
-	    clustermarkers.clearLayers();
-	    
-	    features.forEach(feature => {
-	        const customIcon = createCustomIcon(); // Create custom icon
-	        const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
-	        const popupContent =
-	            `<h3>${feature.properties.name}</h3>
-	            開放時間: ${feature.properties.openinghrs}<br>
-	            ${feature.properties.remarks ? `${feature.properties.remarks}<br>` : ''}
-	            <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>`;
-	        marker.bindPopup(popupContent);
-	        clustermarkers.addLayer(marker);
-	    });
-	    map.addLayer(clustermarkers); // Ensure markers are added to the map
-	}
-	
-	// Call loadMarkers initially to display all markers
-	loadMarkers();
 </script>
 </body>
 </html>
