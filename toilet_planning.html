@@ -145,9 +145,12 @@
         }).addTo(map);
 
         const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv20250326.csv';
-        const bufferGeoJsonUrl1km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
-        const bufferGeoJsonUrl2km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km_invert.geojson'; // New 2km buffer URL
-        let bufferLayer; 
+        const lineGeoJsonUrl1km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
+        const polygonGeoJsonUrl1km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit_buffer4326.geojson';
+        const lineGeoJsonUrl2km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km_invert.geojson';
+        const polygonGeoJsonUrl2km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit_buffer4326.geojson'; // New 2km polygon URL
+        let lineLayer; 
+        let polygonLayer;
         let markers = [];
 
         function createCustomIcon() {
@@ -156,7 +159,7 @@
             const size = 30;
             canvas.width = size;
             canvas.height = size;
-            context.fillStyle = 'green'; // Default color
+            context.fillStyle = 'green';
             context.beginPath();
             context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
             context.fill();
@@ -243,18 +246,27 @@
             });
         }
 
-        function loadBuffer(bufferType) {
-            const bufferGeoJsonUrl = bufferType === '1km' ? bufferGeoJsonUrl1km : bufferGeoJsonUrl2km;
-            fetch(bufferGeoJsonUrl)
+        function loadGeoJSON(url, layerType) {
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    bufferLayer = L.geoJSON(data, {
-                        style: {
-                            color: bufferType === '1km' ? 'blue' : 'green',
-                            weight: 2,
-                            opacity: 0.5
-                        }
-                    }).addTo(map);
+                    if (layerType === 'line') {
+                        lineLayer = L.geoJSON(data, {
+                            style: {
+                                color: 'blue',
+                                weight: 2,
+                                opacity: 0.5
+                            }
+                        }).addTo(map);
+                    } else if (layerType === 'polygon') {
+                        polygonLayer = L.geoJSON(data, {
+                            style: {
+                                color: 'green',
+                                weight: 2,
+                                opacity: 0.5
+                            }
+                        }).addTo(map);
+                    }
                 });
         }
 
@@ -262,24 +274,23 @@
         typeDropdown.addEventListener('change', function() {
             const typeFilter = typeDropdown.value;
             if (typeFilter === '1km invert') {
-                if (!bufferLayer) {
-                    loadBuffer('1km'); // Load the 1km buffer if not already loaded
-                } else {
-                    map.addLayer(bufferLayer); // Show the 1km buffer layer
-                }
-                markers.forEach(marker => marker.addTo(map)); // Show all toilet markers
+                loadGeoJSON(lineGeoJsonUrl1km, 'line');
+                loadGeoJSON(polygonGeoJsonUrl1km, 'polygon');
+                markers.forEach(marker => marker.addTo(map));
             } else if (typeFilter === '2km invert') {
-                if (!bufferLayer) {
-                    loadBuffer('2km'); // Load the 2km buffer if not already loaded
-                } else {
-                    map.addLayer(bufferLayer); // Show the 2km buffer layer
-                }
-                markers.forEach(marker => marker.addTo(map)); // Show all toilet markers
+                loadGeoJSON(lineGeoJsonUrl2km, 'line');
+                loadGeoJSON(polygonGeoJsonUrl2km, 'polygon');
+                markers.forEach(marker => marker.addTo(map));
             } else if (typeFilter === 'only toilets') {
-                if (bufferLayer) {
-                    map.removeLayer(bufferLayer); // Hide the buffer layer
+                if (lineLayer) {
+                    map.removeLayer(lineLayer);
+                    lineLayer = null;
                 }
-                markers.forEach(marker => marker.addTo(map)); // Show only toilet markers
+                if (polygonLayer) {
+                    map.removeLayer(polygonLayer);
+                    polygonLayer = null;
+                }
+                markers.forEach(marker => marker.addTo(map));
             }
         });
 
