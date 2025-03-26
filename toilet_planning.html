@@ -370,6 +370,32 @@
 	      const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 	      window.open(url, '_blank');
 	    }
+
+      document.getElementById('type-dropdown').addEventListener('change', function() {
+	    loadMarkers(); // Call the function to load markers regardless of dropdown selection
+	});
+	
+	// Function to load all markers
+	function loadMarkers() {
+	    // Clear existing markers
+	    clustermarkers.clearLayers();
+	    
+	    features.forEach(feature => {
+	        const customIcon = createCustomIcon(); // Create custom icon
+	        const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
+	        const popupContent =
+	            `<h3>${feature.properties.name}</h3>
+	            開放時間: ${feature.properties.openinghrs}<br>
+	            ${feature.properties.remarks ? `${feature.properties.remarks}<br>` : ''}
+	            <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>`;
+	        marker.bindPopup(popupContent);
+	        clustermarkers.addLayer(marker);
+	    });
+	    map.addLayer(clustermarkers); // Ensure markers are added to the map
+	}
+	
+	// Call loadMarkers initially to display all markers
+	loadMarkers();
 </script>
 </body>
 </html>
