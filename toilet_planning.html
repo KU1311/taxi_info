@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +11,7 @@
             height: 100%; /* Ensures the body takes full height */
             display: flex;
             flex-direction: column; /* Column layout for the body */
+            background-color: #333; /* Background color for the body */
         }
 
         #map {
@@ -21,7 +22,7 @@
         }
 
         .controls-container {
-            position: relative; /* Allows for absolute positioning of dropdowns */
+            position: relative; /* To position dropdowns absolutely */
             z-index: 10; /* Ensure dropdowns are above the map */
         }
 
@@ -68,6 +69,26 @@
         select:focus {
             outline: none; /* Remove focus outline */
             border: 1px solid #666; /* Optional border on focus */
+        }
+
+        .current-location-label {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .current-location-marker {
+            background-color: rgba(73, 167, 223, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
         }
 
         .footer {
@@ -118,101 +139,57 @@
     </style>
 </head>
 <body>
+    <div class="controls-container">
+        <div class="title-dropdown-container">
+            <button class="back-button" onclick="window.history.back();">Back</button>
+            <h2>汽站位置</h2>
+        </div>  
+        <div class="dropdown-row">
+            <div class="dropdown-container">
+                <label for="type-dropdown">選擇類別:</label>
+                <select id="type-dropdown">
+                    <option value="全部">全部</option>
+                    <option value="便宜">便宜</option>
+                    <option value="中等">中等</option>
+                    <option value="昂貴">昂貴</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div class="footer">
+        <div class="footer-content">
+            <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
+            <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+        </div>
+        <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map and other functionalities here
+        const defaultCoords = [22.305451, 114.169656];
+        const defaultZoom = 12;
 
-<select id="geojson-dropdown" class="dropdown">
-    <option value="toilets-only">Toilets Only</option>
-    <option value="1km-cover">1km Cover</option>
-    <option value="2km-cover">2km Cover</option>
-    <option value="1km-buffer-uncovered">1km Buffer Uncovered</option>
-    <option value="2km-buffer-uncovered">2km Buffer Uncovered</option>
-</select>
+        const map = L.map('map').setView(defaultCoords, defaultZoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            opacity: 0.7
+        }).addTo(map);
 
-<div id="map"></div>
+        // Load the GeoJSON data
+        loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
+            L.geoJSON(data, {
+                style: { color: 'green' },
+                onEachFeature: (feature, layer) => {
+                    layer.bindPopup(`<h3>${feature.properties.name}</h3><p>${feature.properties.remarks || '無備註'}</p><p>開放時間: ${feature.properties.openinghrs}</p>`);
+                }
+            }).addTo(map);
+        });
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    // Initialize the map
-    const map = L.map('map').setView([22.2, 113.9], 13);
-
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
-
-    // Define the geojson layers
-    const layers = {
-        toilets: L.geoJSON(null, { style: { color: 'green' } }), // toilet_point_json.geojson
-        cover1km: L.geoJSON(null, { style: { color: 'blue', weight: 4 } }), // toilet_planning_1km.geojson
-        cover2km: L.geoJSON(null, { style: { color: 'purple', weight: 4 } }), // toilet_planning_2km.geojson
-        buffer1km: L.geoJSON(null, {
-            style: { color: 'darkblue', weight: 4 }
-        }), // buffer_1km_invert_edit.geojson
-        buffer2km: L.geoJSON(null, {
-            style: { color: 'darkpurple', weight: 4 }
-        }), // buffer_2km_invert_edit.geojson
-        buffer1km_edit: L.geoJSON(null, {
-            style: { color: 'darkblue', weight: 2, opacity: 0.5 }
-        }), // buffer_1km_invert_edit_buffer4326.geojson
-        buffer2km_edit: L.geoJSON(null, {
-            style: { color: 'darkpurple', weight: 2, opacity: 0.5 }
-        }) // buffer_2km_invert_edit_buffer4326.geojson
-    };
-
-    // Load the toilet GeoJSON data
-    loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
-        layers.toilets.addData(data);
-        layers.toilets.addTo(map);
-    });
-
-    // Function to load geojson files
-    async function loadGeoJSON(url) {
-        const response = await fetch(url);
-        return await response.json();
-    }
-
-    // Handle dropdown selection
-    document.getElementById('geojson-dropdown').addEventListener('change', function() {
-        const value = this.value;
-
-        // Clear all layers except toilets
-        for (const key in layers) {
-            if (key !== 'toilets') {
-                map.removeLayer(layers[key]);
-            }
+        async function loadGeoJSON(url) {
+            const response = await fetch(url);
+            return await response.json();
         }
-
-        // Add relevant layers based on selection
-        if (value === '1km-cover') {
-            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km.geojson').then(data => {
-                layers.cover1km.addData(data);
-                layers.cover1km.addTo(map);
-            });
-        } else if (value === '2km-cover') {
-            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km.geojson').then(data => {
-                layers.cover2km.addData(data);
-                layers.cover2km.addTo(map);
-            });
-        } else if (value === '1km-buffer-uncovered') {
-            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit.geojson').then(data => {
-                layers.buffer1km.addData(data);
-                layers.buffer1km.addTo(map);
-            });
-            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit_buffer4326.geojson').then(data => {
-                layers.buffer1km_edit.addData(data);
-                layers.buffer1km_edit.addTo(map);
-            });
-        } else if (value === '2km-buffer-uncovered') {
-            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit.geojson').then(data => {
-                layers.buffer2km.addData(data);
-                layers.buffer2km.addTo(map);
-            });
-            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit_buffer4326.geojson').then(data => {
-                layers.buffer2km_edit.addData(data);
-                layers.buffer2km_edit.addTo(map);
-            });
-        }
-    });
-</script>
-
+    </script>
 </body>
 </html>
