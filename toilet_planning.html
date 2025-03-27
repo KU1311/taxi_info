@@ -160,13 +160,69 @@
         // Load the GeoJSON data
         loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
             L.geoJSON(data, {
-                style: { color: 'green' },
+                pointToLayer: function (feature, latlng) {
+                    // Customize the circle marker
+                    return L.circleMarker(latlng, {
+                        radius: 5,          // Size of the circle (pixels)
+                        fillColor: 'black', // Fill color
+                        color: 'black',     // Stroke color
+                        weight: 1,          // Stroke width
+                        opacity: 1,         // Stroke opacity
+                        fillOpacity: 0.8    // Fill opacity
+                    });
+                },
                 onEachFeature: (feature, layer) => {
                     layer.bindPopup(`<h3>${feature.properties.name}</h3><p>${feature.properties.remarks || ''}</p><p>開放時間: ${feature.properties.openinghrs}</p>`);
                 }
             }).addTo(map);
         });
 
+        function createCustomIcon(type) {
+	            const canvas = document.createElement('canvas');
+	            const context = canvas.getContext('2d');
+	            const size = 30; // Size of the marker
+	            canvas.width = size;
+	            canvas.height = size;
+	
+	            // Set the fill color based on the type
+	            let fillColor;
+	            switch (type) {
+	                case '便宜':
+	                    fillColor = 'green';
+	                    break;
+	                case '中等':
+	                    fillColor = 'orange';
+	                    break;
+	                case '昂貴':
+	                    fillColor = 'red';
+	                    break;
+	                default:
+	                    fillColor = 'black'; // Default color for unknown types
+	            }
+	
+	            // Draw the red circle (or the corresponding color)
+	            context.fillStyle = fillColor; // Set the fill color
+	            context.beginPath();
+	            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2); // Draw a circle
+	            context.fill(); // Fill the circle
+	
+	            // Draw the "LPG" text in the center
+		    context.fillStyle = 'white'; // Set the text color to white
+		    context.font = 'bold 10px Arial'; // Set a smaller font size
+		    context.textAlign = 'center';
+		    context.textBaseline = 'middle';
+		    context.fillText('LPG', size / 2, size / 2); // Draw the "LPG" in the center
+	
+	            const iconUrl = canvas.toDataURL(); // Convert canvas to image URL
+	            return L.icon({
+	                iconUrl: iconUrl,
+	                iconSize: [size, size], // Set the icon size
+	                iconAnchor: [size / 2, size], // Anchor the icon at the bottom center
+	                popupAnchor: [0, -size] // Position the popup above the marker
+	            });
+	        }
+
+        
         async function loadGeoJSON(url) {
             const response = await fetch(url);
             return await response.json();
