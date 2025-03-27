@@ -194,7 +194,7 @@
                     L.geoJSON(data, { style: { color: 'purple', weight: 4 } }).addTo(map);
                 });
             } else if (value === '1km-buffer-uncovered') {
-                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit.geojson').then(data => {
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit.geojson').then(data => {
                     L.geoJSON(data, { style: { color: 'darkblue', weight: 4 } }).addTo(map);
                 });
                 loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit_buffer4326.geojson').then(data => {
