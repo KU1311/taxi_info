@@ -1,303 +1,112 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>規劃建議 - 方便泊車的洗手間</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Map Dropdown Selection</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        html, body {
-            margin: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        #map {
-            flex: 1;
-            width: 100%;
-            z-index: 1;
-            position: relative;
-        }
-
-        .controls-container {
-            position: relative;
-            z-index: 10;
-        }
-
-        h2 {
-            margin-bottom: 10px;
-            text-align: center;
-            color: white;
-        }
-
-        .dropdown-row {
-            display: flex;
-            justify-content: space-between;
-            z-index: 20;
-            background-color: #333;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .dropdown-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            margin: 0 5px;
-            box-sizing: border-box;
-        }
-
-        .dropdown-container label {
-            margin-bottom: 5px;
-            color: white;
-            text-align: center;
-        }
-
-        select {
-            background-color: #444;
-            color: white;
-            border: none;
-            padding: 5px;
-            border-radius: 3px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .current-location-marker {
-            background-color: rgba(73, 167, 223, 0.5);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #333;
-            color: white;
-            padding: 10px;
-        }
-
-        .footer-content {
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-icon {
-            height: 3em;
-            margin-right: 10px;
-        }
-
-        .whatsapp-button {
-            background-color: #25D366;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            margin-left: 40px;
-        }
+        #map { height: 600px; }
+        .dropdown { margin: 20px; }
     </style>
 </head>
-<body style="background-color:#333;">
-    <div class="controls-container">
-        <div class="title-dropdown-container">
-            <button class="back-button" onclick="window.history.back();">Back</button>
-            <h2 style="color: white; margin: 0;">規劃建議 - 方便泊車的洗手間</h2>
-        </div>  
-        <div class="dropdown-row">
-            <div class="dropdown-container">
-                <label for="type-dropdown">顯示項目:</label>
-                <select id="type-dropdown">
-                    <option value="only toilets">Only Toilets</option>
-                    <option value="1km invert">1km Invert</option>
-                    <option value="2km invert">2km Invert</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div id="map"></div>
-    <div class="footer">
-        <div class="footer-content">
-            <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
-            <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
-        </div>
-        <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
-    </div>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        const defaultCoords = [22.305451, 114.169656];
-        const defaultZoom = 12;
+<body>
 
-        const map = L.map('map').setView(defaultCoords, defaultZoom);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            opacity: 0.7
-        }).addTo(map);
+<select id="geojson-dropdown" class="dropdown">
+    <option value="toilets-only">Toilets Only</option>
+    <option value="1km-cover">1km Cover</option>
+    <option value="2km-cover">2km Cover</option>
+    <option value="1km-buffer-uncovered">1km Buffer Uncovered</option>
+    <option value="2km-buffer-uncovered">2km Buffer Uncovered</option>
+</select>
 
-        const csvUrl = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv20250326.csv';
-        const lineGeoJsonUrl1km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km_invert.geojson';
-        const polygonGeoJsonUrl1km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit_buffer4326.geojson';
-        const lineGeoJsonUrl2km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km_invert.geojson';
-        const polygonGeoJsonUrl2km = 'https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit_buffer4326.geojson'; // New 2km polygon URL
-        let lineLayer; 
-        let polygonLayer;
-        let markers = [];
+<div id="map"></div>
 
-        function createCustomIcon() {
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            const size = 30;
-            canvas.width = size;
-            canvas.height = size;
-            context.fillStyle = 'green';
-            context.beginPath();
-            context.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-            context.fill();
-            context.fillStyle = 'white';
-            context.font = 'bold 10px Arial';
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
-            context.fillText('WC', size / 2, size / 2);
-            const iconUrl = canvas.toDataURL();
-            return L.icon({
-                iconUrl: iconUrl,
-                iconSize: [size, size],
-                iconAnchor: [size / 2, size],
-                popupAnchor: [0, -size]
-            });
-        }
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Initialize the map
+    const map = L.map('map').setView([22.2, 113.9], 13);
 
-        function setUserLocation(position) {
-            const userCoords = [position.coords.latitude, position.coords.longitude];
-            const userZoom = 16;
-            map.setView(userCoords, userZoom);
-            const userLocationMarker = L.divIcon({
-                className: 'current-location-marker',
-                iconSize: [50, 50]
-            });
-            L.marker(userCoords, { icon: userLocationMarker })
-                .bindPopup(`<div class="current-location-label">你的位置</div>`)
-                .addTo(map);
-        }
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(setUserLocation, function() {
-                console.warn("Geolocation not allowed. Using default location.");
-            });
-        }
+    // Define the geojson layers
+    const layers = {
+        toilets: L.geoJSON(null, { style: { color: 'green' } }), // toilet_csv20250326.csv
+        cover1km: L.geoJSON(null, { style: { color: 'blue', weight: 4 } }), // toilet_planning_1km.geojson
+        cover2km: L.geoJSON(null, { style: { color: 'purple', weight: 4 } }), // toilet_planning_2km.geojson
+        buffer1km: L.geoJSON(null, {
+            style: { color: 'darkblue', weight: 4 }
+        }), // buffer_1km_invert_edit.geojson
+        buffer2km: L.geoJSON(null, {
+            style: { color: 'darkpurple', weight: 4 }
+        }), // buffer_2km_invert_edit.geojson
+        buffer1km_edit: L.geoJSON(null, {
+            style: { color: 'darkblue', weight: 2, opacity: 0.5 }
+        }), // buffer_1km_invert_edit_buffer4326.geojson
+        buffer2km_edit: L.geoJSON(null, {
+            style: { color: 'darkpurple', weight: 2, opacity: 0.5 }
+        }) // buffer_2km_invert_edit_buffer4326.geojson
+    };
 
-        fetch(csvUrl)
-            .then(response => response.text())
-            .then(csvData => {
-                const rows = csvData.trim().split('\n');
-                const headers = rows[0].split(',').map(header => header.replace('\r', '').replace('"', ''));
-                const data = rows.slice(1).map(row => {
-                    const values = row.split(',');
-                    return headers.reduce((obj, header, i) => {
-                        let value = String(values[i]).replace('\r', '');
-                        obj[header] = value;
-                        return obj;
-                    }, {});
-                });
+    // Load the toilet CSV data
+    // Assuming you have a function to load CSV data and convert it to geoJSON
+    loadCSV('path/to/toilet_csv20250326.csv').then(data => {
+        layers.toilets.addData(data);
+        layers.toilets.addTo(map);
+    });
 
-                const features = data.map(row => {
-                    const latitude = parseFloat(row['lat']);
-                    const longitude = parseFloat(row['lng']);
-                    return {
-                        type: 'Feature',
-                        geometry: {
-                            type: 'Point',
-                            coordinates: [longitude, latitude]
-                        },
-                        properties: {
-                            id: row['id'],
-                            openinghrs: row['openinghrs'],
-                            name: row['name'],
-                            lat: latitude,
-                            lng: longitude
-                        }
-                    };
-                });
+    // Function to load geojson files
+    async function loadGeoJSON(url) {
+        const response = await fetch(url);
+        return await response.json();
+    }
 
-                loadMarkers(features);
-            });
+    // Handle dropdown selection
+    document.getElementById('geojson-dropdown').addEventListener('change', function() {
+        const value = this.value;
 
-        function loadMarkers(features) {
-            features.forEach(feature => {
-                const customIcon = createCustomIcon();
-                const marker = L.marker([feature.properties.lat, feature.properties.lng], { icon: customIcon });
-                const popupContent =
-                    `<h3>${feature.properties.name}</h3>
-                     <b>開放時間:</b> ${feature.properties.openinghrs}<br>
-                     <button onclick="openGoogleMapsNavigation(${feature.properties.lat}, ${feature.properties.lng})">導航</button>`;
-                marker.bindPopup(popupContent);
-                marker.addTo(map);
-                markers.push(marker);
-            });
-        }
-
-        function loadGeoJSON(url, layerType) {
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (layerType === 'line') {
-                        lineLayer = L.geoJSON(data, {
-                            style: {
-                                color: 'blue',
-                                weight: 2,
-                                opacity: 0.5
-                            }
-                        }).addTo(map);
-                    } else if (layerType === 'polygon') {
-                        polygonLayer = L.geoJSON(data, {
-                            style: {
-                                color: 'green',
-                                weight: 2,
-                                opacity: 0.5
-                            }
-                        }).addTo(map);
-                    }
-                });
-        }
-
-        const typeDropdown = document.getElementById('type-dropdown');
-        typeDropdown.addEventListener('change', function() {
-            const typeFilter = typeDropdown.value;
-            if (typeFilter === '1km invert') {
-                loadGeoJSON(lineGeoJsonUrl1km, 'line');
-                loadGeoJSON(polygonGeoJsonUrl1km, 'polygon');
-                markers.forEach(marker => marker.addTo(map));
-            } else if (typeFilter === '2km invert') {
-                loadGeoJSON(lineGeoJsonUrl2km, 'line');
-                loadGeoJSON(polygonGeoJsonUrl2km, 'polygon');
-                markers.forEach(marker => marker.addTo(map));
-            } else if (typeFilter === 'only toilets') {
-                if (lineLayer) {
-                    map.removeLayer(lineLayer);
-                    lineLayer = null;
-                }
-                if (polygonLayer) {
-                    map.removeLayer(polygonLayer);
-                    polygonLayer = null;
-                }
-                markers.forEach(marker => marker.addTo(map));
+        // Clear all layers except toilets
+        for (const key in layers) {
+            if (key !== 'toilets') {
+                map.removeLayer(layers[key]);
             }
-        });
-
-        function openGoogleMapsNavigation(lat, lng) {
-            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-            window.open(url, '_blank');
         }
-    </script>
+
+        // Add relevant layers based on selection
+        if (value === '1km-cover') {
+            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km.geojson').then(data => {
+                layers.cover1km.addData(data);
+                layers.cover1km.addTo(map);
+            });
+        } else if (value === '2km-cover') {
+            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km.geojson').then(data => {
+                layers.cover2km.addData(data);
+                layers.cover2km.addTo(map);
+            });
+        } else if (value === '1km-buffer-uncovered') {
+            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit.geojson').then(data => {
+                layers.buffer1km.addData(data);
+                layers.buffer1km.addTo(map);
+            });
+            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit_buffer4326.geojson').then(data => {
+                layers.buffer1km_edit.addData(data);
+                layers.buffer1km_edit.addTo(map);
+            });
+        } else if (value === '2km-buffer-uncovered') {
+            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit.geojson').then(data => {
+                layers.buffer2km.addData(data);
+                layers.buffer2km.addTo(map);
+            });
+            loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit_buffer4326.geojson').then(data => {
+                layers.buffer2km_edit.addData(data);
+                layers.buffer2km_edit.addTo(map);
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
