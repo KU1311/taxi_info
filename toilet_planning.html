@@ -34,7 +34,7 @@
 
     // Define the geojson layers
     const layers = {
-        toilets: L.geoJSON(null, { style: { color: 'green' } }), // toilet_csv20250326.csv
+        toilets: L.geoJSON(null, { style: { color: 'green' } }), // toilet_point_json.geojson
         cover1km: L.geoJSON(null, { style: { color: 'blue', weight: 4 } }), // toilet_planning_1km.geojson
         cover2km: L.geoJSON(null, { style: { color: 'purple', weight: 4 } }), // toilet_planning_2km.geojson
         buffer1km: L.geoJSON(null, {
@@ -51,9 +51,8 @@
         }) // buffer_2km_invert_edit_buffer4326.geojson
     };
 
-    // Load the toilet CSV data
-    // Assuming you have a function to load CSV data and convert it to geoJSON
-    loadCSV('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_csv20250326.csv').then(data => {
+    // Load the toilet GeoJSON data
+    loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
         layers.toilets.addData(data);
         layers.toilets.addTo(map);
     });
