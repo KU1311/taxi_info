@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>汽站位置</title>
+    <title>規劃建議 - 方便泊車的洗手間</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         html, body {
@@ -122,17 +122,17 @@
     <div class="controls-container">
         <div class="title-dropdown-container">
             <button class="back-button" onclick="window.history.back();">Back</button>
-            <h2>汽站位置</h2>
+            <h2>規劃建議 - 方便泊車的洗手間</h2>
         </div>
         <div class="dropdown-row">
             <div class="dropdown-container">
                 <label for="geojson-dropdown">選擇顯示:</label>
                 <select id="geojson-dropdown">
-                    <option value="toilets-only">Toilets Only</option>
-                    <option value="1km-cover">1km Cover</option>
-                    <option value="2km-cover">2km Cover</option>
-                    <option value="1km-buffer-uncovered">1km Buffer Uncovered</option>
-                    <option value="2km-buffer-uncovered">2km Buffer Uncovered</option>
+                    <option value="toilets-only">僅顯示洗手間</option>
+                    <option value="1km-cover">1公里覆蓋</option>
+                    <option value="2km-cover">2公里覆蓋</option>
+                    <option value="1km-buffer-uncovered">無覆蓋區域 (1公里覆蓋)</option>
+                    <option value="2km-buffer-uncovered">無覆蓋區域 (2公里覆蓋)</option>
                 </select>
             </div>
         </div>
@@ -162,7 +162,7 @@
             L.geoJSON(data, {
                 style: { color: 'green' },
                 onEachFeature: (feature, layer) => {
-                    layer.bindPopup(`<h3>${feature.properties.name}</h3><p>${feature.properties.remarks || '無備註'}</p><p>開放時間: ${feature.properties.openinghrs}</p>`);
+                    layer.bindPopup(`<h3>${feature.properties.name}</h3><p>${feature.properties.remarks || ''}</p><p>開放時間: ${feature.properties.openinghrs}</p>`);
                 }
             }).addTo(map);
         });
