@@ -170,7 +170,8 @@
                         fillOpacity: 1
                     });
                 }
-            }).addTo(map).setOptions({ layerType: 'toiletPoints' });
+                isToiletLayer: true
+            }).addTo(map);
         });
 
         
@@ -185,7 +186,7 @@
 
             // Clear previous layers
             map.eachLayer(layer => {
-                if (layer instanceof L.GeoJSON && layer.options.layerType !== 'toiletPoints') {
+                if (layer instanceof L.GeoJSON && !layer.options.isToiletLayer) {
                     map.removeLayer(layer);
                 }
             });
