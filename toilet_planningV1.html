@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>規劃建議 - 方便泊車的洗手間</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%; /* Ensures the body takes full height */
+            display: flex;
+            flex-direction: column; /* Column layout for the body */
+            background-color: #333; /* Background color for the body */
+        }
+
+        #map {
+            flex: 1; /* Allow the map to take up remaining space */
+            width: 100%; /* Full width */
+            z-index: 1; /* Lower z-index for the map */
+            position: relative; /* Create a positioning context */
+        }
+
+        .controls-container {
+            position: relative; /* To position dropdowns absolutely */
+            z-index: 10; /* Ensure dropdowns are above the map */
+        }
+
+        h2 {
+            margin-bottom: 10px; /* Space between title and dropdowns */
+            text-align: center; /* Center the title */
+            color: white; /* Change header text color for visibility */
+        }
+
+        .dropdown-row {
+            display: flex; /* Align dropdowns in a row */
+            justify-content: space-between; /* Space out dropdowns evenly */
+            z-index: 20; /* Higher z-index to ensure it floats above the map */
+            background-color: #333; /* Background color for the dropdown container */
+            padding: 10px; /* Padding around the dropdown row */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container {
+            flex: 1; /* Allow each dropdown to take equal space */
+            display: flex; /* Use flexbox for internal layout */
+            flex-direction: column; /* Stack label and dropdown vertically */
+            margin: 0 5px; /* Optional margin between dropdowns */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        .dropdown-container label {
+            margin-bottom: 5px; /* Space between label and dropdown */
+            color: white; /* Change label color for visibility */
+            text-align: center; /* Center the label text */
+            white-space: nowrap; /* Prevent label text from wrapping */
+        }
+
+        select {
+            background-color: #444; /* Darker background for the select dropdowns */
+            color: white; /* White text for dropdowns */
+            border: none; /* Remove default border */
+            padding: 5px; /* Padding inside dropdown */
+            border-radius: 3px; /* Rounded corners for aesthetics */
+            width: 100%; /* Make select take full width of the container */
+            box-sizing: border-box; /* Ensure padding is included in width */
+        }
+
+        select:focus {
+            outline: none; /* Remove focus outline */
+            border: 1px solid #666; /* Optional border on focus */
+        }
+
+        .footer {
+            display: flex; /* Use flexbox for layout */
+            align-items: center; /* Center items vertically */
+            justify-content: space-between; /* Space between left content and button */
+            background-color: #333; /* Background color for footer */
+            color: white; /* Text color */
+            padding: 10px; /* Padding around the footer */
+        }
+
+        .footer-content {
+            display: flex; /* Use flexbox for inner content */
+            align-items: center; /* Center the icon and text vertically */
+        }
+
+        .footer-icon {
+            height: 3em; /* Set height to match two lines of text */
+            margin-right: 10px; /* Space between image and text */
+        }
+
+        .footer h3 {
+            margin: 0; /* Remove default margin */
+            line-height: 1.4; /* Adjust line height for spacing */
+        }
+
+        .whatsapp-button {
+            background-color: #25D366; /* WhatsApp green */
+            color: white; /* Button text color */
+            padding: 10px 15px; /* Padding for the button */
+            border-radius: 5px; /* Rounded corners */
+            text-decoration: none; /* Remove underline */
+            display: flex; /* Center the text */
+            align-items: center; /* Center text vertically */
+            margin-left: 40px; /* Add space between footer content and button */
+        }
+
+        button {
+            display: flex;
+            padding: 0.75rem;
+            background-color: rgb(237, 28, 36); /* Button color */
+            color: white; /* Text color */
+            border: none; /* Remove default border */
+            border-radius: 4px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            font-size: 1rem; /* Font size */
+        }
+    </style>
+</head>
+<body>
+    <div class="controls-container">
+        <div class="title-dropdown-container">
+            <button class="back-button" onclick="window.history.back();">Back</button>
+            <h2>規劃建議 - 方便泊車的洗手間</h2>
+        </div>
+        <div class="dropdown-row">
+            <div class="dropdown-container">
+                <label for="geojson-dropdown">選擇顯示:</label>
+                <select id="geojson-dropdown">
+                    <option value="toilets-only">僅顯示洗手間</option>
+                    <option value="1km-cover">1公里覆蓋</option>
+                    <option value="2km-cover">2公里覆蓋</option>
+                    <option value="1km-buffer-uncovered">無覆蓋區域 (1公里覆蓋)</option>
+                    <option value="2km-buffer-uncovered">無覆蓋區域 (2公里覆蓋)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+    <div class="footer">
+        <div class="footer-content">
+            <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
+            <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+        </div>
+        <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map and other functionalities here
+        const defaultCoords = [22.305451, 114.169656];
+        const defaultZoom = 12;
+
+        const map = L.map('map').setView(defaultCoords, defaultZoom);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            opacity: 0.7
+        }).addTo(map);
+
+        // Load the GeoJSON data
+        loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
+            L.geoJSON(data, {
+                style: { color: 'green' },
+                onEachFeature: (feature, layer) => {
+                    layer.bindPopup(`<h3>${feature.properties.name}</h3><p>${feature.properties.remarks || ''}</p><p>開放時間: ${feature.properties.openinghrs}</p>`);
+                }
+            }).addTo(map);
+        });
+
+        
+        async function loadGeoJSON(url) {
+            const response = await fetch(url);
+            return await response.json();
+        }
+
+        // Handle dropdown selection
+        document.getElementById('geojson-dropdown').addEventListener('change', function() {
+            const value = this.value;
+
+            // Clear previous layers
+            map.eachLayer(layer => {
+                if (layer instanceof L.GeoJSON && layer.options.style.color !== 'green') {
+                    map.removeLayer(layer);
+                }
+            });
+
+            // Load relevant layers based on selection
+            if (value === '1km-cover') {
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km.geojson').then(data => {
+                    L.geoJSON(data, { style: { color: 'blue', weight: 4 } }).addTo(map);
+                });
+            } else if (value === '2km-cover') {
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km.geojson').then(data => {
+                    L.geoJSON(data, { style: { color: 'purple', weight: 4 } }).addTo(map);
+                });
+            } else if (value === '1km-buffer-uncovered') {
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit.geojson').then(data => {
+                    L.geoJSON(data, { style: { color: 'darkblue', weight: 4 } }).addTo(map);
+                });
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit_buffer4326.geojson').then(data => {
+                    L.geoJSON(data, { style: { color: 'darkblue', weight: 2, opacity: 0.5 } }).addTo(map);
+                });
+            } else if (value === '2km-buffer-uncovered') {
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit.geojson').then(data => {
+                    L.geoJSON(data, { style: { color: 'darkblue', weight: 4 } }).addTo(map);
+                });
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit_buffer4326.geojson').then(data => {
+                    L.geoJSON(data, { style: { color: 'darkpurple', weight: 2, opacity: 0.5 } }).addTo(map);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
