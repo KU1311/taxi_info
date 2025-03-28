@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>規劃建議 - 方便泊車的洗手間 Planning Recomendation - Driver-friendly Toilets Coverage</title>
+    <title>規劃建議 - 方便泊車的洗手間 Planning Recommendation - Driver-friendly Toilets Coverage</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         html, body {
@@ -22,7 +22,15 @@
             justify-content: center; /* Center content vertically */
             color: white; /* Text color */
             padding: 20px; /* Padding around the content */
-            text-align: center; /* Center text */
+        }
+
+        .text-box {
+            width: 50%; /* Set width to 50% for wider screens */
+            background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
+            padding: 20px; /* Padding inside the box */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+            text-align: left; /* Left-align text */
         }
 
         button {
@@ -69,35 +77,70 @@
             align-items: center; /* Center text vertically */
             margin-left: 40px; /* Add space between footer content and button */
         }
+
+        /* Media query for smaller screens */
+        @media (max-width: 600px) {
+            .text-box {
+                width: 100%; /* Full width for smaller screens */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="content">
-        <h2>簡介 Introduction</h2>
-        <p>
-            Public toilets are essential for drivers and their health. To achieve Hong Kong as a healthy city, it is important to take care the commercial vehicles drivers, whose are one of the strong stakeholders in building Hong Kong as a vibrant city.
+        <div class="text-box">
+            <h2>簡介 Introduction</h2>
+            <p>
 
-            This project aims to find out the driver-friendly public toilet service coverage and blind spots. By using 1km and 2km threshold of buffer to the toilets, it is able to find out the locations that are under supply of easily accessible public toilets for drivers. The blind spot map suggests that planners should provide more drivers-friendly public toilets in those areas. 
-            
-            The toilet points are collected by public accessible dataset and from me. Only the toilet location which is adjacent to roads that temporary on-street parking is possible (not necessary legal but at least possible) are included. Privately managed toilets in private properties like shopping malls and gas stations are not included here, as they are not necessarily open for public for free nor adjacent to the road.
-            
-            Threshold of 1km and 2km are chosen in balancing time, distance and practicality. In urban areas, 2km is around 5 minutes of driving, which is a reasonable time for drivers to bear from the urgent need of toilet. It is also a reasonable distance for drivers to hunt for a toilet in urban areas, without the need to go beyond another district despite similar time on highways. 1km is a more hostile requirement for comparison, which provides a more ideal coverage if fulfilled.
-            
-            The display of the uncovered area excludes highways, as it is hard to fulfill the public toilet provision in within 2km. It is also assumed the drivers start hunting toilet since their last stopping point (drop-off of goods or passengers) which is not likely on highways.
-            
-            If there are any questions or suggestions about this study, please feel free to contact me (Sunny HAU) at sunnyhyl929@gmail.com
-            
             公共廁所對司機及其健康至關重要。要實現香港成為健康城市的目標，照顧商用車輛司機的需求十分重要，因為他們是建設香港作為充滿活力城市的重要持份者之一。
-            此項目旨在找出對司機友好的公共廁所服務覆蓋範圍及盲點。通過使用1公里和2公里的廁所緩衝區臨界值，能夠找出那些缺乏易於讓司機使用的公共廁所的地點。盲點地圖建議規劃者應在這些區域提供更多對司機友好的公共廁所。
-            廁所位置數據來自公開可獲取的數據集及本人收集。只有位於可臨時路邊停車（不一定合法但至少可能）的道路附近的廁所位置才被包括在內。私人物業（如商場和加油站）內由私人管理的廁所不包括在內，因為它們不一定免費向公眾開放，也不一定靠近道路。
-            選擇1公里和2公里的臨界值是基於時間、距離和實用性的平衡。在市區，2公里大約是5分鐘的車程，這是司機在急需使用廁所時可以忍受的合理時間。這也是司機在市區尋找廁所的合理距離，無需因為高速公路上的類似時間而跨區尋找。1公里是一個更嚴苛的要求，用於比較，如果滿足則能提供更理想的覆蓋範圍。
-            未覆蓋區域的顯示不包括高速公路，因為在2公里內提供公共廁所很難實現。同時假設司機從最後一個停靠點（卸貨或落客）開始尋找廁所，而這些停靠點不太可能位於高速公路上。
-            如果對此研究有任何問題或建議，請隨時通過電子郵件與我（Sunny HAU）聯繫：sunnyhyl929@gmail.com
             
-
-        </p>
-        <button onclick="window.location.href='toilet_planning.html';">Enter</button>
+            <p>
+            
+            此項目旨在找出對司機友好的公共廁所服務覆蓋範圍及盲點。通過使用1公里和2公里的廁所緩衝區臨界值，能夠找出那些缺乏易於讓司機使用的公共廁所的地點。盲點地圖建議規劃者應在這些區域提供更多對司機友好的公共廁所。
+            
+            <p>
+            
+            廁所位置數據來自公開可獲取的數據集及本人收集。只有位於可臨時路邊停車（不一定合法但至少可能）的道路附近的廁所位置才被包括在內。私人物業（如商場和加油站）內由私人管理的廁所不包括在內，因為它們不一定免費向公眾開放，也不一定靠近道路。
+            
+            <p>
+            
+            選擇1公里和2公里的臨界值是基於時間、距離和實用性的平衡。在市區，2公里大約是5分鐘的車程，這是司機在急需使用廁所時可以忍受的合理時間。這也是司機在市區尋找廁所的合理距離，無需因為高速公路上的類似時間而跨區尋找。1公里是一個更嚴苛的要求，用於比較，如果滿足則能提供更理想的覆蓋範圍。
+            
+            <p>
+            
+            未覆蓋區域的顯示不包括高速公路，因為在2公里內提供公共廁所很難實現。同時假設司機從最後一個停靠點（卸貨或落客）開始尋找廁所，而這些停靠點不太可能位於高速公路上。
+            
+            <p>
+            
+            如果對此研究有任何問題或建議，請隨時通過電子郵件與我（Sunny HAU）聯繫：sunnyhyl929@gmail.com
+            <p>
+            <p>
+                Public toilets are essential for drivers and their health. To achieve Hong Kong as a healthy city, it is important to take care the commercial vehicles drivers, whose are one of the strong stakeholders in building Hong Kong as a vibrant city.
+            </p>
+            <p>
+                This project aims to find out the driver-friendly public toilet service coverage and blind spots. By using 1km and 2km threshold of buffer to the toilets, it is able to find out the locations that are under supply of easily accessible public toilets for drivers. The blind spot map suggests that planners should provide more drivers-friendly public toilets in those areas.
+            </p>
+            <p>
+                The toilet points are collected by public accessible dataset and from me. Only the toilet location which is adjacent to roads that temporary on-street parking is possible (not necessary legal but at least possible) are included. Privately managed toilets in private properties like shopping malls and gas stations are not included here, as they are not necessarily open for public for free nor adjacent to the road.
+            </p>
+            <p>
+                Threshold of 1km and 2km are chosen in balancing time, distance and practicality. In urban areas, 2km is around 5 minutes of driving, which is a reasonable time for drivers to bear from the urgent need of toilet. It is also a reasonable distance for drivers to hunt for a toilet in urban areas, without the need to go beyond another district despite similar time on highways. 1km is a more hostile requirement for comparison, which provides a more ideal coverage if fulfilled.
+            </p>
+            <p>
+                The display of the uncovered area excludes highways, as it is hard to fulfill the public toilet provision in within 2km. It is also assumed the drivers start hunting toilet since their last stopping point (drop-off of goods or passengers) which is not likely on highways.
+            </p>
+            <p>
+                If there are any questions or suggestions about this study, please feel free to contact me (Sunny HAU) at sunnyhyl929@gmail.com
+            </p>
+            <button onclick="window.location.href='toilet_planning.html';">Enter</button>
+        </div>
     </div>
-    
+    <div class="footer">
+        <div class="footer-content">
+            <img src="https://raw.githubusercontent.com/KU1311/taxi_info/main/etaxi-icon.png" alt="eTaxi Icon" class="footer-icon">
+            <h3>資料錯誤?提供意見? <br> 請聯絡客服</h3>
+        </div>
+        <a href="https://wa.me/85256600580" class="whatsapp-button">WhatsApp</a>
+    </div>
 </body>
 </html>
