@@ -156,10 +156,11 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             opacity: 0.7
         }).addTo(map);
-
+        
+        let toiletLayer; // Store reference to toilet layer
         // Load the GeoJSON data
-        loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
-            L.geoJSON(data, {  // <-- Change 'toilet_point_json' to 'data' here
+        loadGeoJSON('https://raw.githubusercontent.com/.../toilet_point_json.geojson').then(data => {
+            toiletLayer = L.geoJSON(data, {
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, {
                         radius: 3,
@@ -170,10 +171,8 @@
                         fillOpacity: 1
                     });
                 }
-                isToiletLayer: true
             }).addTo(map);
         });
-
         
         async function loadGeoJSON(url) {
             const response = await fetch(url);
@@ -186,7 +185,7 @@
 
             // Clear previous layers
             map.eachLayer(layer => {
-                if (layer instanceof L.GeoJSON && !layer.options.isToiletLayer) {
+                if (layer instanceof L.GeoJSON && layer !== toiletLayer) {
                     map.removeLayer(layer);
                 }
             });
