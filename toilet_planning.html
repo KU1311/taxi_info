@@ -185,7 +185,7 @@
 
             // Clear previous layers
             map.eachLayer(layer => {
-                if (layer instanceof L.GeoJSON && layer.options.style.color !== 'green') {
+                if (layer instanceof L.GeoJSON) {
                     map.removeLayer(layer);
                 }
             });
