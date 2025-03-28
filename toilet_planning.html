@@ -157,7 +157,7 @@
             opacity: 0.7
         }).addTo(map);
         
-        let toiletLayer; // Store reference to toilet layer
+        
         // Load the GeoJSON data
         loadGeoJSON('https://raw.githubusercontent.com/.../toilet_point_json.geojson').then(data => {
             toiletLayer = L.geoJSON(data, {
@@ -185,7 +185,7 @@
 
             // Clear previous layers
             map.eachLayer(layer => {
-                if (layer instanceof L.GeoJSON && layer !== toiletLayer) {
+                if (layer instanceof L.GeoJSON) {
                     map.removeLayer(layer);
                 }
             });
@@ -195,9 +195,37 @@
                 loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_1km.geojson').then(data => {
                     L.geoJSON(data, { style: { color: 'blue', weight: 4 } }).addTo(map);
                 });
+                loadGeoJSON('https://raw.githubusercontent.com/.../toilet_point_json.geojson').then(data => {
+                    toiletLayer = L.geoJSON(data, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.circleMarker(latlng, {
+                                radius: 3,
+                                fillColor: "#000000",
+                                color: "#000000",
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 1
+                            });
+                        }
+                    }).addTo(map);
+                });
             } else if (value === '2km-cover') {
                 loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_planning_2km.geojson').then(data => {
                     L.geoJSON(data, { style: { color: 'purple', weight: 4 } }).addTo(map);
+                });
+                loadGeoJSON('https://raw.githubusercontent.com/.../toilet_point_json.geojson').then(data => {
+                    toiletLayer = L.geoJSON(data, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.circleMarker(latlng, {
+                                radius: 3,
+                                fillColor: "#000000",
+                                color: "#000000",
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 1
+                            });
+                        }
+                    }).addTo(map);
                 });
             } else if (value === '1km-buffer-uncovered') {
                 loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit.geojson').then(data => {
@@ -206,12 +234,40 @@
                 loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_1km_invert_edit_buffer4326.geojson').then(data => {
                     L.geoJSON(data, { style: { color: 'darkblue', weight: 2, opacity: 0.5 } }).addTo(map);
                 });
+                loadGeoJSON('https://raw.githubusercontent.com/.../toilet_point_json.geojson').then(data => {
+                    toiletLayer = L.geoJSON(data, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.circleMarker(latlng, {
+                                radius: 3,
+                                fillColor: "#000000",
+                                color: "#000000",
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 1
+                            });
+                        }
+                    }).addTo(map);
+                });
             } else if (value === '2km-buffer-uncovered') {
                 loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit.geojson').then(data => {
                     L.geoJSON(data, { style: { color: 'darkblue', weight: 4 } }).addTo(map);
                 });
                 loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/buffer_2km_invert_edit_buffer4326.geojson').then(data => {
                     L.geoJSON(data, { style: { color: 'darkpurple', weight: 2, opacity: 0.5 } }).addTo(map);
+                });
+                loadGeoJSON('https://raw.githubusercontent.com/.../toilet_point_json.geojson').then(data => {
+                    toiletLayer = L.geoJSON(data, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.circleMarker(latlng, {
+                                radius: 3,
+                                fillColor: "#000000",
+                                color: "#000000",
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 1
+                            });
+                        }
+                    }).addTo(map);
                 });
             }
         });
