@@ -159,15 +159,15 @@
 
         // Load the GeoJSON data
         loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
-            L.geoJSON(toilet_point_json, {
+            L.geoJSON(data, {  // <-- Change 'toilet_point_json' to 'data' here
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, {
-                        radius: 3,          // Size of the dot
-                        fillColor: "#000000",// Fill color (black)
-                        color: "#000000",   // Stroke color (black)
-                        weight: 1,          // Stroke width
-                        opacity: 1,         // Stroke opacity
-                        fillOpacity: 1      // Fill opacity
+                        radius: 3,
+                        fillColor: "#000000",
+                        color: "#000000",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 1
                     });
                 }
             }).addTo(map);
