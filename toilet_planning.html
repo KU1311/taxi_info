@@ -159,10 +159,16 @@
 
         // Load the GeoJSON data
         loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
-            L.geoJSON(data, {
-                style: { color: 'green' },
-                onEachFeature: (feature, layer) => {
-                    layer.bindPopup(`<h3>${feature.properties.name}</h3><p>${feature.properties.remarks || ''}</p><p>開放時間: ${feature.properties.openinghrs}</p>`);
+            L.geoJSON(toilet_point_json, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, {
+                        radius: 3,          // Size of the dot
+                        fillColor: "#000000",// Fill color (black)
+                        color: "#000000",   // Stroke color (black)
+                        weight: 1,          // Stroke width
+                        opacity: 1,         // Stroke opacity
+                        fillOpacity: 1      // Fill opacity
+                    });
                 }
             }).addTo(map);
         });
