@@ -61,7 +61,7 @@
             color: white; /* White text for dropdowns */
             border: none; /* Remove default border */
             padding: 5px; /* Padding inside dropdown */
-            border-radius: 3px; /* Rounded corners for aesthetics */
+            border-radius: 5px; /* Rounded corners for aesthetics */
             width: 100%; /* Make select take full width of the container */
             box-sizing: border-box; /* Ensure padding is included in width */
         }
@@ -163,7 +163,7 @@
             toiletLayer = L.geoJSON(data, {
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, {
-                        radius: 3,
+                        radius: 5,
                         fillColor: "#000000",
                         color: "#000000",
                         weight: 1,
@@ -199,7 +199,7 @@
                     toiletLayer = L.geoJSON(data, {
                         pointToLayer: function (feature, latlng) {
                             return L.circleMarker(latlng, {
-                                radius: 3,
+                                radius: 5,
                                 fillColor: "#000000",
                                 color: "#000000",
                                 weight: 1,
@@ -217,7 +217,22 @@
                     toiletLayer = L.geoJSON(data, {
                         pointToLayer: function (feature, latlng) {
                             return L.circleMarker(latlng, {
-                                radius: 3,
+                                radius: 5,
+                                fillColor: "#000000",
+                                color: "#000000",
+                                weight: 1,
+                                opacity: 1,
+                                fillOpacity: 1
+                            });
+                        }
+                    }).addTo(map);
+                });
+            } else if (value === 'toilets-only') {
+                loadGeoJSON('https://raw.githubusercontent.com/KU1311/taxi_info/main/toilet_point_json.geojson').then(data => {
+                    toiletLayer = L.geoJSON(data, {
+                        pointToLayer: function (feature, latlng) {
+                            return L.circleMarker(latlng, {
+                                radius: 5,
                                 fillColor: "#000000",
                                 color: "#000000",
                                 weight: 1,
@@ -238,7 +253,7 @@
                     toiletLayer = L.geoJSON(data, {
                         pointToLayer: function (feature, latlng) {
                             return L.circleMarker(latlng, {
-                                radius: 3,
+                                radius: 5,
                                 fillColor: "#000000",
                                 color: "#000000",
                                 weight: 1,
@@ -259,7 +274,7 @@
                     toiletLayer = L.geoJSON(data, {
                         pointToLayer: function (feature, latlng) {
                             return L.circleMarker(latlng, {
-                                radius: 3,
+                                radius: 5,
                                 fillColor: "#000000",
                                 color: "#000000",
                                 weight: 1,
